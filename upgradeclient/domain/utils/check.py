@@ -47,7 +47,7 @@ class Check(object):
         latest_changes = []
         for item in summarizes:
             print '*' * 100
-            print item
+            print item.values()
             print dir(item)
             print '*' * 100
             file_kind = pysvn.node_kind.file
