@@ -1,15 +1,13 @@
 #! -*- coding: utf-8 -*-
 
-
-import os
 import time
 import signal
+import pprint
 import datetime
 
 
 from multiprocessing import Process
 from upgradeclient.domain.common.logger import Logger
-from upgradeclient.domain.common.psposix import Psposix
 
 
 logger = Logger.get_logger(__name__)
@@ -75,9 +73,10 @@ class CheckService(object):
         logger.info('stop check service successfully!')
 
     def send_cache_task(self, obj):
-        print '='*50
+        print '*' * 50
+        pprint.pprint(obj.__dict__)
         print obj.filename, obj.download_url
-        print '='*50
+        print '*' * 50
 
     def handle(self, name, ins):
         url = ins.get_base_url()
