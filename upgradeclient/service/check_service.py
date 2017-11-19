@@ -85,6 +85,7 @@ class CheckService(object):
             end_time = datetime.datetime.now()
             sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
             print '='*100
+            print ins.revision_seconds
             print url, sta_time, end_time
             print '='*100
             latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
