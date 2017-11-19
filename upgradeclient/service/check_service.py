@@ -35,6 +35,9 @@ class CheckService(object):
         self.filter_factory = filter_factory
 
     def sub_process_signal_callback(self, signal_num, unused_frame):
+        print '='*100
+        print signal_num, signal.SIGINT, signal.SIGTERM
+        print '='*100
         if signal_num in (signal.SIGINT, signal.SIGTERM):
             return
         for name in self.sub_process:
