@@ -16,7 +16,7 @@ class CheckHandlerProcess(Process):
         self.service = service
 
     def run(self):
-        signal.signal(signal.SIGCHLD, self.sub_process_signal_callback)
+        signal.signal(signal.SIGCHLD, self.service.sub_process_signal_callback)
         ins = self.obj.get_data()
         self.service.handle(self.name, ins)
         while True:
@@ -58,7 +58,7 @@ class CheckService(object):
 
         1. 多进程同时检测多个base_url是否有更新
         2. 子进程挂掉后自动重启
-        3. 将任务内容回调写入cacher
+        3. 回调将任务写入cacher
         """
         for name in self.dao_factory:
             p = CheckHandlerProcess(name, self.dao_factory[name], self)
