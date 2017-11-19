@@ -16,11 +16,8 @@ class CheckHandlerProcess(Process):
         self.service = service
 
     def run(self):
-        signal.signal(signal.SIGCHLD, self.service.sub_process_signal_callback)
         ins = self.obj.get_data()
         self.service.handle(self.name, ins)
-        while True:
-            signal.pause()
 
 
 class CheckService(object):
@@ -31,7 +28,10 @@ class CheckService(object):
         self.dao_factory = dao_factory
         self.filter_factory = filter_factory
 
-    def sub_process_signal_callback(self, unused_signal, unused_frame):
+    def signal_callback(self, signal_num, unused_frame):
+        if signal_num in (signal.SIGINT, signal.SIGTERM):
+            self.stop()
+            return 
         for name in self.sub_process:
             p = self.sub_process[name]
             if not p.is_alive():
@@ -41,9 +41,6 @@ class CheckService(object):
                 self.sub_process.pop(name)
                 self.sub_process.update({name: sub_p})
 
-    def main_process_signal_callback(self, unused_signal, unused_frame):
-        self.stop()
-
     def stop(self):
         if not self.sub_process:
             return
@@ -51,7 +48,7 @@ class CheckService(object):
             p = self.sub_process[name]
             if p.is_alive():
                 p.terminate()
-                
+
     def start(self):
         """ 启动check_service
 
@@ -64,9 +61,7 @@ class CheckService(object):
             p.daemon = True
             p.start()
             self.sub_process.update({name: p})
-        signal.signal(signal.SIGINT, self.main_process_signal_callback)
-        signal.signal(signal.SIGTERM, self.main_process_signal_callback)
-
+        signal.signal(signal.SIGINT, self.signal_callback)
         while True:
             signal.pause()
 
