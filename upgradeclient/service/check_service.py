@@ -28,10 +28,7 @@ class CheckService(object):
         self.dao_factory = dao_factory
         self.filter_factory = filter_factory
 
-    def signal_callback(self, signal_num, unused_frame):
-        if signal_num in (signal.SIGINT, signal.SIGTERM):
-            self.stop()
-            return
+    def sub_process_signal_callback(self, unused_signal, unused_frame):
         for name in self.sub_process:
             p = self.sub_process[name]
             if not p.is_alive():
@@ -40,6 +37,9 @@ class CheckService(object):
                 sub_p.start()
                 self.sub_process.pop(name)
                 self.sub_process.update({name: sub_p})
+
+    def main_process_signal_callback(self, unused_signal, unused_frame):
+        self.stop()
 
     def stop(self):
         if not self.sub_process:
@@ -61,9 +61,9 @@ class CheckService(object):
             p.daemon = True
             p.start()
             self.sub_process.update({name: p})
-        map(lambda s: signal.signal(s, self.signal_callback), [
-            signal.SIGCHLD, signal.SIGINT, signal.SIGTERM
-        ])
+        signal.signal(signal.SIGCHLD, self.sub_process_signal_callback)
+        signal.signal(signal.SIGINT, self.main_process_signal_callback)
+        signal.signal(signal.SIGTERM, self.main_process_signal_callback)
         while True:
             signal.pause()
 
