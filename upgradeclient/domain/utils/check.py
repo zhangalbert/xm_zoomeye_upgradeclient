@@ -69,6 +69,7 @@ class Check(object):
             svn_info = self.info(full_url)
             filename = '{0}_{1}'.format(os.path.basename(full_url), svn_info['number'])
             svn_info.update({
+                'action': ExtStr(fact_kind),
                 'filename': ExtStr(filename),
                 'download_url': ExtStr(full_url)
             })
