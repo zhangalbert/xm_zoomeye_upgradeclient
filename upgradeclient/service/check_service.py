@@ -50,13 +50,7 @@ class CheckService(object):
 
     def main_process_signal_callback(self, unused_signal, unused_frame):
         self.stopping = True
-        if not self.sub_process:
-            return
-        for name in self.sub_process:
-            p = self.sub_process[name]
-            if Psposix.pid_exists(p.pid):
-                os.kill(p.pid, signal.SIGTERM)
-
+        
     def start(self):
         """ 启动check_service
 
