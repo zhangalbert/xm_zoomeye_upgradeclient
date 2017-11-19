@@ -44,9 +44,12 @@ class Check(object):
         revision_min, revision_max = map(lambda t: self.to_revision_date(t), (sta_timetuple, end_timetuple))
         summarizes = self.svnclient.diff_summarize(url, revision_min, url, revision_max)
 
-        print url, revision_min, revision_max, summarizes
         latest_changes = []
         for item in summarizes:
+            print '*' * 100
+            print item
+            print dir(item)
+            print '*' * 100
             file_kind = pysvn.node_kind.file
             file_path = item['path']
             node_kind = item['node_kind']
