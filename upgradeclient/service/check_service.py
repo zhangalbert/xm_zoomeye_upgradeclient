@@ -30,15 +30,13 @@ class CheckService(object):
     def __init__(self, check=None, cache=None, dao_factory=None, filter_factory=None):
         self.check = check
         self.cache = cache
+        self.stopping = False
         self.sub_process = {}
         self.dao_factory = dao_factory
         self.filter_factory = filter_factory
 
-    def sub_process_signal_callback(self, signal_num, unused_frame):
-        print '='*100
-        print signal_num, signal.SIGINT, signal.SIGTERM
-        print '='*100
-        if signal_num in (signal.SIGINT, signal.SIGTERM):
+    def sub_process_signal_callback(self, unused_signal, unused_frame):
+        if self.stopping is True:
             return
         for name in self.sub_process:
             p = self.sub_process[name]
@@ -53,6 +51,7 @@ class CheckService(object):
         self.stop()
 
     def stop(self):
+        self.stopping = True
         if not self.sub_process:
             return
         for name in self.sub_process:
