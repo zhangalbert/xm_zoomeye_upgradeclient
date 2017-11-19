@@ -74,7 +74,7 @@ class CheckService(object):
 
     def send_cache_task(self, obj):
         print '*' * 50
-        pprint.pprint(dict(obj))
+        pprint.pprint(dict(obj.__dict__))
         print '*' * 50
 
     def handle(self, name, ins):
