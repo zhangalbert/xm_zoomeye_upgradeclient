@@ -33,7 +33,9 @@ class CheckService(object):
         self.dao_factory = dao_factory
         self.filter_factory = filter_factory
 
-    def sub_process_signal_callback(self, unused_signal, unused_frame):
+    def sub_process_signal_callback(self, signal_num, unused_frame):
+        if signal_num in (signal.SIGINT, signal.SIGTERM):
+            return
         for name in self.sub_process:
             p = self.sub_process[name]
             if not p.is_alive():
@@ -47,8 +49,15 @@ class CheckService(object):
         self.stop()
 
     def stop(self):
-        logger.error('stop check service successfully!')
+        if not self.sub_process:
+            return
+        for name in self.sub_process:
+            p = self.sub_process[name]
+            if p.is_alive():
+                p.terminate()
+                p.join(60)
         sys.exit(0)
+        logger.error('stop check service successfully!')
 
     def start(self):
         """ 启动check_service
