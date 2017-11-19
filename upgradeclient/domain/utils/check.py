@@ -67,7 +67,8 @@ class Check(object):
             full_url = urlparse.urljoin(url, file_path)
             full_url = urllib.quote(full_url.encode('utf-8'), safe=':/')
             svn_info = self.info(full_url)
-            filename = '{0}_{1}'.format(os.path.basename(full_url), svn_info['number'])
+            furl_md5 = File.get_strs_md5(full_url)
+            filename = '{0}_{1}'.format(os.path.basename(full_url), furl_md5)
             svn_info.update({
                 'action': ExtStr(fact_kind),
                 'filename': ExtStr(filename),
