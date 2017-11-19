@@ -56,8 +56,7 @@ class CheckService(object):
             p = self.sub_process[name]
             if pid_exists(p.pid):
                 p.terminate()
-        sys.exit(0)
-        logger.error('stop check service successfully!')
+        logger.info('stop check service successfully!')
 
     def start(self):
         """ 启动check_service
