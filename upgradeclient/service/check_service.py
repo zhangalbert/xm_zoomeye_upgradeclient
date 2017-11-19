@@ -1,14 +1,12 @@
 #! -*- coding: utf-8 -*-
 
 
-import os
 import time
 import signal
 
 
 from multiprocessing import Process
 from upgradeclient.domain.common.logger import Logger
-from upgradeclient.domain.common.psposix import Psposix
 
 
 logger = Logger.get_logger(__name__)
@@ -49,19 +47,14 @@ class CheckService(object):
 
     def main_process_signal_callback(self, unused_signal, unused_frame):
         self.stopping = True
-        if not self.sub_process:
-            return
-        for name in self.sub_process:
-            p = self.sub_process[name]
-            if p.is_alive():
-                p.terminate()
 
     def start(self):
         """ 启动check_service
 
-        1. 多进程同时检测多个base_url是否有更新
-        2. 子进程挂掉后自动重启
-        3. 回调将任务写入cacher
+        1. 多进程同时检测多个base_url是否有固件更新
+        2. 子进程异常后自动启动同配置子进程
+        3. 多进程检测数据通过对应子类过滤器最终生成下载任务对象
+        4. 异步回调写入下载任务对象到本地cacher
         """
         for name in self.dao_factory:
             p = CheckHandlerProcess(name, self.dao_factory[name], self)
