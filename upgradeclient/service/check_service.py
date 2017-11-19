@@ -9,6 +9,7 @@ import signal
 from psutil import pid_exists
 from multiprocessing import Process
 from upgradeclient.domain.common.logger import Logger
+from upgradeclient.domain.common.psposix import Psposix
 
 
 logger = Logger.get_logger(__name__)
@@ -54,7 +55,7 @@ class CheckService(object):
             return
         for name in self.sub_process:
             p = self.sub_process[name]
-            if pid_exists(p.pid):
+            if Psposix.pid_exists(p.pid):
                 p.terminate()
         logger.info('stop check service successfully!')
 
