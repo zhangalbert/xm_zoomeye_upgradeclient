@@ -61,7 +61,9 @@ class CheckService(object):
             p.daemon = True
             p.start()
             self.sub_process.update({name: p})
-        signal.signal(signal.SIGCHLD, self.signal_callback)
+        map(lambda s: signal.signal(s, self.signal_callback), [
+            signal.SIGCHLD, signal.SIGINT, signal.SIGTERM
+        ])
         while True:
             signal.pause()
 
