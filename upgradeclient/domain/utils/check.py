@@ -59,6 +59,9 @@ class Check(object):
             file_kind = pysvn.node_kind.file
             file_path = item['path']
             node_kind = item['node_kind']
+            print '*' * 100
+            print item.items()
+            print '*' * 100
             if file_kind != node_kind:
                 continue
             full_url = urlparse.urljoin(url, file_path)
