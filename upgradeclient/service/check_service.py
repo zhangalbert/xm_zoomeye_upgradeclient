@@ -50,7 +50,7 @@ class CheckService(object):
 
     def main_process_signal_callback(self, unused_signal, unused_frame):
         self.stopping = True
-        
+
     def start(self):
         """ 启动check_service
 
