@@ -44,7 +44,8 @@ class CheckService(object):
     def stop(self):
         if not self.sub_process:
             return
-        for p in self.sub_process:
+        for name in self.sub_process:
+            p = self.sub_process[name]
             if p.is_alive():
                 p.terminate()
                 p.join(60)
