@@ -48,17 +48,13 @@ class CheckService(object):
                 self.sub_process.update({name: sub_p})
 
     def main_process_signal_callback(self, unused_signal, unused_frame):
-        self.stop()
-
-    def stop(self):
         self.stopping = True
         if not self.sub_process:
             return
         for name in self.sub_process:
             p = self.sub_process[name]
-            if Psposix.pid_exists(p.pid):
-                os.kill(p.pid, signal.SIGINT)
-        logger.info('stop check service successfully!')
+            if p.is_alive():
+                p.terminate()
 
     def start(self):
         """ 启动check_service
@@ -76,7 +72,10 @@ class CheckService(object):
         signal.signal(signal.SIGINT, self.main_process_signal_callback)
         signal.signal(signal.SIGTERM, self.main_process_signal_callback)
         while True:
-            signal.pause()
+            if self.stopping is True:
+                break
+            time.sleep(0.1)
+        logger.info('stop check service successfully!')
 
     def send_cache_task(self, obj):
         print '='*50
