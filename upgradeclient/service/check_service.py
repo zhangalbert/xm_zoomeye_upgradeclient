@@ -31,7 +31,7 @@ class CheckService(object):
     def signal_callback(self, signal_num, unused_frame):
         if signal_num in (signal.SIGINT, signal.SIGTERM):
             self.stop()
-            return 
+            return
         for name in self.sub_process:
             p = self.sub_process[name]
             if not p.is_alive():
@@ -61,7 +61,7 @@ class CheckService(object):
             p.daemon = True
             p.start()
             self.sub_process.update({name: p})
-        signal.signal(signal.SIGINT, self.signal_callback)
+        signal.signal(signal.SIGCHLD, self.signal_callback)
         while True:
             signal.pause()
 
