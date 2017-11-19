@@ -1,11 +1,16 @@
 #! -*- coding: utf-8 -*-
 
 
+import sys
 import time
 import signal
 
 
 from multiprocessing import Process
+from upgradeclient.domain.common.logger import Logger
+
+
+logger = Logger.get_logger(__name__)
 
 
 class CheckHandlerProcess(Process):
@@ -42,12 +47,8 @@ class CheckService(object):
         self.stop()
 
     def stop(self):
-        if not self.sub_process:
-            return
-        for name in self.sub_process:
-            p = self.sub_process[name]
-            if p.is_alive():
-                p.terminate()
+        logger.error('stop check service successfully!')
+        sys.exit(0)
 
     def start(self):
         """ 启动check_service
