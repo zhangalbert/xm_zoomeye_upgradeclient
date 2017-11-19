@@ -59,8 +59,8 @@ class Check(object):
             file_kind = pysvn.node_kind.file
             file_path = item['path']
             node_kind = item['node_kind']
-            is_delete = item['summarize_kind'] == 'delete'
-            if is_delete:
+            fact_kind = item['summarize_kind']
+            if str(fact_kind) == 'delete':
                 continue
             if file_kind != node_kind:
                 continue
