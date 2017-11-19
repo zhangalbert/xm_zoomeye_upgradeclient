@@ -41,11 +41,11 @@ class Check(object):
         return revision_date
 
     def info(self, url, *args, **kwargs):
-        svn_info = self.svnclient.info2(url, *args, **kwargs)
+        svn_info = self.svnclient.info2(url, *args, **kwargs)[0][-1]
         data = {
-            'repos_UUID': svn_info.repos_UUID,
-            'last_changed_date': svn_info.last_changed_date,
-            'last_changed_author': svn_info.last_changed_author
+            'date': svn_info.last_changed_date,
+            'author': svn_info.last_changed_author,
+            'number': svn_info.rev.number if svn_info.rev else svn_info.rev,
         }
 
         return data
@@ -64,9 +64,9 @@ class Check(object):
             full_url = urlparse.urljoin(url, file_path)
             full_url = urllib.quote(full_url.encode('utf-8'), safe=':/')
             svn_info = self.info(full_url)
-            name_pos = '_'.join([os.path.basename(full_url), svn_info['repos_UUID']])
+            filename = '_'.join([os.path.basename(full_url), svn_info['number']])
             svn_info.update({
-                'filename': ExtStr(name_pos),
+                'filename': ExtStr(filename),
                 'download_url': ExtStr(full_url)
             })
             print '='*100
