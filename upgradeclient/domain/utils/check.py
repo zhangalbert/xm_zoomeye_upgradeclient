@@ -40,16 +40,22 @@ class Check(object):
 
         return revision_date
 
+    def info(self, url, *args, **kwargs):
+        svn_info = self.svnclient.info2(url, *args, **kwargs)
+        data = {
+            'repos_UUID': svn_info.repos_UUID,
+            'last_changed_date': svn_info.last_changed_date,
+            'last_changed_author': svn_info.last_changed_author
+        }
+
+        return data
+
     def revision_summarize(self, url, sta_timetuple, end_timetuple):
         revision_min, revision_max = map(lambda t: self.to_revision_date(t), (sta_timetuple, end_timetuple))
         summarizes = self.svnclient.diff_summarize(url, revision_min, url, revision_max)
 
         latest_changes = []
         for item in summarizes:
-            print '*' * 100
-            print item.values()
-            print dir(item)
-            print '*' * 100
             file_kind = pysvn.node_kind.file
             file_path = item['path']
             node_kind = item['node_kind']
@@ -57,9 +63,15 @@ class Check(object):
                 continue
             full_url = urlparse.urljoin(url, file_path)
             full_url = urllib.quote(full_url.encode('utf-8'), safe=':/')
-            urls_md5 = File.get_strs_md5(full_url)
-            name_md5 = '_'.join([os.path.basename(full_url), urls_md5])
-
-            latest_changes.append({'filename': ExtStr(name_md5), 'download_url': ExtStr(full_url)})
+            svn_info = self.info(full_url)
+            name_pos = '_'.join([os.path.basename(full_url), svn_info['repos_UUID']])
+            svn_info.update({
+                'filename': ExtStr(name_pos),
+                'download_url': ExtStr(full_url)
+            })
+            print '='*100
+            print svn_info
+            print '='*100
+            latest_changes.append(svn_info)
 
         return latest_changes
