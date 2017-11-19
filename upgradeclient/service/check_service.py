@@ -51,8 +51,7 @@ class CheckService(object):
             p = self.sub_process[name]
             if p.is_alive():
                 p.terminate()
-                p.join(60)
-
+                
     def start(self):
         """ 启动check_service
 
