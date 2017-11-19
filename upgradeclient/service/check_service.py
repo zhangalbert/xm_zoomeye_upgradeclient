@@ -6,6 +6,7 @@ import time
 import signal
 
 
+from psutil import pid_exists
 from multiprocessing import Process
 from upgradeclient.domain.common.logger import Logger
 
@@ -53,7 +54,7 @@ class CheckService(object):
             return
         for name in self.sub_process:
             p = self.sub_process[name]
-            if p.is_alive():
+            if pid_exists(p.pid):
                 p.terminate()
                 p.join(60)
         sys.exit(0)
