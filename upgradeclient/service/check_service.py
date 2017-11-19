@@ -56,7 +56,6 @@ class CheckService(object):
             p = self.sub_process[name]
             if pid_exists(p.pid):
                 p.terminate()
-                p.join(60)
         sys.exit(0)
         logger.error('stop check service successfully!')
 
