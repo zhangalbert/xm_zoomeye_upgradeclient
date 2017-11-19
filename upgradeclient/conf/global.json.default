@@ -1,0 +1,50 @@
+{
+  "ipc": {
+    "_comments": "ipc config.",
+    "base_url": "http://10.6.3.200/svn/Release/Dev/IPC/",
+    "proxy_host": "10.6.3.200",
+    "target_host": "10.6.3.200",
+    "revision_seconds": 86400,
+    "summarize_interval": 15,
+    "auth_user": "tangjialing",
+    "auth_pass": "tjl123",
+    "notify_to": [
+      "limanman@xiongmaitech.com"
+    ],
+    "notify_cc": [
+      "limanman@xiongmaitech.com"
+    ]
+  },
+  "dvr": {
+    "_comments": "dvr config.",
+    "base_url": "http://10.6.3.200/svn/Release/Dev/DVR/",
+    "proxy_host": "10.6.3.200",
+    "target_host": "10.6.3.200",
+    "revision_seconds": 86400,
+    "summarize_interval": 15,
+    "auth_user": "tangjialing",
+    "auth_pass": "tjl123",
+    "notify_to": [
+      "limanman@xiongmaitech.com"
+    ],
+    "notify_cc": [
+      "limanman@xiongmaitech.com"
+    ]
+  },
+  "xmjp": {
+    "_comments": "xmjp config.",
+    "base_url": "http://10.6.3.200/svn/Release/Dev/XMJP/",
+    "proxy_host": "10.6.3.200",
+    "target_host": "10.6.3.200",
+    "revision_seconds": 86400,
+    "summarize_interval": 15,
+    "auth_user": "tangjialing",
+    "auth_pass": "tjl123",
+    "notify_to": [
+      "limanman@xiongmaitech.com"
+    ],
+    "notify_cc": [
+      "limanman@xiongmaitech.com"
+    ]
+  }
+}

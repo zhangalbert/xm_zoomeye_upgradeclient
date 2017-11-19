@@ -1,0 +1,18 @@
+{
+  "ipc": {
+    "_comments": "ipc config.",
+    "base_url": "http://vip.alisvn.com/limanman.autoupgrade/",
+    "proxy_host": "10.6.3.200",
+    "target_host": "10.6.3.200",
+    "revision_seconds": 86400,
+    "summarize_interval": 15,
+    "auth_user": "limanman",
+    "auth_pass": "PyFansLi050318",
+    "notify_to": [
+      "limanman@xiongmaitech.com"
+    ],
+    "notify_cc": [
+      "limanman@xiongmaitech.com"
+    ]
+  }
+}

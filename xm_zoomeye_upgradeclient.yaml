@@ -1,0 +1,73 @@
+objects:
+  - object: XmZoomeyeUpgradeClient
+    class: upgradeclient.xm_zoomeye_upgradeclient.XmZoomeyeUpgradeClient
+    scope: singleton
+    properties:
+      download_service: None
+      upload_service: None
+      alert_service: None
+      check_service: {ref: CheckService}
+      constructor-args: {download_service: download_service, upload_service: upload_service, alert_service: alert_service, check_service: check_service)}
+
+  - object: CheckService
+    class: upgradeclient.service.check_service.CheckService
+    scope: singleton
+    properties:
+      check: {ref: Check}
+      cache: None
+      dao_factory:
+        dvr: {ref: DvrDao}
+        ipc: {ref: IpcDao}
+        xmjp: {ref: XmjpDao}
+      filter_factory:
+        dvr: {ref: DvrFilter}
+        ipc: {ref: IpcFilter}
+        xmjp: {ref: XmjpFilter}
+    constructor-args: {check: check, cache: cache, dao_factory: dao_factory, filter_factory: filter_factory}
+
+  - object: Check
+    class: upgradeclient.domain.utils.check.Check
+    scope: singleton
+    constructor-args: {}
+
+  - object: DvrDao
+    class: upgradeclient.domain.dao.dvr_dao.DvrDao
+    scope: singleton
+    properties:
+      conf_path: /etc/upgradeclient/global.json
+    constructor-args: {conf_path: conf_path}
+
+  - object: IpcDao
+    class: upgradeclient.domain.dao.ipc_dao.IpcDao
+    scope: singleton
+    properties:
+      conf_path: /etc/upgradeclient/global.json
+    constructor-args: {conf_path: conf_path}
+
+  - object: XmjpDao
+    class: upgradeclient.domain.dao.xmjp_dao.XmjpDao
+    scope: singleton
+    properties:
+      conf_path: /etc/upgradeclient/global.json
+    constructor-args: {conf_path: conf_path}
+
+  - object: DvrFilter
+    class: upgradeclient.domain.bl.filter.dvr_filter.DvrFilter
+    scope: singleton
+    constructor-args: {}
+
+  - object: IpcFilter
+    class: upgradeclient.domain.bl.filter.ipc_filter.IpcFilter
+    scope: singleton
+    constructor-args: {}
+
+  - object: XmjpFilter
+    class: upgradeclient.domain.bl.filter.xmjp_filter.XmjpFilter
+    scope: singleton
+    constructor-args: {}
+
+
+
+
+
+
