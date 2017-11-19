@@ -34,13 +34,14 @@ class Check(object):
     def reg_login_callback(self, func=lambda *args: (True, None, None, False)):
         self.svnclient.callback_get_login = func
 
-    def timestamp2revision_date(self, timestamp):
+    def to_revision_date(self, timetuple):
+        timestamp = time.mktime(timetuple)
         revision_date = pysvn.Revision(pysvn.opt_revision_kind.date, timestamp)
 
         return revision_date
 
-    def revision_summarize(self, url, start_timestamp, end_timestamp=time.time()):
-        revision_min, revision_max = map(lambda t: self.timestamp2revision_date(t), (start_timestamp, end_timestamp))
+    def revision_summarize(self, url, sta_timetuple, end_timetuple):
+        revision_min, revision_max = map(lambda t: self.to_revision_date(t), (sta_timetuple, end_timetuple))
         summarizes = self.svnclient.diff_summarize(url, revision_min, url, revision_max)
 
         print url, revision_min, revision_max, summarizes

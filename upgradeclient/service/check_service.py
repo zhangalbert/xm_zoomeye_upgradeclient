@@ -3,6 +3,7 @@
 
 import time
 import signal
+import datetime
 
 
 from multiprocessing import Process
@@ -62,8 +63,9 @@ class CheckService(object):
             p.start()
             self.sub_process.update({name: p})
         signal.signal(signal.SIGCHLD, self.sub_process_signal_callback)
-        signal.signal(signal.SIGINT, self.main_process_signal_callback)
-        signal.signal(signal.SIGTERM, self.main_process_signal_callback)
+        map(lambda s: signal.signal(s, self.main_process_signal_callback), [
+            signal.SIGINT, signal.SIGTERM, signal.SIGTSTP
+        ])
         while True:
             if self.stopping is True:
                 break
@@ -80,14 +82,14 @@ class CheckService(object):
         filter_ins = self.filter_factory[name]
         self.check.set_commit_info_style(style_num=1)
         while True:
-            end_timestamp = time.time()
-            start_timestamp = end_timestamp - ins.revision_seconds
-            latest_changes = self.check.revision_summarize(url, start_timestamp, end_timestamp)
+            end_time = datetime.datetime.now()
+            sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
+            latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
+                                                           end_time.timetuple())
             for item in latest_changes:
                 obj = type('obj', (object,), item)
                 res = filter_ins.release_note_validate(obj)
                 if not res:
                     continue
                 self.send_cache_task(obj)
-
             time.sleep(ins.summarize_interval)
