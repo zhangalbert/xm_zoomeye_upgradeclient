@@ -59,9 +59,9 @@ class Check(object):
             file_kind = pysvn.node_kind.file
             file_path = item['path']
             node_kind = item['node_kind']
-            print '*' * 100
-            print item.items()
-            print '*' * 100
+            is_delete = item['delete'] == 'delete'
+            if is_delete:
+                continue
             if file_kind != node_kind:
                 continue
             full_url = urlparse.urljoin(url, file_path)
@@ -72,9 +72,6 @@ class Check(object):
                 'filename': ExtStr(filename),
                 'download_url': ExtStr(full_url)
             })
-            print '='*100
-            print svn_info
-            print '='*100
             latest_changes.append(svn_info)
 
         return latest_changes
