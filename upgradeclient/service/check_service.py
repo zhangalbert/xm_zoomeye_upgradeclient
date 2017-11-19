@@ -56,11 +56,11 @@ class CheckService(object):
 
     def handle(self, name, ins):
         url = ins.get_base_url()
-        end_timestamp = time.time()
-        start_timestamp = end_timestamp - ins.revision_seconds
-
         filter_ins = self.filter_factory[name]
+        self.check.set_commit_info_style(style_num=1)
         while True:
+            end_timestamp = time.time()
+            start_timestamp = end_timestamp - ins.revision_seconds
             latest_changes = self.check.revision_summarize(url, start_timestamp, end_timestamp)
             for item in latest_changes:
                 obj = type('obj', (object,), item)
