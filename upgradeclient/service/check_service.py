@@ -1,6 +1,7 @@
 #! -*- coding: utf-8 -*-
 
 
+import os
 import time
 import signal
 import datetime
@@ -8,6 +9,7 @@ import datetime
 
 from multiprocessing import Process
 from upgradeclient.domain.common.logger import Logger
+from upgradeclient.domain.common.psposix import Psposix
 
 
 logger = Logger.get_logger(__name__)
@@ -48,6 +50,12 @@ class CheckService(object):
 
     def main_process_signal_callback(self, unused_signal, unused_frame):
         self.stopping = True
+        if not self.sub_process:
+            return
+        for name in self.sub_process:
+            p = self.sub_process[name]
+            if Psposix.pid_exists(p.pid):
+                os.kill(p.pid, signal.SIGTERM)
 
     def start(self):
         """ 启动check_service
@@ -84,10 +92,6 @@ class CheckService(object):
         while True:
             end_time = datetime.datetime.now()
             sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
-            print '='*100
-            print ins.revision_seconds
-            print url, sta_time, end_time
-            print '='*100
             latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
                                                            end_time.timetuple())
             for item in latest_changes:
