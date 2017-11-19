@@ -28,10 +28,7 @@ class CheckService(object):
         self.dao_factory = dao_factory
         self.filter_factory = filter_factory
 
-    def signal_callback(self, signal_num, unused_frame):
-        if signal_num in (signal.SIGINT, signal.SIGTERM):
-            self.stop()
-            return
+    def sub_process_signal_callback(self, unused_signal, unused_frame):
         for name in self.sub_process:
             p = self.sub_process[name]
             if not p.is_alive():
@@ -41,13 +38,16 @@ class CheckService(object):
                 self.sub_process.pop(name)
                 self.sub_process.update({name: sub_p})
 
+    def main_process_signal_callback(self, unused_signal, unused_frame):
+        self.stop()
+
     def stop(self):
         if not self.sub_process:
             return
         for p in self.sub_process:
             if p.is_alive():
                 p.terminate()
-                p.join()
+                p.join(60)
 
     def start(self):
         for name in self.dao_factory:
@@ -56,7 +56,11 @@ class CheckService(object):
             p.start()
             self.sub_process.update({name: p})
 
-            signal.signal(signal.SIGCHLD, self.signal_callback)
+            signal.signal(signal.SIGCHLD, self.sub_process_signal_callback)
+
+        signal.signal(signal.SIGINT, self.main_process_signal_callback)
+        signal.signal(signal.SIGTERM, self.main_process_signal_callback)
+
         while True:
             signal.pause()
 
@@ -81,3 +85,6 @@ class CheckService(object):
                 self.send_cache_task(obj)
 
             time.sleep(ins.summarize_interval)
+
+        while True:
+            signal.pause()
