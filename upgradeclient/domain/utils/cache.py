@@ -17,11 +17,14 @@ class Cache(object):
         self.base_wpath = base_wpath
 
     def read(self, relative_path=None):
+        messages = []
         target_path = self.base_wpath
         if relative_path is not None:
             target_path = os.path.join(self.base_wpath, relative_path)
-
-        messages = []
+        if not os.path.exists(target_path):
+            logger.warning('cache file dir is not ready, path={0}'.format(target_path))
+            return messages
+        
         for f in os.listdir(target_path):
             f_path = os.path.join(target_path, f)
             if not os.access(f_path, os.F_OK|os.R_OK):
