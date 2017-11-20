@@ -17,9 +17,9 @@ class Cache(object):
         self.base_wpath = base_wpath
 
     def read(self, relative_path=None):
-        target_path = self.base_rpath
+        target_path = self.base_wpath
         if relative_path is not None:
-            target_path = os.path.join(self.base_rpath, relative_path)
+            target_path = os.path.join(self.base_wpath, relative_path)
 
         messages = []
         for f in os.listdir(target_path):
