@@ -1,5 +1,6 @@
 #! -*- coding: utf-8 -*-
 
+import os
 import time
 import signal
 import pprint
@@ -78,7 +79,8 @@ class CheckService(object):
         dict_data = dict(obj.__dict__)
         event = EventHandler.create_event(event_name=EventType.CHECKING, **dict_data)
         json_data = event.to_json()
-        self.cache.write(json_data, 'check_cache')
+        relative_path = os.path.join('check_cache', obj.filename)
+        self.cache.write(json_data, relative_path)
 
     def handle(self, name, ins):
         url = ins.get_base_url()
