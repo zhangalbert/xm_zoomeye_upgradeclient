@@ -38,7 +38,7 @@ class Cache(object):
         target_path = self.base_rpath
         if relative_path is not None:
             target_path = os.path.join(self.base_rpath, relative_path)
-        if os.path.exists(relative_path):
+        if os.path.exists(target_path):
             logger.warning('cache file has not been consumed, ignore, path={0}'.format(target_path))
             return
         File.write_content(content, target_path)
