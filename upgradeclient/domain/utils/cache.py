@@ -16,15 +16,15 @@ class Cache(object):
         self.base_rpath = base_rpath
         self.base_wpath = base_wpath
 
-    def read(self, relative_path=None):
+    def read(self, abstruct_path=None, relative_path=None):
         messages = []
-        target_path = self.base_wpath
+        target_path = abstruct_path or self.base_wpath
         if relative_path is not None:
-            target_path = os.path.join(self.base_wpath, relative_path)
+            target_path = os.path.join(target_path, relative_path)
         if not os.path.exists(target_path):
-            logger.warning('cache file dir is not ready, path={0}'.format(target_path))
+            logger.warning('cache dir is not ready, path={0}'.format(target_path))
             return messages
-        
+
         for f in os.listdir(target_path):
             f_path = os.path.join(target_path, f)
             if not os.access(f_path, os.F_OK|os.R_OK):
@@ -37,10 +37,10 @@ class Cache(object):
 
         return messages
 
-    def write(self, content, relative_path=None):
-        target_path = self.base_rpath
+    def write(self, content, abstruct_path=None, relative_path=None):
+        target_path = abstruct_path or self.base_rpath
         if relative_path is not None:
-            target_path = os.path.join(self.base_rpath, relative_path)
+            target_path = os.path.join(target_path, relative_path)
         if os.path.exists(target_path):
             logger.warning('cache file has not been consumed, ignore, path={0}'.format(target_path))
             return
