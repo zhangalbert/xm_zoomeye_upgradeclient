@@ -69,9 +69,11 @@ class Check(object):
             svn_info = self.info(full_url)
             furl_md5 = File.get_strs_md5(full_url)
             filename = '{0}_{1}'.format(os.path.basename(full_url), furl_md5)
+            filetype = file_path.split('/', 1)[0]
             svn_info.update({
                 'action': ExtStr(fact_kind),
                 'filename': ExtStr(filename),
+                'filetype': ExtStr(filetype),
                 'download_url': ExtStr(full_url)
             })
             latest_changes.append(svn_info)

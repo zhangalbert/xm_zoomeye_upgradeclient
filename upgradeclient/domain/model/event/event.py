@@ -5,10 +5,11 @@ import json
 
 
 class Event(object):
-    def __init__(self, name=None, filename=None, download_url=None, author=None, date=None, number=None, action=None,
-                 **_):
+    def __init__(self, name=None, filename=None, filetype=None, download_url=None, author=None, date=None, number=None,
+                 action=None, **_):
         self.name = name
         self.filename = filename
+        self.filetype = filetype
         self.download_url = download_url
         self.author = author
         self.date = date
@@ -32,6 +33,16 @@ class Event(object):
         """ 设置SVN文件名
         """
         self.filename = filename
+
+    def get_filetype(self):
+        """ 获取固件类型
+        """
+        return self.filetype
+
+    def set_filetype(self, filetype):
+        """ 设置固件类型
+        """
+        self.filetype = filetype
 
     def get_download_url(self):
         """ 获取文件下载地址
@@ -86,6 +97,7 @@ class Event(object):
     def to_dict(self):
         dict_data = {
             'filename': self.get_filename(),
+            'filetype': self.get_filetype(),
             'download_url': self.get_download_url(),
             'author': self.get_author(),
             'date': self.get_date(),
@@ -110,13 +122,14 @@ class Event(object):
         dict_data = json.loads(json_data)
         name = dict_data.get('name', None)
         filename = dict_data.get('filename', None)
+        filetype = dict_data.get('filetype', None)
         download_url = dict_data.get('download_url', None)
         author = dict_data.get('author', None)
         date = dict_data.get('date', None)
         number = dict_data.get('number', None)
         action = dict_data.get('action', None)
 
-        event = Event(name=name, filename=filename, download_url=download_url, author=author, date=date, number=number,
-                      action=action)
+        event = Event(name=name, filename=filename, filetype=filetype, download_url=download_url, author=author,
+                      date=date, number=number, action=action)
 
         return event
