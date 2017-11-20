@@ -3,7 +3,7 @@ objects:
     class: upgradeclient.xm_zoomeye_upgradeclient.XmZoomeyeUpgradeClient
     scope: singleton
     properties:
-      download_service: None
+      download_service: {ref: DownloadService}
       upload_service: None
       alert_service: None
       check_service: {ref: CheckService}
@@ -24,6 +24,21 @@ objects:
         ipc: {ref: IpcFilter}
         xmjp: {ref: XmjpFilter}
     constructor-args: {check: check, cache: cache, dao_factory: dao_factory, filter_factory: filter_factory}
+
+  - object: DownloadService
+    class: upgradeclient.service.download_service.DownloadService
+    scope: singleton
+    properties:
+      cache: {ref: Cache}
+      download: {ref: Download}
+      relative_path: check_cache
+      check_interval: 15
+    constructor-args: {cache: cache, download: download, relative_path: relative_path, check_interval: check_interval}
+
+  - object: Download
+    class: upgradeclient.domain.utils.download.Download
+    scope: singleton
+    constructor-args: {}
 
   - object: Check
     class: upgradeclient.domain.utils.check.Check

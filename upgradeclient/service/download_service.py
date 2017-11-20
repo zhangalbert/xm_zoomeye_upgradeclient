@@ -33,24 +33,27 @@ class DownloadService(object):
         self.check_interval = check_interval or 15
 
     def start(self):
-        while True:
-            messages = self.cache.read(self.relative_path)
-            if not messages:
-                time.sleep(self.check_interval)
-                continue
-            for message in messages:
-                t = DownloadHandlerThread(message, self)
-                t.setDaemon(True)
-                t.start()
-                self.sub_threads.append(t)
-
+        def target():
             while True:
-                threads_status = map(lambda _: not _.isAlive(), self.sub_threads)
-                if all(threads_status):
-                    break
-                logger.warning('download service thread group not finished, ignore, number={0}'.format(len(messages)))
-                time.sleep(1)
-            time.sleep(self.check_interval)
+                messages = self.cache.read(self.relative_path)
+                if not messages:
+                    time.sleep(self.check_interval)
+                    continue
+                for message in messages:
+                    t = DownloadHandlerThread(message, self)
+                    t.setDaemon(True)
+                    t.start()
+                    self.sub_threads.append(t)
+
+                while True:
+                    threads_status = map(lambda _: not _.isAlive(), self.sub_threads)
+                    if all(threads_status):
+                        break
+                    logger.warning('download service thread group not finished, ignore, number={0}'.format(len(messages)))
+                    time.sleep(1)
+                time.sleep(self.check_interval)
+        t = Thread(target=target)
+        t.start()
 
     def handle(self, obj):
         fdirname = os.path.join(self.cache.base_rpath, 'download_cache')
@@ -62,4 +65,4 @@ class DownloadService(object):
             return
         self.download.wget(obj.download_url, filepath)
 
-
+        # 后续其它处理
