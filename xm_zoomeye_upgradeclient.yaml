@@ -14,7 +14,7 @@ objects:
     scope: singleton
     properties:
       check: {ref: Check}
-      cache: None
+      cache: {ref: Cache}
       dao_factory:
         dvr: {ref: DvrDao}
         ipc: {ref: IpcDao}
@@ -29,6 +29,14 @@ objects:
     class: upgradeclient.domain.utils.check.Check
     scope: singleton
     constructor-args: {}
+
+  - object: Cache
+    class: upgradeclient.domain.utils.cache.Cache
+    scope: singleton
+    properties:
+      base_rpath: /tmp/xm_zoomeye_upgradeclient/read
+      base_wpath: /tmp/xm_zoomeye_upgradeclient/write
+    constructor-args: {base_rpath: base_rpath, base_wpath: base_wpath}
 
   - object: DvrDao
     class: upgradeclient.domain.dao.dvr_dao.DvrDao

@@ -8,6 +8,8 @@ import datetime
 
 from multiprocessing import Process
 from upgradeclient.domain.common.logger import Logger
+from upgradeclient.domain.bl.event_handler import EventHandler
+from upgradeclient.domain.model.event.event_type import EventType
 
 
 logger = Logger.get_logger(__name__)
@@ -73,9 +75,10 @@ class CheckService(object):
         logger.info('stop check service successfully!')
 
     def send_cache_task(self, obj):
-        print '*' * 50
-        pprint.pprint(dict(obj.__dict__))
-        print '*' * 50
+        dict_data = dict(obj.__dict__)
+        event = EventHandler.create_event(event_name=EventType.CHECKING, **dict_data)
+        json_data = event.to_json()
+        self.cache.write(json_data, 'check_cache')
 
     def handle(self, name, ins):
         url = ins.get_base_url()
