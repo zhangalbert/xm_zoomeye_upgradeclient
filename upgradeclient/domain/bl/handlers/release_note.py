@@ -58,10 +58,7 @@ class ReleaseNoteHandler(BaseHandler):
         end_time = datetime.datetime.now()
         sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
         for key, val in dict_data:
-            print '*' * 100
-            print key, val
-            print '*' * 100
-            date, flag = key
+            date, flag = key[:2]
             if date < sta_time.strftime('%Y-%m-%d') or date > end_time.strftime('%Y-%m-%d'):
                 logger.debug('{0} delected invalid date-range, ignore, url={0}'.format(obj.get_download_url()))
                 continue
