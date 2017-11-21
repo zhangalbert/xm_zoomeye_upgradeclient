@@ -15,8 +15,7 @@ class BaseFilter(object):
     def firmware_name_validate(self, obj):
         q = Q(obj__filename__regexp=r'(?<=\.)(?P<date>[0-9]{8}).*(?=.bin)') & \
             Q(obj__download_url__regexp=r'(?<=\.)(?P<date>[0-9]{8}).*(?=.bin)') & \
-            Q(obj__filename__not_istartswith='upall_') & \
-            Q(obj__filename__not_istartswith='UPALL_')
+            Q(obj__filename__not_istartswith='upall_')
 
         return R(obj, q_ins=q)()
 
