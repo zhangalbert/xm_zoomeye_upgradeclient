@@ -58,6 +58,9 @@ class ReleaseNoteHandler(BaseHandler):
         end_time = datetime.datetime.now()
         sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
         for key, val in dict_data:
+            print '*' * 100
+            print key, val
+            print '*' * 100
             date, flag = key
             if date < sta_time.strftime('%Y-%m-%d') or date > end_time.strftime('%Y-%m-%d'):
                 logger.debug('{0} delected invalid date-range, ignore, url={0}'.format(obj.get_download_url()))
@@ -70,11 +73,10 @@ class ReleaseNoteHandler(BaseHandler):
 
         return event_list
 
-    def cleaning(self, **args):
-        for f in args:
-            if not os.path.exists(f):
-                continue
-            os.remove(f)
+    def delete(self, filename):
+        if not os.path.exists(filename):
+            return
+        os.remove(filename)
 
     def handle(self, obj):
         """ 处理DOWNLOADING_RELEASENOTE事件
@@ -95,4 +97,4 @@ class ReleaseNoteHandler(BaseHandler):
 
         fdirname = os.path.join(self.cache.base_path, 'check_cache')
         filename = os.path.join(fdirname, obj.get_filename())
-        self.cleaning(filename)
+        self.delete(filename)
