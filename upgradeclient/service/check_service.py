@@ -104,10 +104,9 @@ class CheckService(object):
             merged_urlmaps = {}
             for item in latest_changes:
                 obj = type('obj', (object,), item)
-                res = filter_ins.release_note_validate(obj)
                 base_url = self.get_baseurl(obj.download_url)
-                if not res:
-                    if base_url in merged_changes:
+                if not filter_ins.release_note_validate(obj):
+                    if base_url in merged_changes and filter_ins.firmware_name_validate(obj):
                         merged_changes[base_url].append(obj)
                     continue
                 merged_changes.setdefault(os.path.dirname(obj.download_url), [])
