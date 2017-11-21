@@ -57,6 +57,11 @@ class ReleaseNoteHandler(BaseHandler):
         ins = conf_dao.get_data()
         end_time = datetime.datetime.now()
         sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
+        print '#' * 100
+        import pprint
+        pprint.pprint(dict_data)
+        print '#' * 100
+
         for key, val in dict_data:
             date, flag = key[:2]
             sta_date = sta_time.strftime('%Y-%m-%d')
