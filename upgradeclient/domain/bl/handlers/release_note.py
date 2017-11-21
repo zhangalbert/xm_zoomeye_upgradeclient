@@ -64,9 +64,8 @@ class ReleaseNoteHandler(BaseHandler):
                 continue
             q = Q(obj__download_url__contains=date) & Q(obj__filename__contains=flag)
             filter_res = self.filter_event(q, objs_list)
-            for e in filter_res:
-                e.set_data(val)
-            event_list.extend()
+            map(lambda e: e.set_data(val), filter_res)
+            event_list.extend(filter_res)
 
         return event_list
 
