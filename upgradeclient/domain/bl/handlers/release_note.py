@@ -64,6 +64,10 @@ class ReleaseNoteHandler(BaseHandler):
                 continue
             q = Q(obj__download_url__contains=date) & Q(obj__filename__contains=flag)
             filter_res = self.filter_event(q, objs_list)
+            print '=' * 100
+            print key
+            print filter_res
+            print '=' * 100
             map(lambda e: e.set_data(val), filter_res)
             event_list.extend(filter_res)
 
@@ -88,6 +92,9 @@ class ReleaseNoteHandler(BaseHandler):
         download.wget(obj.get_download_url(), filename)
 
         event_list = self.analysis_log(obj)
+        print '*' * 100
+        print event_list
+        print '*' * 100
         for event in event_list:
             self.send_task_cache(event)
 
