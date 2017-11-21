@@ -36,6 +36,8 @@ class Download(object):
         self._wrapped_reporthook = callback or self._defaulthook
 
     def wget(self, url, filename, **kwargs):
+        is_success = True
+
         self._url, self._filename = url, filename
         download_fname = '{0}.downloading'.format(filename)
 
@@ -45,9 +47,12 @@ class Download(object):
             shutil.move(download_fname, filename)
             logger.info('download {0} from {1} successfuly'.format(filename, url))
         except Exception as e:
+            is_success = False
             logger.error('download {0} from {1} with exception, exp={2}'.format(filename, url, e))
         finally:
             if os.path.exists(download_fname):
                 os.remove(download_fname)
+
+        return is_success
 
 

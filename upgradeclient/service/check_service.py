@@ -76,7 +76,7 @@ class CheckService(object):
 
     def send_cache_task(self, obj):
         dict_data = dict(obj.__dict__)
-        event = EventHandler.create_event(event_name=EventType.CHECKING, **dict_data)
+        event = EventHandler.create_event(event_name=EventType.DOWNLOADING_RELEASENOTE, **dict_data)
         json_data = event.to_json()
         relative_path = os.path.join('check_cache', obj.filename)
         self.cache.write(json_data, relative_path=relative_path)
