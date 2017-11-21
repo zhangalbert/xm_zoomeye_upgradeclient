@@ -120,9 +120,5 @@ class CheckService(object):
                 event_data = map(lambda e: self.create_event(daoname=name, **dict(e.__dict__)).to_json(),
                                  merged_changes[item])
                 event.set_data(event_data)
-                print '*' * 100
-                import pprint
-                pprint.pprint(event_data)
-                print '*' * 100
                 self.send_cache_task(event)
             time.sleep(ins.summarize_interval)
