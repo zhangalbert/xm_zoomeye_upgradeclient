@@ -50,21 +50,33 @@ objects:
     scope: singleton
     properties:
       cache: {ref: Cache}
-    constructor-args: {cache: cache}
+      dao_factory:
+        dvr: {ref: DvrDao}
+        ipc: {ref: IpcDao}
+        xmjp: {ref: XmjpDao}
+    constructor-args: {cache: cache, dao_factory: dao_factory}
 
   - object: FirmwareHandler
     class: upgradeclient.domain.bl.handlers.firmware.FirmwareHandler
     scope: singleton
     properties:
       cache: {ref: Cache}
-    constructor-args: {cache: cache}
+      dao_factory:
+        dvr: {ref: DvrDao}
+        ipc: {ref: IpcDao}
+        xmjp: {ref: XmjpDao}
+    constructor-args: {cache: cache, dao_factory: dao_factory}
 
   - object: ReleaseNoteHandler
     class: upgradeclient.domain.bl.handlers.release_note.ReleaseNoteHandler
     scope: singleton
     properties:
       cache: {ref: Cache}
-    constructor-args: {cache: cache}
+      dao_factory:
+        dvr: {ref: DvrDao}
+        ipc: {ref: IpcDao}
+        xmjp: {ref: XmjpDao}
+    constructor-args: {cache: cache, dao_factory: dao_factory}
 
   - object: Check
     class: upgradeclient.domain.utils.check.Check

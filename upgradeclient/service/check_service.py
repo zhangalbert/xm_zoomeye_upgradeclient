@@ -74,12 +74,15 @@ class CheckService(object):
             time.sleep(0.1)
         logger.info('stop check service successfully!')
 
-    def send_cache_task(self, obj):
-        dict_data = dict(obj.__dict__)
-        event = EventHandler.create_event(event_name=EventType.DOWNLOADING_RELEASENOTE, **dict_data)
+    def send_cache_task(self, event):
         json_data = event.to_json()
-        relative_path = os.path.join('check_cache', obj.filename)
+        relative_path = os.path.join('check_cache', event.get_filename())
         self.cache.write(json_data, relative_path=relative_path)
+
+    def create_event(self, **kwargs):
+        event = EventHandler.create_event(event_name=EventType.DOWNLOADING_RELEASENOTE, **kwargs)
+
+        return event
 
     def handle(self, name, ins):
         url = ins.get_base_url()
@@ -90,10 +93,22 @@ class CheckService(object):
             sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
             latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
                                                            end_time.timetuple())
+
+            merged_changes = {}
+            merged_urlmaps = {}
             for item in latest_changes:
                 obj = type('obj', (object,), item)
                 res = filter_ins.release_note_validate(obj)
                 if not res:
+                    if os.path.dirname(obj.download_url) in merged_changes:
+                        merged_changes[obj.download_url].append(obj)
                     continue
-                self.send_cache_task(obj)
+                merged_changes.setdefault(os.path.dirname(obj.download_url), [])
+                merged_urlmaps.setdefault(os.path.dirname(obj.download_url), obj)
+
+            for item in merged_urlmaps:
+                event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
+                event_data = map(lambda e: self.create_event(daoname=name, **dict(e.__dict__)).to_json())
+                event.set_data(event_data)
+                self.send_cache_task(event)
             time.sleep(ins.summarize_interval)

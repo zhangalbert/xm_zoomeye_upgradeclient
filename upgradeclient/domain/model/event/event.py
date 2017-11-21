@@ -6,15 +6,17 @@ import json
 
 class Event(object):
     def __init__(self, name=None, filename=None, filetype=None, download_url=None, author=None, date=None, number=None,
-                 action=None, **_):
+                 action=None, daoname=None, data=None, **_):
         self.name = name
         self.filename = filename
+        self.daoname = daoname
         self.filetype = filetype
         self.download_url = download_url
         self.author = author
         self.date = date
         self.number = number
         self.action = action
+        self.data = data
 
     def get_name(self):
         """ 事件名称
@@ -33,6 +35,14 @@ class Event(object):
         """ 设置SVN文件名
         """
         self.filename = filename
+
+    def get_daoname(self):
+        """ 获取DAO的名称"""
+        return self.daoname
+
+    def set_daoname(self, daoname):
+        """ 设置DAO的名称"""
+        set.daoname = daoname
 
     def get_filetype(self):
         """ 获取固件类型
@@ -94,16 +104,26 @@ class Event(object):
         """
         self.action = action
 
+    def get_data(self):
+        """ 获取附加数据"""
+        return self.data
+
+    def set_data(self, data):
+        """ 设置附加数据"""
+        self.data = data
+
     def to_dict(self):
         dict_data = {
             "name": self.get_name(),
             'filename': self.get_filename(),
+            'daoname': self.get_daoname(),
             'filetype': self.get_filetype(),
             'download_url': self.get_download_url(),
             'author': self.get_author(),
             'date': self.get_date(),
             'number': self.get_number(),
             'action': self.get_action(),
+            'data': self.get_data(),
         }
 
         return dict_data
@@ -122,6 +142,7 @@ class Event(object):
         """
         dict_data = json.loads(json_data)
         name = dict_data.get('name', None)
+        daoname = dict_data.get('daoname', None)
         filename = dict_data.get('filename', None)
         filetype = dict_data.get('filetype', None)
         download_url = dict_data.get('download_url', None)
@@ -129,8 +150,9 @@ class Event(object):
         date = dict_data.get('date', None)
         number = dict_data.get('number', None)
         action = dict_data.get('action', None)
+        data = dict_data.get('data', None)
 
         event = Event(name=name, filename=filename, filetype=filetype, download_url=download_url, author=author,
-                      date=date, number=number, action=action)
+                      date=date, number=number, action=action, daoname=daoname, data=data)
 
         return event
