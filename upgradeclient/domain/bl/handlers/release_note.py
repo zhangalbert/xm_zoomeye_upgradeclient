@@ -57,13 +57,9 @@ class ReleaseNoteHandler(BaseHandler):
         ins = conf_dao.get_data()
         end_time = datetime.datetime.now()
         sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
-        print '#' * 100
-        import pprint
-        pprint.pprint(dict_data)
-        print '#' * 100
 
-        for key, val in dict_data:
-            date, flag = key[:2]
+        for key, val in dict_data.iteritems():
+            date, flag = key
             sta_date = sta_time.strftime('%Y-%m-%d')
             end_date = end_time.strftime('%Y-%m-%d')
             if date < sta_date or date > end_date:
@@ -73,10 +69,6 @@ class ReleaseNoteHandler(BaseHandler):
                 continue
             q = Q(obj__download_url__contains=date) & Q(obj__filename__contains=flag)
             filter_res = self.filter_event(q, objs_list)
-            print '=' * 100
-            print key
-            print filter_res
-            print '=' * 100
             map(lambda e: e.set_data(val), filter_res)
             event_list.extend(filter_res)
 
