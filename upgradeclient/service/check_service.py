@@ -106,9 +106,6 @@ class CheckService(object):
                 obj = type('obj', (object,), item)
                 base_url = self.get_baseurl(obj.download_url)
                 if not filter_ins.release_note_validate(obj):
-                    print '#'*100
-                    print obj.filename, filter_ins.firmware_name_validate(obj)
-                    print '#'*100
                     if base_url in merged_changes and filter_ins.firmware_name_validate(obj):
                         merged_changes[base_url].append(obj)
                     continue
