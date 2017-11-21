@@ -25,17 +25,18 @@ class DownloadHandlerThread(Thread):
 
 
 class DownloadService(object):
-    def __init__(self, cache=None, download=None, relative_path=None, check_interval=15):
+    def __init__(self, cache=None, handler_factory=None, abstruct_path=None, relative_path=None, check_interval=15):
         self.cache = cache
         self.sub_threads = []
-        self.download = download
-        self.relative_path = relative_path or ''
+        self.abstruct_path = abstruct_path
+        self.relative_path = relative_path
+        self.handler_factory = handler_factory
         self.check_interval = check_interval or 15
 
     def start(self):
         def target():
             while True:
-                messages = self.cache.read(self.relative_path)
+                messages = self.cache.read(self.abstruct_path, self.relative_path)
                 if not messages:
                     time.sleep(self.check_interval)
                     continue
@@ -56,13 +57,13 @@ class DownloadService(object):
         t.start()
 
     def handle(self, obj):
-        fdirname = os.path.join(self.cache.base_rpath, 'download_cache')
+        fdirname = os.path.join(self.cache.base_path, 'download_cache')
         if not os.path.exists(fdirname):
             os.makedirs(fdirname)
         filepath = os.path.join(fdirname, obj.get_filename())
         if os.path.exists(filepath):
             logger.warning('download file has not been consumed, ignore, path={0}'.format(filepath))
             return
-        self.download.wget(obj.download_url, filepath)
 
-        # 后续其它处理
+        handler = self.handler_factory.create_download_handler(obj)
+        handler.handle(obj)

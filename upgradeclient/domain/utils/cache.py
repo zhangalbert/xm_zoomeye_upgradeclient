@@ -12,13 +12,12 @@ logger = Logger.get_logger(__name__)
 
 
 class Cache(object):
-    def __init__(self, base_rpath=None, base_wpath=None):
-        self.base_rpath = base_rpath
-        self.base_wpath = base_wpath
+    def __init__(self, base_path=None):
+        self.base_path = base_path
 
     def read(self, abstruct_path=None, relative_path=None):
         messages = []
-        target_path = abstruct_path or self.base_wpath
+        target_path = abstruct_path or self.base_path
         if relative_path is not None:
             target_path = os.path.join(target_path, relative_path)
         if not os.path.exists(target_path):
@@ -38,7 +37,7 @@ class Cache(object):
         return messages
 
     def write(self, content, abstruct_path=None, relative_path=None):
-        target_path = abstruct_path or self.base_rpath
+        target_path = abstruct_path or self.base_path
         if relative_path is not None:
             target_path = os.path.join(target_path, relative_path)
         if os.path.exists(target_path):

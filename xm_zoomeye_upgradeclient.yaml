@@ -30,15 +30,41 @@ objects:
     scope: singleton
     properties:
       cache: {ref: Cache}
-      download: {ref: Download}
+      handler_factory: {ref: DownloadHandlerFactory}
       relative_path: check_cache
       check_interval: 15
-    constructor-args: {cache: cache, download: download, relative_path: relative_path, check_interval: check_interval}
+    constructor-args: {cache: cache, handler_factory: handler_factory, relative_path: relative_path, check_interval: check_interval}
 
-  - object: Download
-    class: upgradeclient.domain.utils.download.Download
+  - object: DownloadHandlerFactory
+    class: upgradeclient.domain.bl.download_handler_factory.DownloadHandlerFactory
     scope: singleton
-    constructor-args: {}
+    properties:
+      download_handlers:
+        default: {ref: DefaultHandler}
+        downloading_firmware: {ref: FirmwareHandler}
+        downloading_releasenote: {ref: ReleaseNoteHandler}
+    constructor-args: {download_handlers: download_handlers}
+
+  - object: DefaultHandler
+    class: upgradeclient.domain.bl.handlers.default.DefaultHandler
+    scope: singleton
+    properties:
+      cache: {ref: Cache}
+    constructor-args: {cache: cache}
+
+  - object: FirmwareHandler
+    class: upgradeclient.domain.bl.handlers.firmware.FirmwareHandler
+    scope: singleton
+    properties:
+      cache: {ref: Cache}
+    constructor-args: {cache: cache}
+
+  - object: ReleaseNoteHandler
+    class: upgradeclient.domain.bl.handlers.release_note.ReleaseNoteHandler
+    scope: singleton
+    properties:
+      cache: {ref: Cache}
+    constructor-args: {cache: cache}
 
   - object: Check
     class: upgradeclient.domain.utils.check.Check
@@ -49,9 +75,8 @@ objects:
     class: upgradeclient.domain.utils.cache.Cache
     scope: singleton
     properties:
-      base_rpath: /tmp/xm_zoomeye_upgradeclient/read
-      base_wpath: /tmp/xm_zoomeye_upgradeclient/write
-    constructor-args: {base_rpath: base_rpath, base_wpath: base_wpath}
+      base_path: /tmp/xm_zoomeye_upgradeclient/
+    constructor-args: {base_path: base_path}
 
   - object: DvrDao
     class: upgradeclient.domain.dao.dvr_dao.DvrDao
