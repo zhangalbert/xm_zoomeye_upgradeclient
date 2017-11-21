@@ -106,6 +106,11 @@ class CheckService(object):
                 merged_changes.setdefault(os.path.dirname(obj.download_url), [])
                 merged_urlmaps.setdefault(os.path.dirname(obj.download_url), obj)
 
+            print '*'*100
+            print merged_changes
+            print merged_urlmaps
+            print '*'*100
+
             for item in merged_urlmaps:
                 event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
                 event_data = map(lambda e: self.create_event(daoname=name, **dict(e.__dict__)).to_json(),
