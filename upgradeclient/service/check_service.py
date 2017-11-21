@@ -113,16 +113,14 @@ class CheckService(object):
                 merged_changes.setdefault(os.path.dirname(obj.download_url), [])
                 merged_urlmaps.setdefault(os.path.dirname(obj.download_url), obj)
 
-            print '*'*100
-            import pprint
-            pprint.pprint(merged_changes)
-            pprint.pprint(merged_urlmaps)
-            print '*'*100
-
             for item in merged_urlmaps:
                 event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
                 event_data = map(lambda e: self.create_event(daoname=name, **dict(e.__dict__)).to_json(),
                                  merged_changes[item])
                 event.set_data(event_data)
+                print '*' * 100
+                import pprint
+                pprint.pprint(event_data)
+                print '*' * 100
                 self.send_cache_task(event)
             time.sleep(ins.summarize_interval)
