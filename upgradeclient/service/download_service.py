@@ -64,6 +64,5 @@ class DownloadService(object):
         if os.path.exists(filepath):
             logger.warning('download file has not been consumed, ignore, path={0}'.format(filepath))
             return
-
         handler = self.handler_factory.create_download_handler(obj)
         handler.handle(obj)
