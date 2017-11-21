@@ -114,8 +114,9 @@ class CheckService(object):
                 merged_urlmaps.setdefault(os.path.dirname(obj.download_url), obj)
 
             print '*'*100
-            print merged_changes
-            print merged_urlmaps
+            import pprint
+            pprint.pprint(merged_changes)
+            pprint.pprint(merged_urlmaps)
             print '*'*100
 
             for item in merged_urlmaps:
