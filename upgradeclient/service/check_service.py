@@ -96,6 +96,9 @@ class CheckService(object):
 
             merged_changes = {}
             merged_urlmaps = {}
+            print '*' * 100
+            print latest_changes
+            print '*' * 100
             for item in latest_changes:
                 obj = type('obj', (object,), item)
                 res = filter_ins.release_note_validate(obj)
@@ -105,11 +108,6 @@ class CheckService(object):
                     continue
                 merged_changes.setdefault(os.path.dirname(obj.download_url), [])
                 merged_urlmaps.setdefault(os.path.dirname(obj.download_url), obj)
-
-            print '*'*100
-            print merged_changes
-            print merged_urlmaps
-            print '*'*100
 
             for item in merged_urlmaps:
                 event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
