@@ -42,12 +42,10 @@ class ReleaseNoteHandler(BaseHandler):
         event_list = []
         fdirname = os.path.join(self.cache.base_path, 'download_cache')
         filename = os.path.join(fdirname, obj.get_filename())
-
-        dict_data = json.loads(obj.get_data())
-        if not dict_data:
+        if not obj.get_data():
             logger.warning('release_not with no firmwares list data, url={0}'.format(obj.get_download_url()))
             return event_list
-        objs_list = map(lambda o: type('obj', (object,), json.loads(o)), dict_data)
+        objs_list = map(lambda o: type('obj', (object,), json.loads(o)), obj.get_data())
 
         dict_data = Firmware.release_note2dict(filename)
         if not dict_data:
