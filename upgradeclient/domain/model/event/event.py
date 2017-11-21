@@ -96,6 +96,7 @@ class Event(object):
 
     def to_dict(self):
         dict_data = {
+            "name": self.get_name(),
             'filename': self.get_filename(),
             'filetype': self.get_filetype(),
             'download_url': self.get_download_url(),
