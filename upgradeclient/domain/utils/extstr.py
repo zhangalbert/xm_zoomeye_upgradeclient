@@ -39,7 +39,7 @@ class ExtStr(str):
         return self.lower().startswith(data.lower())
 
     def not_istartswith(self, data):
-        return self.istartswith(data)
+        return not self.istartswith(data)
 
     def not_endswith(self, data):
         return not self.endswith(data)
