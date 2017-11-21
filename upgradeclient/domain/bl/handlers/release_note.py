@@ -22,7 +22,10 @@ class ReleaseNoteHandler(BaseHandler):
         fdirname = os.path.join(self.cache.base_path, 'download_cache')
         filename = os.path.join(fdirname, obj.get_filename())
 
-        dwresult = Download().wget(obj.get_download_url(), filename)
+        download = Download()
+        # 使用默认回调
+        download.reg_reporthook()
+        dwresult = download.wget(obj.get_download_url(), filename)
 
         fdirname = os.path.join(self.cache.base_path, 'check_cache')
         filename = os.path.join(fdirname, obj.get_filename())
