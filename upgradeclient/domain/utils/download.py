@@ -2,6 +2,7 @@
 
 
 import os
+import types
 import urllib
 import shutil
 import threading
@@ -25,7 +26,7 @@ class Download(object):
         2. b 数据块的大小
         3. c 远程文件大小
         """
-        if self._wrapped_reporthook and isinstance(self._wrapped_reporthook, function):
+        if self._wrapped_reporthook and isinstance(self._wrapped_reporthook, types.FunctionType):
             self._wrapped_reporthook(self, a, b, c)
 
     def _defaulthook(self, cls, a, b, c):
