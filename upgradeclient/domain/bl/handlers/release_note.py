@@ -53,7 +53,8 @@ class ReleaseNoteHandler(BaseHandler):
                                                                                           filename))
             return event_list
 
-        ins = self.dao_factory[obj.get_daoname()]
+        conf_dao = self.dao_factory[obj.get_daoname()]
+        ins = conf_dao.get_data()
         end_time = datetime.datetime.now()
         sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
         for key, val in dict_data:
@@ -62,7 +63,10 @@ class ReleaseNoteHandler(BaseHandler):
                 logger.debug('{0} delected invalid date-range, ignore, url={0}'.format(obj.get_download_url()))
                 continue
             q = Q(obj__download_url__contains=date) & Q(obj__filename__contains=flag)
-            event_list.extend(self.filter_event(q, objs_list))
+            filter_res = self.filter_event(q, objs_list)
+            for e in filter_res:
+                e.set_data(val)
+            event_list.extend()
 
         return event_list
 
