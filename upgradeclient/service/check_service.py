@@ -8,8 +8,8 @@ import datetime
 
 from multiprocessing import Process
 from upgradeclient.domain.common.logger import Logger
+from upgradeclient.domain.model.event.event import Event
 from upgradeclient.domain.model.event.event_type import EventType
-from upgradeclient.domain.bl.event.event_handler import EventHandler
 
 
 logger = Logger.get_logger(__name__)
@@ -80,7 +80,7 @@ class CheckService(object):
         self.cache.write(json_data, relative_path=relative_path)
 
     def create_event(self, **kwargs):
-        event = EventHandler.create_event(event_name=EventType.DOWNLOADING_RELEASENOTE, **kwargs)
+        event = Event(name=EventType.DOWNLOADING_RELEASENOTE, **kwargs)
 
         return event
 

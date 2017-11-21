@@ -11,9 +11,9 @@ from upgradeclient.domain.utils.extstr import ExtStr
 from upgradeclient.domain.common.logger import Logger
 from upgradeclient.domain.utils.download import Download
 from upgradeclient.domain.utils.firmware import Firmware
+from upgradeclient.domain.model.event.event import Event
 from upgradeclient.domain.bl.handlers.base import BaseHandler
 from upgradeclient.domain.model.event.event_type import EventType
-from upgradeclient.domain.bl.event.event_handler import EventHandler
 
 
 logger = Logger.get_logger(__name__)
@@ -26,7 +26,8 @@ class ReleaseNoteHandler(BaseHandler):
         self.cache.write(json_data, relative_path=relative_path)
 
     def create_event(self, **kwargs):
-        event = EventHandler.create_event(event_name=EventType.DOWNLOADING_FIRMWARE, **kwargs)
+        kwargs.pop('name')
+        event = Event(name=EventType.DOWNLOADING_FIRMWARE, **kwargs)
 
         return event
 
