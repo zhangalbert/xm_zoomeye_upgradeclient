@@ -59,8 +59,12 @@ class ReleaseNoteHandler(BaseHandler):
         sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
         for key, val in dict_data:
             date, flag = key[:2]
-            if date < sta_time.strftime('%Y-%m-%d') or date > end_time.strftime('%Y-%m-%d'):
-                logger.debug('{0} delected invalid date-range, ignore, url={0}'.format(obj.get_download_url()))
+            sta_date = sta_time.strftime('%Y-%m-%d')
+            end_date = end_time.strftime('%Y-%m-%d')
+            if date < sta_date or date > end_date:
+                logger.debug('{0} delected invalid date-range, ignore, cur_date={1} sta_date={2} end_date={3}'.format(
+                    self.__class__.__name__, date, sta_date, end_date
+                ))
                 continue
             q = Q(obj__download_url__contains=date) & Q(obj__filename__contains=flag)
             filter_res = self.filter_event(q, objs_list)
