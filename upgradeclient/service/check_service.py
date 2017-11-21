@@ -121,4 +121,5 @@ class CheckService(object):
                                  merged_changes[item])
                 event.set_data(event_data)
                 self.send_cache_task(event)
+
             time.sleep(ins.summarize_interval)

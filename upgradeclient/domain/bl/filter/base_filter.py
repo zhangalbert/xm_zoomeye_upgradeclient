@@ -17,3 +17,4 @@ class BaseFilter(object):
 
         return R(obj, q_ins=q)()
 
+
