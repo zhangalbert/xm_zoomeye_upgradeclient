@@ -108,7 +108,8 @@ class CheckService(object):
 
             for item in merged_urlmaps:
                 event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
-                event_data = map(lambda e: self.create_event(daoname=name, **dict(e.__dict__)).to_json())
+                event_data = map(lambda e: self.create_event(daoname=name, **dict(e.__dict__)).to_json(),
+                                 merged_changes[item])
                 event.set_data(event_data)
                 self.send_cache_task(event)
             time.sleep(ins.summarize_interval)
