@@ -84,6 +84,12 @@ class CheckService(object):
 
         return event
 
+    def get_baseurl(self, url):
+        parent_url = os.path.dirname(url)
+        base_url = os.path.dirname(parent_url)
+
+        return base_url
+
     def handle(self, name, ins):
         url = ins.get_base_url()
         filter_ins = self.filter_factory[name]
@@ -96,18 +102,21 @@ class CheckService(object):
 
             merged_changes = {}
             merged_urlmaps = {}
-            print '*' * 100
-            print latest_changes
-            print '*' * 100
             for item in latest_changes:
                 obj = type('obj', (object,), item)
                 res = filter_ins.release_note_validate(obj)
+                base_url = self.get_baseurl(obj.download_url)
                 if not res:
-                    if os.path.dirname(obj.download_url) in merged_changes:
-                        merged_changes[obj.download_url].append(obj)
+                    if base_url in merged_changes:
+                        merged_changes[base_url].append(obj)
                     continue
                 merged_changes.setdefault(os.path.dirname(obj.download_url), [])
                 merged_urlmaps.setdefault(os.path.dirname(obj.download_url), obj)
+
+            print '*'*100
+            print merged_changes
+            print merged_urlmaps
+            print '*'*100
 
             for item in merged_urlmaps:
                 event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
