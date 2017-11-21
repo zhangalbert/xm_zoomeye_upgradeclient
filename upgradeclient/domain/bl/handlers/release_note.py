@@ -7,6 +7,7 @@ import datetime
 
 
 from upgradeclient.domain.common.filter import Q, R
+from upgradeclient.domain.utils.extstr import ExtStr
 from upgradeclient.domain.common.logger import Logger
 from upgradeclient.domain.utils.download import Download
 from upgradeclient.domain.utils.firmware import Firmware
@@ -32,6 +33,8 @@ class ReleaseNoteHandler(BaseHandler):
     def filter_event(self, q, objs_list):
         event_list = []
         for obj in objs_list:
+            obj.filename = ExtStr(obj.filename)
+            obj.download_url = ExtStr(obj.download_url)
             res = R(obj, q_ins=q)()
             if res is True:
                 event = self.create_event(**dict(obj.__dict__))
