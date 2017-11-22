@@ -37,7 +37,6 @@ class CheckService(object):
         self.filter_factory = filter_factory
 
     def sub_process_signal_callback(self, signal_num, unused_frame):
-        # 子进程忽略Ctrl+C/Ctrl+Z信号
         if self.event_event.is_set():
             return
         for name in self.sub_process:
@@ -79,7 +78,7 @@ class CheckService(object):
             if is_finished is True:
                 break
             time.sleep(15)
-        logger.info('check service graceful closing successfully!')
+        logger.info('xm_zoomeye_upgradeclient server graceful closing successfully!')
 
     def send_cache_task(self, event):
         json_data = event.to_json()

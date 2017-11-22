@@ -97,9 +97,7 @@ class ReleaseNoteHandler(BaseHandler):
         download.wget(obj.get_download_url(), filename)
 
         event_list = self.analysis_log(obj)
-        print '*' * 100
-        print event_list
-        print '*' * 100
+        
         for event in event_list:
             self.send_task_cache(event)
 
