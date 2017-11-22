@@ -15,6 +15,7 @@ logger = Logger.get_logger(__name__)
 class FirmwareHandler(BaseHandler):
     def analysis_log(self, obj):
         task_list = []
+        upgfiles = os.path.join(self.cache.base_path, 'upgrade_files')
         fdirname = os.path.join(self.cache.base_path, 'download_cache')
         fsrcname = obj.get_filename().rsplit('_', 1)[0]
         filename = os.path.join(fdirname, fsrcname)
