@@ -75,6 +75,7 @@ class CheckService(object):
                 p = self.sub_process[name]
                 if p.is_alive():
                     is_finished = False
+                    break
             if is_finished is True:
                 break
             time.sleep(15)
