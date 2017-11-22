@@ -95,7 +95,8 @@ class ReleaseNoteHandler(BaseHandler):
         event_list = self.analysis_log(obj)
         for event in event_list:
             self.send_task_cache(event)
-        self.delete(src_name, dst_name)
+        # self.delete(src_name, dst_name)
+        self.delete(src_name)
 
 
 
