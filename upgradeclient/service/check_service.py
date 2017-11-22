@@ -102,6 +102,7 @@ class CheckService(object):
         filter_ins = self.filter_factory[name]
         self.check.set_commit_info_style(style_num=1)
         signal.signal(signal.SIGINT, self.ctl_process_signal_callback)
+
         while True:
             if self.event_event.is_set():
                 fmtdata = (name, os.getpid())
