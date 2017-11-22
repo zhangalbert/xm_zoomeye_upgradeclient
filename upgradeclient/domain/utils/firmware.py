@@ -73,7 +73,7 @@ class Firmware(object):
                         change_dict.update({match_key: match_val})
                 else:
                     try:
-                        change_dict[match_key].append(cur_item)
+                        change_dict[match_key].append(cur_item.lstrip())
                     except AttributeError, e:
                         add_flag = False
                         break
@@ -110,6 +110,6 @@ class Firmware(object):
         if devid[5] < '5':
             resid = devid[:8] + 'XXXXXXXXXXX' + devid[19:]
         else:
-            resid = devid[:8] + devid[8:13].replace('2', '0').replace('3', '1') + '0000' + devid[17:]
+            resid = devid[:8] + 'XXXXX' + '0000' + devid[17:]
 
         return resid
