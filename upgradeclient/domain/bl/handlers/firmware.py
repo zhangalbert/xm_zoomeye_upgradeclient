@@ -50,19 +50,19 @@ class FirmwareHandler(BaseHandler):
         dst_name = os.path.join(tdirname, fsrcname)
 
         eventdata = obj.get_data()
-        eventdata['ChangeLog_SimpChinese'] = type('obj', (object,), {
+        eventdata['ChangeLog_SimpChinese'] = type('obj', (ExtStr,), {
             'relative_path': ExtStr(os.path.join(eventdata['Date'], 'ChangeLog_SimpChinese.dat')),
             'file_contents': ExtStr(os.linesep.join(eventdata['ChangeLog_SimpChinese']).strip()),
         })
-        eventdata['ChangeLog_English'] = type('obj', (object,), {
+        eventdata['ChangeLog_English'] = type('obj', (ExtStr,), {
             'relative_path': ExtStr(os.path.join(eventdata['Date'], 'ChangeLog_English.dat')),
             'file_contents': ExtStr(os.linesep.join(eventdata['ChangeLog_English']).strip()),
         })
-        eventdata['Level'] = type('obj', (object,), {
+        eventdata['Level'] = type('obj', (ExtStr,), {
             'relative_path': ExtStr(os.path.join(eventdata['Date'], 'Level_{0}.dat'.format(eventdata['Level']))),
             'file_contents': ExtStr(eventdata['Level'].strip()),
         })
-        eventdata['Firmware'] = type('obj', (object,), {
+        eventdata['Firmware'] = type('obj', (ExtStr,), {
             'relative_path': ExtStr(os.path.join(eventdata['Date'], fsrcname)),
             'file_contents': ExtStr(open(dst_name, 'r+b').read()).strip(),
         })
