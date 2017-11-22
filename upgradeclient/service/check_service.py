@@ -70,6 +70,10 @@ class CheckService(object):
             signal.SIGINT, signal.SIGTERM, signal.SIGTSTP
         ])
         while True:
+            if not self.event_event.is_set():
+                time.sleep(5)
+                continue
+
             is_finished = True
             for name in self.sub_process:
                 p = self.sub_process[name]
@@ -77,9 +81,10 @@ class CheckService(object):
                     is_finished = False
                     logger.info('{0} is graceful closing, wait..., plist={1}'.format(self.__class__.__name__,
                                                                                      multiprocessing.active_children()))
-            if is_finished:
+                    break
+            if is_finished is True:
                 break
-            time.sleep(0.1)
+            time.sleep(5)
         logger.info('stop check service successfully!')
 
     def send_cache_task(self, event):
