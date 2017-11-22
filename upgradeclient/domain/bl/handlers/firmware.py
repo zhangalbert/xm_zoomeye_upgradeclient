@@ -26,7 +26,6 @@ class FirmwareHandler(BaseHandler):
         dst_name = os.path.join(tdirname, fsrcname)
 
         download = Download()
-        download.reg_reporthook()
         if not download.wget(obj.get_download_url(), dst_name):
             return
 

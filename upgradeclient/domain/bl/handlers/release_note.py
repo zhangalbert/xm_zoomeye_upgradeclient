@@ -90,7 +90,6 @@ class ReleaseNoteHandler(BaseHandler):
         src_name = os.path.join(sdirname, obj.get_filename())
 
         download = Download()
-        download.reg_reporthook()
         if not download.wget(obj.get_download_url(), dst_name):
             return
         event_list = self.analysis_log(obj)
