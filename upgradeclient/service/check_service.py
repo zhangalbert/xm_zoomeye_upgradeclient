@@ -15,12 +15,6 @@ from upgradeclient.domain.model.event.event_type import EventType
 logger = Logger.get_logger(__name__)
 
 
-class GracefulClosingException(Exception):
-    @staticmethod
-    def process_signal_callback(unused_signal, unused_frame):
-        raise GracefulClosingException
-
-
 class CheckHandlerProcess(multiprocessing.Process):
     def __init__(self, name, obj, service):
         super(CheckHandlerProcess, self).__init__()
@@ -55,6 +49,11 @@ class CheckService(object):
                 self.sub_process.pop(name)
                 self.sub_process.update({name: sub_p})
 
+    def ctl_process_signal_callback(self):
+        self.event_event.set()
+        fmtdata = (os.getpid(), multiprocessing.current_process())
+        logger.info('check service {0} got GracefulClosingException signal, pid={0}'.format(**fmtdata))
+
     def start(self):
         """ 启动check_service
 
@@ -70,21 +69,17 @@ class CheckService(object):
             p.start()
             self.sub_process.update({name: p})
         signal.signal(signal.SIGCHLD, self.sub_process_signal_callback)
-        signal.signal(signal.SIGINT, GracefulClosingException.process_signal_callback)
-        try:
-            while True:
-                is_finished = True
-                for name in self.sub_process:
-                    p = self.sub_process[name]
-                    if p.is_alive():
-                        is_finished = False
-                if is_finished is True:
-                    break
-                time.sleep(5)
-            logger.info('check service graceful closing successfully!')
-        except GracefulClosingException:
-            self.event_event.set()
-            logger.info('check service main process got GracefulClosingException signal, pid={0}'.format(os.getpid()))
+        signal.signal(signal.SIGINT,  self.ctl_process_signal_callback)
+        while True:
+            is_finished = True
+            for name in self.sub_process:
+                p = self.sub_process[name]
+                if p.is_alive():
+                    is_finished = False
+            if is_finished is True:
+                break
+            time.sleep(15)
+        logger.info('check service graceful closing successfully!')
 
     def send_cache_task(self, event):
         json_data = event.to_json()
@@ -106,38 +101,33 @@ class CheckService(object):
         url = ins.get_base_url()
         filter_ins = self.filter_factory[name]
         self.check.set_commit_info_style(style_num=1)
-        try:
-            while True:
-                if self.event_event.is_set():
-                    fmtdata = (name, os.getpid())
-                    logger.info('check service sub process {0} stoped successfull, pid={1}'.format(**fmtdata))
-                    break
-                end_time = datetime.datetime.now()
-                sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
-                latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
-                                                               end_time.timetuple())
+        while True:
+            if self.event_event.is_set():
+                fmtdata = (name, os.getpid())
+                logger.info('check service sub process {0} stoped successfull, pid={1}'.format(**fmtdata))
+                break
+            end_time = datetime.datetime.now()
+            sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
+            latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
+                                                           end_time.timetuple())
 
-                merged_changes = {}
-                merged_urlmaps = {}
-                for item in latest_changes:
-                    obj = type('obj', (object,), item)
-                    base_url = self.get_baseurl(obj.download_url)
-                    if not filter_ins.release_note_validate(obj):
-                        if base_url in merged_changes and filter_ins.firmware_name_validate(obj):
-                            merged_changes[base_url].append(obj)
-                        continue
-                    merged_changes.setdefault(os.path.dirname(obj.download_url), [])
-                    merged_urlmaps.setdefault(os.path.dirname(obj.download_url), obj)
+            merged_changes = {}
+            merged_urlmaps = {}
+            for item in latest_changes:
+                obj = type('obj', (object,), item)
+                base_url = self.get_baseurl(obj.download_url)
+                if not filter_ins.release_note_validate(obj):
+                    if base_url in merged_changes and filter_ins.firmware_name_validate(obj):
+                        merged_changes[base_url].append(obj)
+                    continue
+                merged_changes.setdefault(os.path.dirname(obj.download_url), [])
+                merged_urlmaps.setdefault(os.path.dirname(obj.download_url), obj)
 
-                for item in merged_urlmaps:
-                    event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
-                    event_data = map(lambda e: self.create_event(daoname=name, **dict(e.__dict__)).to_json(),
-                                     merged_changes[item])
-                    event.set_data(event_data)
-                    self.send_cache_task(event)
+            for item in merged_urlmaps:
+                event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
+                event_data = map(lambda e: self.create_event(daoname=name, **dict(e.__dict__)).to_json(),
+                                 merged_changes[item])
+                event.set_data(event_data)
+                self.send_cache_task(event)
 
-                time.sleep(ins.summarize_interval)
-        except (GracefulClosingException, KeyboardInterrupt):
-            self.event_event.set()
-            fmtdata = (name, os.getpid())
-            logger.info('check service sub process {0} got GracefulClosingException signal, pid={1}'.format(**fmtdata))
+            time.sleep(ins.summarize_interval)
