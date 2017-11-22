@@ -62,6 +62,7 @@ class CheckService(object):
         2. 子进程异常后自动启动同配置子进程
         3. 多进程检测数据通过对应子类过滤器最终生成下载任务对象
         4. 异步回调写入下载任务对象到本地cacher
+        5. 优雅关闭,等待所有子进程任务执行完后,主进程关闭
         """
         for name in self.dao_factory:
             p = CheckHandlerProcess(name, self.dao_factory[name], self)
@@ -80,11 +81,10 @@ class CheckService(object):
                 if is_finished is True:
                     break
                 time.sleep(5)
+            logger.info('check service graceful closing successfully!')
         except GracefulClosingException:
             self.event_event.set()
             logger.info('check service main process got GracefulClosingException signal, pid={0}'.format(os.getpid()))
-        finally:
-            logger.info('check service graceful closing successfully!')
 
     def send_cache_task(self, event):
         json_data = event.to_json()
