@@ -92,7 +92,6 @@ class ReleaseNoteHandler(BaseHandler):
         download = Download()
         download.reg_reporthook()
         if not download.wget(obj.get_download_url(), dst_name):
-            self.delete(src_name)
             return
         event_list = self.analysis_log(obj)
         for event in event_list:
