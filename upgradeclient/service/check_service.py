@@ -39,6 +39,7 @@ class CheckService(object):
     def sub_process_signal_callback(self, signal_num, unused_frame):
         # 子进程忽略Ctrl+C/Ctrl+Z信号,对这些信号单独处理,一旦事件标志位被设置则关闭自动重启
         if signal_num in [signal.SIGINT, signal.SIGTSTP] or self.event_event.is_set():
+            self.event_event.set()
             return
         for name in self.sub_process:
             p = self.sub_process[name]
@@ -48,9 +49,6 @@ class CheckService(object):
                 sub_p.start()
                 self.sub_process.pop(name)
                 self.sub_process.update({name: sub_p})
-
-    def main_process_signal_callback(self, unused_signal, unused_frame):
-        self.event_event.set()
 
     def start(self):
         """ 启动check_service
@@ -66,9 +64,8 @@ class CheckService(object):
             p.start()
             self.sub_process.update({name: p})
         signal.signal(signal.SIGCHLD, self.sub_process_signal_callback)
-        map(lambda s: signal.signal(s, self.main_process_signal_callback), [
-            signal.SIGINT, signal.SIGTERM, signal.SIGTSTP
-        ])
+        signal.signal(signal.SIGINT, self.sub_process_signal_callback)
+        signal.signal(signal.SIGTSTP, self.sub_process_signal_callback)
         while True:
             if not self.event_event.is_set():
                 time.sleep(5)
@@ -79,8 +76,7 @@ class CheckService(object):
                 p = self.sub_process[name]
                 if p.is_alive():
                     is_finished = False
-                    logger.info('{0} is graceful closing, wait..., plist={1}'.format(self.__class__.__name__,
-                                                                                     multiprocessing.active_children()))
+                    logger.info('{0} is graceful closing, wait ... '.format(self.__class__.__name__))
                     break
             if is_finished is True:
                 break
@@ -109,6 +105,8 @@ class CheckService(object):
         self.check.set_commit_info_style(style_num=1)
         while True:
             if self.event_event.is_set():
+                current_process = multiprocessing.current_process()
+                logger.info('check service subprocess {0} is closed successfull'.format(current_process))
                 break
             end_time = datetime.datetime.now()
             sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
