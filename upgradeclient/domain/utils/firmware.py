@@ -103,6 +103,8 @@ class Firmware(object):
     def convert_devid(devid):
         resid = None
 
+        if devid is None:
+            return resid
         if len(devid) != 24:
             return resid
         if devid[5] < '5':
