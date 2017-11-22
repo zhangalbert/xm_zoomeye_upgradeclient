@@ -48,8 +48,8 @@ class File(object):
                 detector.feed(line)
                 if detector.done:
                     break
-        detector.close()
         fencoding = detector.result['encoding']
+        detector.close()
         # 转存到其它文件
         new_file = '{0}.{1}'.format(path, 'saving')
         with open(new_file, 'a+b') as fd_saving:
