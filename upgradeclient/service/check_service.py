@@ -73,6 +73,9 @@ class CheckService(object):
         while True:
             is_finished = True
             for name in self.sub_process:
+                print '#' * 100
+                print self.sub_process
+                print '#' * 100
                 p = self.sub_process[name]
                 if p.is_alive():
                     is_finished = False
