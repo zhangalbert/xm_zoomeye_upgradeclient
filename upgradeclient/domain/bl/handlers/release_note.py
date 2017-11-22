@@ -78,11 +78,6 @@ class ReleaseNoteHandler(BaseHandler):
 
         return event_list
 
-    def delete(self, filename):
-        if not os.path.exists(filename):
-            return
-        os.remove(filename)
-
     def handle(self, obj):
         """ 处理DOWNLOADING_RELEASENOTE事件
         1. 下载release_note文件到download_cache
@@ -97,6 +92,7 @@ class ReleaseNoteHandler(BaseHandler):
         download = Download()
         download.reg_reporthook()
         if not download.wget(obj.get_download_url(), dst_name):
+            self.delete(src_name)
             return
         event_list = self.analysis_log(obj)
         for event in event_list:
