@@ -52,7 +52,7 @@ class CheckService(object):
     def ctl_process_signal_callback(self, unused_signal, unused_frame):
         self.event_event.set()
         fmtdata = (os.getpid(), multiprocessing.current_process())
-        logger.info('check service main/sub process got ctrl+c signal, pid={0}, name={1}'.format(**fmtdata))
+        logger.info('check service main/sub process got ctrl+c signal, pid={0}, name={1}'.format(*fmtdata))
 
     def start(self):
         """ 启动check_service
@@ -106,7 +106,7 @@ class CheckService(object):
         while True:
             if self.event_event.is_set():
                 fmtdata = (name, os.getpid())
-                logger.info('check service sub process {0} stoped successfull, pid={1}'.format(**fmtdata))
+                logger.info('check service sub process {0} stoped successfull, pid={1}'.format(*fmtdata))
                 break
             end_time = datetime.datetime.now()
             sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
