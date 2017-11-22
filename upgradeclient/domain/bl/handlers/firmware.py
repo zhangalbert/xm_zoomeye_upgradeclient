@@ -20,7 +20,6 @@ class FirmwareHandler(BaseHandler):
     def create_files(self, obj):
         is_created = True
 
-        upgfiles = os.path.join(self.cache.base_path, 'upgrade_files')
         tdirname = os.path.join(self.cache.base_path, 'download_cache')
         dst_name = os.path.join(tdirname, os.path.basename(obj['Firmware'].relative_path))
         upgdevid = Firmware.convert_devid(Firmware.get_devid(dst_name))
@@ -28,6 +27,9 @@ class FirmwareHandler(BaseHandler):
             is_created = False
             return is_created
 
+        upgfiles = os.path.join(self.cache.base_path, 'upgrade_files', upgdevid)
+        upg_date = os.path.join(upgfiles, obj['Date'])
+        os.path.exists(upg_date) and os.remove(upg_date)
         for k, v in obj.iteritems():
             if getattr(v, 'relative_path', None) is not None and getattr(v, 'file_contents', None):
                 path = os.path.join(upgfiles, v.relative_path)
