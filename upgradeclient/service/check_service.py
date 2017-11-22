@@ -137,7 +137,7 @@ class CheckService(object):
                     self.send_cache_task(event)
 
                 time.sleep(ins.summarize_interval)
-        except GracefulClosingException:
+        except (GracefulClosingException, KeyboardInterrupt):
             self.event_event.set()
             fmtdata = (name, os.getpid())
             logger.info('check service sub process {0} got GracefulClosingException signal, pid={1}'.format(**fmtdata))
