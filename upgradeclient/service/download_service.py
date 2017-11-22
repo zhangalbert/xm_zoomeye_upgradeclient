@@ -54,6 +54,7 @@ class DownloadService(object):
                     time.sleep(1)
                 time.sleep(self.check_interval)
         t = Thread(target=target)
+        t.setDaemon(True)
         t.start()
 
     def handle(self, obj):
