@@ -67,7 +67,7 @@ class FirmwareHandler(BaseHandler):
             'file_contents': ExtStr(open(dst_name, 'r+b').read()).strip(),
         })
         eventdata['XmCloudUpgrade'] = ExtStr(eventdata['XmCloudUpgrade'])
-        event_obj = type('obj', (object,), **eventdata)
+        event_obj = type('obj', (object,), eventdata)
         if not self.is_allow_gen(event_obj):
             return None
 
