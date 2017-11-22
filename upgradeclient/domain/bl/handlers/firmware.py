@@ -2,6 +2,7 @@
 
 
 import os
+import shutil
 
 
 from upgradeclient.domain.common.file import File
@@ -29,7 +30,7 @@ class FirmwareHandler(BaseHandler):
 
         upgfiles = os.path.join(self.cache.base_path, 'upgrade_files', upgdevid)
         upg_date = os.path.join(upgfiles, obj['Date'])
-        os.path.exists(upg_date) and os.remove(upg_date)
+        os.path.exists(upg_date) and shutil.rmtree(upg_date)
         for k, v in obj.iteritems():
             if getattr(v, 'relative_path', None) is not None and getattr(v, 'file_contents', None):
                 path = os.path.join(upgfiles, v.relative_path)
