@@ -112,7 +112,6 @@ class CheckService(object):
             sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
             latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
                                                            end_time.timetuple())
-
             merged_changes = {}
             merged_urlmaps = {}
             for item in latest_changes:
