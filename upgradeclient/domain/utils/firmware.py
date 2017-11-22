@@ -7,6 +7,9 @@ import string
 import zipfile
 
 
+from upgradeclient.domain.common.file import File
+
+
 class Firmware(object):
     @staticmethod
     def release_note2dict(path):
@@ -16,6 +19,7 @@ class Firmware(object):
         note2firmware = {}
         start_records = False
         # 读取数据,获取以(2016-10-25,IPC_HI3518EV200_50H10L_S38)为键,以后续值为值作为字典
+        File.set_file_to_utf8(path)
         with open(path, 'r+b') as rhandler:
             for cur_line in rhandler:
                 match = re.match('(\\d{4}-\\d{1,2}-\\d{1,2})\\W+([A-Z-0-9_a-z]+)', cur_line)

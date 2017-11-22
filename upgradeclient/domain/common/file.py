@@ -3,6 +3,8 @@
 
 import os
 import hashlib
+import chardet
+import shutil
 
 
 class File(object):
@@ -30,6 +32,40 @@ class File(object):
                 f_content += line
 
         File.write_content(f_content, path)
+
+    @staticmethod
+    def to_utf8(path):
+        f_content = File.read_content(path)
+        fencoding = chardet.detect(f_content)['encoding']
+        f_content = f_content.decode(fencoding).encode('utf-8')
+        File.write_content(f_content, path)
+
+    @staticmethod
+    def bigfile_to_utf8(path):
+        detector = chardet.UniversalDetector()
+        with open(path, 'rU') as fd:
+            for line in fd:
+                detector.feed(line)
+                if detector.done:
+                    break
+        detector.close()
+        fencoding = detector.result['encoding']
+        # 转存到其它文件
+        new_file = '{0}.{1}'.format(path, 'saving')
+        with open(new_file, 'a+b') as fd_saving:
+            with open(path, 'rU') as fd:
+                for line in fd:
+                    encode_line = line.decode(fencoding).encode('utf-8')
+                    fd_saving.write(encode_line)
+        shutil.move(new_file, path)
+
+    @staticmethod
+    def set_file_to_utf8(path):
+        fsize = os.stat(path).st_size
+        if fsize > pow(2, 20):
+            File.bigfile_to_utf8(path)
+            return
+        File.to_utf8(path)
 
     @staticmethod
     def get_strs_md5(strs):
