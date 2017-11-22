@@ -4,9 +4,9 @@ import os
 import time
 import signal
 import datetime
+import multiprocessing
 
 
-from multiprocessing import Process
 from upgradeclient.domain.common.logger import Logger
 from upgradeclient.domain.model.event.event import Event
 from upgradeclient.domain.model.event.event_type import EventType
@@ -15,7 +15,7 @@ from upgradeclient.domain.model.event.event_type import EventType
 logger = Logger.get_logger(__name__)
 
 
-class CheckHandlerProcess(Process):
+class CheckHandlerProcess(multiprocessing.Process):
     def __init__(self, name, obj, service):
         super(CheckHandlerProcess, self).__init__()
         self.obj = obj
@@ -31,13 +31,14 @@ class CheckService(object):
     def __init__(self, check=None, cache=None, dao_factory=None, filter_factory=None):
         self.check = check
         self.cache = cache
-        self.stopping = False
         self.sub_process = {}
+        self.event_event = multiprocessing.Event()
         self.dao_factory = dao_factory
         self.filter_factory = filter_factory
 
-    def sub_process_signal_callback(self, unused_signal, unused_frame):
-        if self.stopping is True:
+    def sub_process_signal_callback(self, signal_num, unused_frame):
+        # 子进程忽略Ctrl+C/Ctrl+Z信号,对这些信号单独处理,一旦事件标志位被设置则关闭自动重启
+        if signal_num in [signal.SIGINT, signal.SIGTSTP] or self.event_event.is_set():
             return
         for name in self.sub_process:
             p = self.sub_process[name]
@@ -49,7 +50,7 @@ class CheckService(object):
                 self.sub_process.update({name: sub_p})
 
     def main_process_signal_callback(self, unused_signal, unused_frame):
-        self.stopping = True
+        self.event_event.set()
 
     def start(self):
         """ 启动check_service
@@ -69,7 +70,14 @@ class CheckService(object):
             signal.SIGINT, signal.SIGTERM, signal.SIGTSTP
         ])
         while True:
-            if self.stopping is True:
+            is_finished = True
+            for name in self.sub_process:
+                p = self.sub_process[name]
+                if p.is_alive():
+                    is_finished = False
+                    logger.info('{0} is graceful closing, wait..., plist={1}'.format(self.__class__.__name__,
+                                                                                     multiprocessing.active_children()))
+            if is_finished:
                 break
             time.sleep(0.1)
         logger.info('stop check service successfully!')
@@ -95,6 +103,8 @@ class CheckService(object):
         filter_ins = self.filter_factory[name]
         self.check.set_commit_info_style(style_num=1)
         while True:
+            if self.event_event.is_set():
+                break
             end_time = datetime.datetime.now()
             sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
             latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),

@@ -125,9 +125,3 @@ objects:
     class: upgradeclient.domain.bl.filter.xmjp_filter.XmjpFilter
     scope: singleton
     constructor-args: {}
-
-
-
-
-
-

@@ -13,7 +13,7 @@ class DownloadHandlerFactory(object):
 
     def create_download_handler(self, obj):
         logger.debug('download handler factory create download handler ... ')
-        handler_name = obj.get_name().lower() if obj.get_name() else 'unknow'
+        handler_name = obj.get_name().lower() if obj.get_name() else 'UnknowHandler'
         if handler_name not in self.download_handlers:
             logger.debug('invalid event, no download handler matched(use default), name={0}'.format(handler_name))
             download_handler = self.download_handlers['default']

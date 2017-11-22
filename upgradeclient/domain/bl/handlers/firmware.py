@@ -11,3 +11,4 @@ logger = Logger.get_logger(__name__)
 class FirmwareHandler(BaseHandler):
     def handle(self, obj):
         pass
+
