@@ -52,7 +52,7 @@ class CheckService(object):
     def ctl_process_signal_callback(self):
         self.event_event.set()
         fmtdata = (os.getpid(), multiprocessing.current_process())
-        logger.info('check service {0} got GracefulClosingException signal, pid={0}'.format(**fmtdata))
+        logger.info('check service main/sub process got ctrl+c signal, pid={0}, name={1}'.format(**fmtdata))
 
     def start(self):
         """ 启动check_service
