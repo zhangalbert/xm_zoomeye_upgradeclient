@@ -40,7 +40,7 @@ class FirmwareHandler(BaseHandler):
             return
         task_list = self.analysis_log(obj)
 
-        self.delete(src_name)
+        # self.delete(src_name)
 
 
 
