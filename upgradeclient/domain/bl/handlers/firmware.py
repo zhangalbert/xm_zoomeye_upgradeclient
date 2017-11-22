@@ -21,7 +21,7 @@ class FirmwareHandler(BaseHandler):
         """
         sdirname = os.path.join(self.cache.base_path, 'check_cache')
         tdirname = os.path.join(self.cache.base_path, 'download_cache')
-        fsrcname = obj.get_filename().rsplit('_', maxsplit=1)[0]
+        fsrcname = obj.get_filename().rsplit('_', 1)[0]
         src_name = os.path.join(sdirname, obj.get_filename())
         dst_name = os.path.join(tdirname, fsrcname)
 
