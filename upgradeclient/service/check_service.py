@@ -49,7 +49,7 @@ class CheckService(object):
                 self.sub_process.pop(name)
                 self.sub_process.update({name: sub_p})
 
-    def ctl_process_signal_callback(self):
+    def ctl_process_signal_callback(self, unused_signal, unused_frame):
         self.event_event.set()
         fmtdata = (os.getpid(), multiprocessing.current_process())
         logger.info('check service main/sub process got ctrl+c signal, pid={0}, name={1}'.format(**fmtdata))
@@ -101,6 +101,7 @@ class CheckService(object):
         url = ins.get_base_url()
         filter_ins = self.filter_factory[name]
         self.check.set_commit_info_style(style_num=1)
+        signal.signal(signal.SIGINT, self.ctl_process_signal_callback)
         while True:
             if self.event_event.is_set():
                 fmtdata = (name, os.getpid())
