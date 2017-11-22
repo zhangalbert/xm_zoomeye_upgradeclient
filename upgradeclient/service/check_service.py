@@ -37,7 +37,11 @@ class CheckService(object):
         self.filter_factory = filter_factory
 
     def sub_process_signal_callback(self, signal_num, unused_frame):
-        # 子进程忽略Ctrl+C/Ctrl+Z信号,对这些信号单独处理,一旦事件标志位被设置则关闭自动重启
+        print '=' * 100
+        print signal_num
+        print unused_frame
+        print '=' * 100
+        # 子进程忽略Ctrl+C/Ctrl+Z信号
         if signal_num in [signal.SIGINT, signal.SIGTSTP] or self.event_event.is_set():
             self.event_event.set()
             return
@@ -76,7 +80,7 @@ class CheckService(object):
                 p = self.sub_process[name]
                 if p.is_alive():
                     is_finished = False
-                    logger.info('{0} is graceful closing, wait ... '.format(self.__class__.__name__))
+                    logger.info('{0} is graceful closing, wait ... plist={1}'.format(self.__class__.__name__, multiprocessing.active_children()))
                     break
             if is_finished is True:
                 break
