@@ -21,7 +21,7 @@ def reporthook(cls, a, b, c):
     3. c 远程文件大小
     """
     percent = min(100.0 * a * b / c, 100)
-    logger.info('{0} download {1} {2}%/100%'.format(threading.currentThread(), cls.filename, percent))
+    logger.debug('{0} download {1} {2:.2f}%/100%'.format(threading.currentThread(), cls.filename, percent))
 
 
 class Download(object):
@@ -52,5 +52,3 @@ class Download(object):
         finally:
             os.path.exists(download_fname) and os.remove(download_fname)
         return is_success
-
-
