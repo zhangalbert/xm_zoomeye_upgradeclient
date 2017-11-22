@@ -37,9 +37,9 @@ class FirmwareHandler(BaseHandler):
         return is_created
 
     def is_allow_gen(self, obj):
-        q = Q(obj__ChangeLog_SimpChinese__not_exact='') & \
-            Q(obj__ChangeLog_English__not_exact='') & \
-            Q(obj__Level__not_exact='1') & \
+        q = Q(obj__ChangeLog_SimpChinese__file_contents__not_exact='') & \
+            Q(obj__ChangeLog_English__file_contents__not_exact='') & \
+            Q(obj__Level__file_contents__not_exact='1') & \
             Q(obj__XmCloudUpgrade__exact='1')
 
         return R(obj, q_ins=q)()
@@ -50,19 +50,19 @@ class FirmwareHandler(BaseHandler):
         dst_name = os.path.join(tdirname, fsrcname)
 
         eventdata = obj.get_data()
-        eventdata['ChangeLog_SimpChinese'] = type('obj', (ExtStr,), {
+        eventdata['ChangeLog_SimpChinese'] = type('obj', (object,), {
             'relative_path': ExtStr(os.path.join(eventdata['Date'], 'ChangeLog_SimpChinese.dat')),
             'file_contents': ExtStr(os.linesep.join(eventdata['ChangeLog_SimpChinese']).strip()),
         })
-        eventdata['ChangeLog_English'] = type('obj', (ExtStr,), {
+        eventdata['ChangeLog_English'] = type('obj', (object,), {
             'relative_path': ExtStr(os.path.join(eventdata['Date'], 'ChangeLog_English.dat')),
             'file_contents': ExtStr(os.linesep.join(eventdata['ChangeLog_English']).strip()),
         })
-        eventdata['Level'] = type('obj', (ExtStr,), {
+        eventdata['Level'] = type('obj', (object,), {
             'relative_path': ExtStr(os.path.join(eventdata['Date'], 'Level_{0}.dat'.format(eventdata['Level']))),
             'file_contents': ExtStr(eventdata['Level'].strip()),
         })
-        eventdata['Firmware'] = type('obj', (ExtStr,), {
+        eventdata['Firmware'] = type('obj', (object,), {
             'relative_path': ExtStr(os.path.join(eventdata['Date'], fsrcname)),
             'file_contents': ExtStr(open(dst_name, 'r+b').read()).strip(),
         })
