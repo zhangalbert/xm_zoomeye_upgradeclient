@@ -42,8 +42,7 @@ class CheckService(object):
         print unused_frame
         print '=' * 100
         # 子进程忽略Ctrl+C/Ctrl+Z信号
-        if signal_num in [signal.SIGINT, signal.SIGTSTP] or self.event_event.is_set():
-            self.event_event.set()
+        if self.event_event.is_set():
             return
         for name in self.sub_process:
             p = self.sub_process[name]
@@ -53,6 +52,9 @@ class CheckService(object):
                 sub_p.start()
                 self.sub_process.pop(name)
                 self.sub_process.update({name: sub_p})
+
+    def ctl_process_signal_callback(self, unused_signal, unused_frame):
+        self.event_event.set()
 
     def start(self):
         """ 启动check_service
@@ -68,8 +70,8 @@ class CheckService(object):
             p.start()
             self.sub_process.update({name: p})
         signal.signal(signal.SIGCHLD, self.sub_process_signal_callback)
-        signal.signal(signal.SIGINT, self.sub_process_signal_callback)
-        signal.signal(signal.SIGTSTP, self.sub_process_signal_callback)
+        signal.signal(signal.SIGINT, self.ctl_process_signal_callback)
+        signal.signal(signal.SIGTSTP, self.ctl_process_signal_callback)
         while True:
             if not self.event_event.is_set():
                 time.sleep(5)
