@@ -51,9 +51,7 @@ class Download(object):
             is_success = False
             logger.error('download {0} from {1} with exception, exp={2}'.format(filename, url, e))
         finally:
-            if os.path.exists(download_fname):
-                os.remove(download_fname)
-
+            os.path.exists(download_fname) and os.remove(download_fname)
         return is_success
 
 

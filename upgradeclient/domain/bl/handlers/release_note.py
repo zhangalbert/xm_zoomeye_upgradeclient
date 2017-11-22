@@ -89,18 +89,20 @@ class ReleaseNoteHandler(BaseHandler):
         2. 下载成功调用analysis_log解析release_note文件
         3. 结束后删除check_cache内对应的任务
         """
-        fdirname = os.path.join(self.cache.base_path, 'download_cache')
-        filename = os.path.join(fdirname, obj.get_filename())
+        tdirname = os.path.join(self.cache.base_path, 'download_cache')
+        sdirname = os.path.join(self.cache.base_path, 'check_cache')
+        dst_name = os.path.join(tdirname, obj.get_filename())
+        src_name = os.path.join(sdirname, obj.get_filename())
 
         download = Download()
         download.reg_reporthook()
-        download.wget(obj.get_download_url(), filename)
-
+        if not download.wget(obj.get_download_url(), dst_name):
+            return
         event_list = self.analysis_log(obj)
-
         for event in event_list:
             self.send_task_cache(event)
+        self.delete(src_name)
 
-        fdirname = os.path.join(self.cache.base_path, 'check_cache')
-        filename = os.path.join(fdirname, obj.get_filename())
-        self.delete(filename)
+
+
+
