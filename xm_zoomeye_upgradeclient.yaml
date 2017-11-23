@@ -13,11 +13,8 @@ objects:
   - object: WebuiService
     class: upgradeclient.service.webui_service.WebuiService
     scope: singleton
-    properties:
-      middleware: None
-      envs:
-        port: 8080
-    constructor-args: {middleware: middleware, envs: envs}
+    constructor-args:
+      port: 8081
 
   - object: UploadService
     class: upgradeclient.service.upload_service.UploadService
