@@ -12,5 +12,5 @@ app = web.application(urls, globals())
 
 
 def run(*middleware, **envs):
-    map(lambda k: os.environ.setdefault(k.upper(), envs[k]), envs)
+    map(lambda k: os.environ.setdefault(k.upper(), str(envs[k])), envs)
     app.run(*middleware)
