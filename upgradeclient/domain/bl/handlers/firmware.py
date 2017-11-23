@@ -29,12 +29,14 @@ class FirmwareHandler(BaseHandler):
             return is_created
 
         upgfiles = os.path.join(self.cache.base_path, 'upgrade_files', upgdevid)
-        upg_date = os.path.join(upgfiles, obj['Date'])
-        os.path.exists(upg_date) and shutil.rmtree(upg_date)
+        # upg_date = os.path.join(upgfiles, obj['Date'])
+        # os.path.exists(upg_date) and shutil.rmtree(upg_date)
         for k, v in obj.iteritems():
             if getattr(v, 'relative_path', None) is not None and getattr(v, 'file_contents', None):
                 path = os.path.join(upgfiles, v.relative_path)
                 data = v.file_contents
+                if os.path.exists(path) and File.get_file_md5(path) == File.get_strs_md5(data):
+                    continue
                 File.write_content(data, path)
 
         return is_created
