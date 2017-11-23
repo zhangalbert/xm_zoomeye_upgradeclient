@@ -11,6 +11,6 @@ class WebuiService(object):
         self.envs = envs or {'port': 80}
 
     def start(self, ):
-        t = Thread(server.run, args=self.middleware, kwargs=self.envs)
+        t = Thread(target=server.run, args=self.middleware, kwargs=self.envs)
         t.setDaemon(True)
         t.start()
