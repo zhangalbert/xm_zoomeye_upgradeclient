@@ -6,8 +6,16 @@ objects:
       download_service: {ref: DownloadService}
       upload_service: {ref: UploadService}
       alert_service: None
+      webui_service: {ref: WebuiService}
       check_service: {ref: CheckService}
       constructor-args: {download_service: download_service, upload_service: upload_service, alert_service: alert_service, check_service: check_service)}
+
+  - object: WebuiService
+    class: upgradeclient.service.webui_service.WebuiService
+    scope: singleton
+    properties:
+      port: 80
+    constructor-args: {port: port}
 
   - object: UploadService
     class: upgradeclient.service.upload_service.UploadService
