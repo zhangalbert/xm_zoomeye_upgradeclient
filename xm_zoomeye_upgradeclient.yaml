@@ -15,7 +15,7 @@ objects:
     scope: singleton
     properties:
       port: 80
-    constructor-args: {port: port}
+    constructor-args: [{port: port}]
 
   - object: UploadService
     class: upgradeclient.service.upload_service.UploadService
