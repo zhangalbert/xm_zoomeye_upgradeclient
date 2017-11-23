@@ -54,7 +54,6 @@ class RsyncHandler(BaseHandler):
         current_position = 0
         with open(output.name) as fd:
             while True:
-                output.file.flush()
                 fd.seek(current_position)
                 line = fd.readline()
                 if line.strip():
