@@ -1,50 +1,38 @@
 {
   "ipc": {
     "_comments": "ipc config.",
-    "base_url": "http://10.6.3.200/svn/Release/Dev/IPC/",
-    "proxy_host": "10.6.3.200",
-    "target_host": "10.6.3.200",
+    "base_url": "",
+    "proxy_host": "",
+    "target_host": "",
     "revision_seconds": 86400,
     "summarize_interval": 15,
-    "auth_user": "tangjialing",
-    "auth_pass": "tjl123",
-    "notify_to": [
-      "limanman@xiongmaitech.com"
-    ],
-    "notify_cc": [
-      "limanman@xiongmaitech.com"
-    ]
+    "auth_user": "",
+    "auth_pass": "",
+    "notify_to": [],
+    "notify_cc": []
   },
   "dvr": {
     "_comments": "dvr config.",
-    "base_url": "http://10.6.3.200/svn/Release/Dev/DVR/",
-    "proxy_host": "10.6.3.200",
-    "target_host": "10.6.3.200",
+    "base_url": "",
+    "proxy_host": "",
+    "target_host": "",
     "revision_seconds": 86400,
     "summarize_interval": 15,
-    "auth_user": "tangjialing",
-    "auth_pass": "tjl123",
-    "notify_to": [
-      "limanman@xiongmaitech.com"
-    ],
-    "notify_cc": [
-      "limanman@xiongmaitech.com"
-    ]
+    "auth_user": "",
+    "auth_pass": "",
+    "notify_to": [],
+    "notify_cc": []
   },
   "xmjp": {
     "_comments": "xmjp config.",
-    "base_url": "http://10.6.3.200/svn/Release/Dev/XMJP/",
-    "proxy_host": "10.6.3.200",
-    "target_host": "10.6.3.200",
+    "base_url": "",
+    "proxy_host": "",
+    "target_host": "",
     "revision_seconds": 86400,
     "summarize_interval": 15,
-    "auth_user": "tangjialing",
-    "auth_pass": "tjl123",
-    "notify_to": [
-      "limanman@xiongmaitech.com"
-    ],
-    "notify_cc": [
-      "limanman@xiongmaitech.com"
-    ]
+    "auth_user": "",
+    "auth_pass": "",
+    "notify_to": [],
+    "notify_cc": []
   }
 }

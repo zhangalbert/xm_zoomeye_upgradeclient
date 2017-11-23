@@ -11,7 +11,7 @@ from upgradeclient.domain.utils.extstr import ExtStr
 from upgradeclient.domain.common.logger import Logger
 from upgradeclient.domain.utils.download import Download
 from upgradeclient.domain.utils.firmware import Firmware
-from upgradeclient.domain.bl.handlers.base import BaseHandler
+from upgradeclient.domain.bl.handlers.download.base import BaseHandler
 
 
 logger = Logger.get_logger(__name__)

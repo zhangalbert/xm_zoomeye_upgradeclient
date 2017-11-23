@@ -12,8 +12,8 @@ from upgradeclient.domain.common.logger import Logger
 from upgradeclient.domain.utils.download import Download
 from upgradeclient.domain.utils.firmware import Firmware
 from upgradeclient.domain.model.event.event import Event
-from upgradeclient.domain.bl.handlers.base import BaseHandler
 from upgradeclient.domain.model.event.event_type import EventType
+from upgradeclient.domain.bl.handlers.download.base import BaseHandler
 
 
 logger = Logger.get_logger(__name__)

@@ -2,7 +2,7 @@
 
 
 from upgradeclient.domain.common.logger import Logger
-from upgradeclient.domain.bl.handlers.base import BaseHandler
+from upgradeclient.domain.bl.handlers.download.base import BaseHandler
 
 
 logger = Logger.get_logger(__name__)

@@ -1,0 +1,12 @@
+{
+  "rsync": [
+    {
+      "_comments": "",
+      "username": "",
+      "password": "",
+      "serverip": "",
+      "localpath": "",
+      "remotepath": ""
+    }
+  ]
+}

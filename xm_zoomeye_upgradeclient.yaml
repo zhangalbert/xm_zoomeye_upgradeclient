@@ -4,10 +4,36 @@ objects:
     scope: singleton
     properties:
       download_service: {ref: DownloadService}
-      upload_service: None
+      upload_service: {ref: UploadService}
       alert_service: None
       check_service: {ref: CheckService}
       constructor-args: {download_service: download_service, upload_service: upload_service, alert_service: alert_service, check_service: check_service)}
+
+  - object: UploadService
+    class: upgradeclient.service.upload_service.UploadService
+    scope: singleton
+    properties:
+      cache: {ref: Cache}
+      check_interval: 15
+      dao_factory:
+        rsync: {ref: RsyncDao}
+      upload_factory:
+        rsync: {ref: RsyncHandler}
+    constructor-args: {cache: cache, check_interval: check_interval, dao_factory: dao_factory, upload_factory: upload_factory}
+
+  - object: RsyncDao
+    class: upgradeclient.domain.dao.rsync_dao.RsyncDao
+    scope: singleton
+    properties:
+      conf_path: /etc/upgradeclient/upload.json
+    constructor-args: {conf_path: conf_path}
+
+  - object: RsyncHandler
+    class: upgradeclient.domain.bl.handlers.upload.rsync.RsyncHandler
+    scope: singleton
+    properties:
+      cache: {ref: cache}
+    constructor-args: {cache: cache}
 
   - object: CheckService
     class: upgradeclient.service.check_service.CheckService
@@ -46,7 +72,7 @@ objects:
     constructor-args: {download_handlers: download_handlers}
 
   - object: DefaultHandler
-    class: upgradeclient.domain.bl.handlers.default.DefaultHandler
+    class: upgradeclient.domain.bl.handlers.download.default.DefaultHandler
     scope: singleton
     properties:
       cache: {ref: Cache}
@@ -57,7 +83,7 @@ objects:
     constructor-args: {cache: cache, dao_factory: dao_factory}
 
   - object: FirmwareHandler
-    class: upgradeclient.domain.bl.handlers.firmware.FirmwareHandler
+    class: upgradeclient.domain.bl.handlers.download.firmware.FirmwareHandler
     scope: singleton
     properties:
       cache: {ref: Cache}
@@ -68,7 +94,7 @@ objects:
     constructor-args: {cache: cache, dao_factory: dao_factory}
 
   - object: ReleaseNoteHandler
-    class: upgradeclient.domain.bl.handlers.release_note.ReleaseNoteHandler
+    class: upgradeclient.domain.bl.handlers.download.release_note.ReleaseNoteHandler
     scope: singleton
     properties:
       cache: {ref: Cache}
@@ -112,16 +138,16 @@ objects:
     constructor-args: {conf_path: conf_path}
 
   - object: DvrFilter
-    class: upgradeclient.domain.bl.filter.dvr_filter.DvrFilter
+    class: upgradeclient.domain.bl.filter.check.dvr_filter.DvrFilter
     scope: singleton
     constructor-args: {}
 
   - object: IpcFilter
-    class: upgradeclient.domain.bl.filter.ipc_filter.IpcFilter
+    class: upgradeclient.domain.bl.filter.check.ipc_filter.IpcFilter
     scope: singleton
     constructor-args: {}
 
   - object: XmjpFilter
-    class: upgradeclient.domain.bl.filter.xmjp_filter.XmjpFilter
+    class: upgradeclient.domain.bl.filter.check.xmjp_filter.XmjpFilter
     scope: singleton
     constructor-args: {}

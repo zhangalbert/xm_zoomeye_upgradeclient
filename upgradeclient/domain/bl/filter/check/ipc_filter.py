@@ -1,7 +1,7 @@
 #! -*- coding: utf-8 -*-
 
 
-from upgradeclient.domain.bl.filter.base_filter import BaseFilter
+from upgradeclient.domain.bl.filter.check.base_filter import BaseFilter
 
 
 class IpcFilter(BaseFilter):

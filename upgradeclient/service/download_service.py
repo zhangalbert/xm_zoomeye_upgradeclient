@@ -34,6 +34,9 @@ class DownloadService(object):
         self.check_interval = check_interval or 15
 
     def start(self):
+        """ 启动download_service
+
+        """
         def target():
             while True:
                 messages = self.cache.read(self.abstruct_path, self.relative_path)
