@@ -2,9 +2,11 @@
   "rsync": [
     {
       "_comments": "",
+      "binpath": "",
       "username": "",
       "password": "",
       "serverip": "",
+      "serverport": "",
       "localpath": "",
       "remotepath": ""
     }
