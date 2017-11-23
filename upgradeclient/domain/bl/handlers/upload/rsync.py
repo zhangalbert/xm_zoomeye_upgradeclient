@@ -18,16 +18,26 @@ class RsyncHandler(BaseHandler):
     def __init__(self, cache=None):
         super(RsyncHandler, self).__init__(cache=cache)
 
+    def setmode(self, path, mode):
+        if not os.path.exists(path) or not str(mode).isdigit():
+            return
+        oct_mode = int(str(mode), 8)
+        os.chmod(path, oct_mode)
+
+    def set_password(self, obj):
+        authdir = os.path.join(Database.get_client_dir(), 'auth', 'rsync')
+        password_file = os.path.join(authdir, '{0}.password'.format(obj.get_serverip()))
+        self.setmode(password_file, 600)
+        obj.set_password(password_file)
+
+    def set_localpath(self, obj):
+        obj.set_localpath(os.path.join(self.cache.base_path, obj.get_localpath()))
+
     def command(self, obj):
         execute_command = []
 
-        # 设置密码文件
-        authdir = os.path.join(Database.get_client_dir(), 'auth', 'rsync')
-        password_file = os.path.join(authdir, '{0}.password'.format(obj.get_serverip()))
-        obj.set_password(password_file)
-
-        # 设置本地目录
-        obj.set_localpath(os.path.join(self.cache.base_path, obj.get_localpath()))
+        self.set_password(obj)
+        self.set_localpath(obj)
 
         execute_command.append(obj.get_binpath())
         execute_command.append('-avzut')
