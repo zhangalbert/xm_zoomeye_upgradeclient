@@ -17,7 +17,7 @@ objects:
       envs:
         port: 80
       middleware: None
-    constructor-args: {middleware: middleware, envs=envs}
+    constructor-args: {middleware: middleware, envs: envs}
 
   - object: UploadService
     class: upgradeclient.service.upload_service.UploadService
