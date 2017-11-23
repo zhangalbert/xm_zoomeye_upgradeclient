@@ -7,9 +7,6 @@ from upgradeclient.domain.utils.webui import server
 
 class WebuiService(object):
     def __init__(self, *middleware, **envs):
-        print '='*100
-        print middleware, envs
-        print '='*100
         self.middleware = middleware
         self.envs = envs or {'port': 80}
 
