@@ -37,7 +37,8 @@ class UploadService(object):
                 for future in futures.as_completed(future_to_ins):
                     ins = future_to_ins[future]
                     if future.exception() is not None:
-                        logger.error('upload to {0} with exception, exp={1}'.format(ins.get_remoteurl(),future.exception()))
+                        fmtdata = (ins.get_remoteurl(), future.exception())
+                        logger.error('upload to {0} with exception, exp={1}'.format(*fmtdata))
                     else:
                         logger.info('upload to {0} successfully'.format(ins.get_remoteurl()))
 
