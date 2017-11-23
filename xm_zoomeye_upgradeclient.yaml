@@ -32,7 +32,7 @@ objects:
     class: upgradeclient.domain.bl.handlers.upload.rsync.RsyncHandler
     scope: singleton
     properties:
-      cache: {ref: cache}
+      cache: {ref: Cache}
     constructor-args: {cache: cache}
 
   - object: CheckService
