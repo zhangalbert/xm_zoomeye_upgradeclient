@@ -16,7 +16,6 @@ objects:
     properties:
       port: 80
     constructor-args:
-      - None
       port: port
 
   - object: UploadService
