@@ -1,6 +1,7 @@
 #! -*- coding: utf-8 -*-
 
 
+import os
 import time
 import multiprocessing
 
@@ -24,6 +25,10 @@ class UploadService(object):
         """ 启动upload_service
 
         """
+        # 防止线程之间竞争makedirs导致OSError
+        fdirname = os.path.join(self.cache.base_path, 'upgrade_files')
+        not os.path.exists(fdirname) and os.makedirs(fdirname)
+
         def target():
             while True:
                 future_to_ins = {}
@@ -32,7 +37,7 @@ class UploadService(object):
                     ins_list = self.dao_factory[name].get_data()
                     max_workers = min(len(ins_list), multiprocessing.cpu_count())
                     with futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-                        future_to_ins = dict(map(lambda ins: (executor.submit(uhandler.handle, ins)), ins_list))
+                        future_to_ins = dict(map(lambda o: (executor.submit(uhandler.handle, o), o), ins_list))
 
                 for future in futures.as_completed(future_to_ins):
                     ins = future_to_ins[future]
