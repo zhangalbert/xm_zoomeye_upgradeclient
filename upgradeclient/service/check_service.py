@@ -62,6 +62,10 @@ class CheckService(object):
         4. 异步回调写入下载任务对象到本地cacher
         5. 优雅关闭,等待所有子进程任务执行完后,主进程关闭
         """
+        # 防止进程之间竞争makedirs导致OSError
+        fdirname = os.path.join(self.cache.base_path, 'check_cache')
+        not os.path.exists(fdirname) and os.makedirs(fdirname)
+
         for name in self.dao_factory:
             p = CheckHandlerProcess(name, self.dao_factory[name], self)
             p.daemon = True

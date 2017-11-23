@@ -37,6 +37,10 @@ class DownloadService(object):
         """ 启动download_service
 
         """
+        # 防止线程之间竞争makedirs导致OSError
+        fdirname = os.path.join(self.cache.base_path, 'download_cache')
+        not os.path.exists(fdirname) and os.makedirs(fdirname)
+
         def target():
             while True:
                 messages = self.cache.read(self.abstruct_path, self.relative_path)
@@ -62,8 +66,6 @@ class DownloadService(object):
 
     def handle(self, obj):
         fdirname = os.path.join(self.cache.base_path, 'download_cache')
-        if not os.path.exists(fdirname):
-            os.makedirs(fdirname)
         filepath = os.path.join(fdirname, obj.get_filename())
         if os.path.exists(filepath):
             logger.warning('download file has not been consumed, ignore, path={0}'.format(filepath))
