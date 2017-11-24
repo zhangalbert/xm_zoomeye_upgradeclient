@@ -11,7 +11,7 @@ from upgradeclient.domain.utils.webui.urls import url_patterns as urls
 
 
 app = web.application(urls, globals())
-render = web.template.render('{0}/'.format(template_dir), base=os.path.join(template_dir, 'ebase.html'), cache=False)
+render = web.template.render('{0}/'.format(template_dir), base=os.path.join(template_dir, 'ebase'), cache=False)
 
 # 自定义404/500页面
 app.notfound = lambda: web.notfound(render.error())
