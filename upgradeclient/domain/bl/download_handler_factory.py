@@ -12,10 +12,13 @@ class DownloadHandlerFactory(object):
         self.download_handlers = download_handlers
 
     def create_download_handler(self, obj):
-        logger.debug('download handler factory create download handler ... ')
+        fmtdata = (self.__class__.__name__,)
+        logger.debug('{0} create download handler ... '.format(*fmtdata))
         handler_name = obj.get_name().lower() if obj.get_name() else 'UnknowHandler'
+
         if handler_name not in self.download_handlers:
-            logger.debug('invalid event, no download handler matched(use default), name={0}'.format(handler_name))
+            fmtdata = (self.__class__.__name__, handler_name)
+            logger.error('{0} recv invalid event (no handler matched) use default, name={1}'.format(*fmtdata))
             download_handler = self.download_handlers['default']
         else:
             download_handler = self.download_handlers[handler_name]

@@ -3,9 +3,10 @@
 
 from threading import Thread
 from upgradeclient.domain.utils.webui import server
+from upgradeclient.service.base_service import BaseService
 
 
-class WebuiService(object):
+class WebuiService(BaseService):
     def __init__(self, *middleware, **envs):
         self.middleware = middleware
         self.envs = envs or {'port': 80}

@@ -20,6 +20,10 @@ logger = Logger.get_logger(__name__)
 
 
 class ReleaseNoteHandler(BaseHandler):
+    def __init__(self, *args, **kwargs):
+        super(ReleaseNoteHandler, self).__init__(*args, **kwargs)
+        self.event_type = EventType.DOWNLOADING_RELEASENOTE
+        
     def send_task_cache(self, event):
         json_data = event.to_json()
         relative_path = os.path.join('check_cache', event.get_filename())
@@ -47,14 +51,19 @@ class ReleaseNoteHandler(BaseHandler):
         fdirname = os.path.join(self.cache.base_path, 'download_cache')
         filename = os.path.join(fdirname, obj.get_filename())
         if not obj.get_data():
-            logger.warning('release_not with no firmwares list data, url={0}'.format(obj.get_download_url()))
+            fmtdata = (self.__class__.__name__, obj.get_download_url())
+            msgdata = '{0} detected no event data for releasenote, url={1}'.format(*fmtdata)
+            self.insert(obj)(log_level='warning', log_message=msgdata)
+            logger.warning(msgdata)
             return event_list
         objs_list = map(lambda o: type('obj', (object,), json.loads(o)), obj.get_data())
 
         dict_data = Firmware.release_note2dict(filename)
         if not dict_data:
-            logger.warning('resolve release_note with exception, url={0} path={1}'.format(obj.get_download_url(),
-                                                                                          filename))
+            fmtdata = (self.__class__.__name__, obj.get_download_url())
+            msgdata = '{0} parse releasenot use Firmware with exception, url={1}'.format(*fmtdata)
+            self.insert(obj)(log_level='error', log_message=msgdata)
+            logger.error(msgdata)
             return event_list
 
         conf_dao = self.dao_factory[obj.get_daoname()]
@@ -67,9 +76,9 @@ class ReleaseNoteHandler(BaseHandler):
             sta_date = sta_time.strftime('%Y-%m-%d')
             end_date = end_time.strftime('%Y-%m-%d')
             if date < sta_date or date > end_date:
-                logger.debug('{0} delected invalid date-range, cur_date={1} sta_date={2} end_date={3}, url={4}'.format(
-                    self.__class__.__name__, date, sta_date, end_date, obj.get_download_url()
-                ))
+                fmtdata = (self.__class__.__name__, date, sta_date, end_date, obj.get_download_url)
+                msgdata = '{0} delected invalid date-range in releasenot, cur={1} stat={2} end ={3}'.format(*fmtdata)
+                logger.warning(msgdata)
                 continue
             q = Q(obj__download_url__contains=date) & Q(obj__filename__contains=flag)
             filter_res = self.filter_event(q, objs_list)
@@ -92,13 +101,12 @@ class ReleaseNoteHandler(BaseHandler):
 
         download = Download()
         if not download.wget(obj.get_download_url(), dst_name):
+            fmtdata = (self.__class__.__name__, obj.get_filename(), obj.get_download_url())
+            msgdata = '{0} download {1} failed, url={2}'.format(*fmtdata)
+            self.insert(obj)(log_level='error', log_message=msgdata)
+            logger.error(msgdata)
             return
         event_list = self.analysis_log(obj)
         for event in event_list:
             self.send_task_cache(event)
         self.delete(src_name, dst_name)
-
-
-
-
-

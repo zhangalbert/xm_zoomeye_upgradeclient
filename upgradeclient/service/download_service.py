@@ -8,6 +8,7 @@ import time
 from threading import Thread
 from upgradeclient.domain.common.logger import Logger
 from upgradeclient.domain.model.event.event import Event
+from upgradeclient.service.base_service import BaseService
 
 
 logger = Logger.get_logger(__name__)
@@ -24,7 +25,7 @@ class DownloadHandlerThread(Thread):
         self.service.handle(event)
 
 
-class DownloadService(object):
+class DownloadService(BaseService):
     def __init__(self, cache=None, handler_factory=None, abstruct_path=None, relative_path=None, check_interval=15):
         self.cache = cache
         self.sub_threads = []
@@ -57,8 +58,11 @@ class DownloadService(object):
                     threads_status = map(lambda _: not _.isAlive(), self.sub_threads)
                     if all(threads_status):
                         break
-                    logger.warning('download service thread group not finished, ignore, number={0}'.format(len(messages)))
                     time.sleep(1)
+                fmtdata = (self.__class__.__name__, self.check_interval, len(messages))
+                msgdata = '{0} thread group is finished, wait {1} seconds, num={2}'.format(*fmtdata)
+                db.insert(log_level='info', log_class=self.__class__.__name__, log_message=msgdata)
+                logger.info(msgdata)
                 time.sleep(self.check_interval)
         t = Thread(target=target)
         t.setDaemon(True)
@@ -68,7 +72,10 @@ class DownloadService(object):
         fdirname = os.path.join(self.cache.base_path, 'download_cache')
         filepath = os.path.join(fdirname, obj.get_filename())
         if os.path.exists(filepath):
-            logger.warning('download file has not been consumed, ignore, path={0}'.format(filepath))
+            fmtdata = (self.__class__.__name__, filepath)
+            msgdata = '{0} download_cache file has not been consumed, ignore, path={0}'.format(*fmtdata)
+            self.insert()(log_level='warning', log_message=msgdata)
+            logger.warning(msgdata)
             return
         handler = self.handler_factory.create_download_handler(obj)
         handler.handle(obj)

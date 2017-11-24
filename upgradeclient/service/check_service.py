@@ -9,6 +9,7 @@ import multiprocessing
 
 from upgradeclient.domain.common.logger import Logger
 from upgradeclient.domain.model.event.event import Event
+from upgradeclient.service.base_service import BaseService
 from upgradeclient.domain.model.event.event_type import EventType
 
 
@@ -27,7 +28,7 @@ class CheckHandlerProcess(multiprocessing.Process):
         self.service.handle(self.name, ins)
 
 
-class CheckService(object):
+class CheckService(BaseService):
     def __init__(self, check=None, cache=None, dao_factory=None, filter_factory=None):
         self.check = check
         self.cache = cache
@@ -49,9 +50,10 @@ class CheckService(object):
                 self.sub_process.update({name: sub_p})
 
     def ctl_process_signal_callback(self, unused_signal, unused_frame):
-        self.event_event.set()
-        fmtdata = (os.getpid(), multiprocessing.current_process())
-        logger.info('check service main/sub process got ctrl+c signal, pid={0}, name={1}'.format(*fmtdata))
+        fmtdata = (self.__class__.__name__, multiprocessing.current_process(), os.getpid())
+        msgdata = '{0} main/sub process got ctrl+c signal, name={0}, pid={1}'.format(*fmtdata)
+        self.insert()(log_level='warning ',  log_message=msgdata)
+        logger.warning(msgdata)
 
     def start(self):
         """ 启动check_service
@@ -83,7 +85,10 @@ class CheckService(object):
             if is_finished is True:
                 break
             time.sleep(15)
-        logger.info('xm_zoomeye_upgradeclient server graceful closing successfully!')
+        fmtdata = (self.__class__.__name__,)
+        msgdata = '{0} graceful closing successfully!'.format(*fmtdata)
+        self.insert()(log_level='info', log_message=msgdata)
+        logger.info(msgdata)
 
     def send_cache_task(self, event):
         json_data = event.to_json()
@@ -109,13 +114,23 @@ class CheckService(object):
 
         while True:
             if self.event_event.is_set():
-                fmtdata = (name, os.getpid())
-                logger.info('check service sub process {0} stoped successfull, pid={1}'.format(*fmtdata))
+                fmtdata = (self.__class__.__name__, name, os.getpid())
+                msgdata = '{0} sub process {1} stoped successfull, pid={1}'.format(*fmtdata)
+                self.insert()(log_level='info', log_message=msgdata)
+                logger.info(msgdata)
                 break
             end_time = datetime.datetime.now()
             sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
-            latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
-                                                           end_time.timetuple())
+            try:
+                latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
+                                                               end_time.timetuple())
+            except Exception as e:
+                fmtdata = (self.__class__.__name__, name, ins.summarize_interval, os.getpid(), e)
+                msgdata = '{0} sub process {1} check with exception, wait {2} seconds, pid={3} exp={4}'.format(*fmtdata)
+                self.insert()(log_level='error', log_message=msgdata)
+                logger.error(msgdata)
+                time.sleep(ins.summarize_interval)
+                continue
             merged_changes = {}
             merged_urlmaps = {}
             for item in latest_changes:

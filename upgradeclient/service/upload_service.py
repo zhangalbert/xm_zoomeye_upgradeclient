@@ -9,12 +9,13 @@ import multiprocessing
 from threading import Thread
 from concurrent import futures
 from upgradeclient.domain.common.logger import Logger
+from upgradeclient.service.base_service import BaseService
 
 
 logger = Logger.get_logger(__name__)
 
 
-class UploadService(object):
+class UploadService(BaseService):
     def __init__(self, cache=None, check_interval=None, dao_factory=None, upload_factory=None):
         self.cache = cache
         self.dao_factory = dao_factory
@@ -42,11 +43,14 @@ class UploadService(object):
                 for future in futures.as_completed(future_to_ins):
                     ins = future_to_ins[future]
                     if future.exception() is not None:
-                        fmtdata = (ins.get_remoteurl(), future.exception())
-                        logger.error('upload to {0} with exception, exp={1}'.format(*fmtdata))
+                        fmtdata = (self.__class__.__name__, ins.get_remoteurl(), future.exception())
+                        msgdata = '{0} upload with {1} with exception, exp={2}'.format(*fmtdata)
+                        self.insert()(log_level='error', log_message=msgdata)
+                        logger.error(msgdata)
                     else:
-                        logger.info('upload to {0} successfully'.format(ins.get_remoteurl()))
-
+                        fmtdata = (self.__class__.__name__, ins.get_remoteurl(), future.exception())
+                        msgdata = '{0} upload with {1} success'.format(*fmtdata)
+                        logger.info(msgdata)
                 time.sleep(self.check_interval)
 
         t = Thread(target=target)

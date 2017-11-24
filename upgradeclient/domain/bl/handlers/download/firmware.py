@@ -2,7 +2,6 @@
 
 
 import os
-import shutil
 
 
 from upgradeclient.domain.common.file import File
@@ -11,6 +10,7 @@ from upgradeclient.domain.utils.extstr import ExtStr
 from upgradeclient.domain.common.logger import Logger
 from upgradeclient.domain.utils.download import Download
 from upgradeclient.domain.utils.firmware import Firmware
+from upgradeclient.domain.model.event.event_type import EventType
 from upgradeclient.domain.bl.handlers.download.base import BaseHandler
 
 
@@ -18,6 +18,10 @@ logger = Logger.get_logger(__name__)
 
 
 class FirmwareHandler(BaseHandler):
+    def __init__(self, *args, **kwargs):
+        super(FirmwareHandler, self).__init__(*args, **kwargs)
+        self.event_type = EventType.DOWNLOADING_FIRMWARE
+
     def create_files(self, obj):
         is_created = True
 
@@ -93,15 +97,25 @@ class FirmwareHandler(BaseHandler):
 
         download = Download()
         if not download.wget(obj.get_download_url(), dst_name):
+            fmtdata = (self.__class__.__name__, obj.get_filename(), obj.get_download_url())
+            msgdata = '{0} download {1} failed, url={2}'.format(*fmtdata)
+            self.insert(obj)(log_level='error', log_message=msgdata)
+            logger.error(msgdata)
             return
         eventdata = self.analysis_log(obj)
         if eventdata is None:
             self.delete(src_name, dst_name)
-            logger.error('firmware releasenote with unallowed condition, url={0}'.format(file_url))
+            fmtdata = (self.__class__.__name__, obj.get_data()['Date'], obj.get_download_url())
+            msgdata = '{0} delected unallowed condition in releasenote {1} log, url={2}'.format(*fmtdata)
+            self.insert(obj)(log_level='error', log_message=msgdata)
+            logger.error(msgdata)
             return
         if not self.create_files(eventdata):
             self.delete(src_name, dst_name)
-            logger.error('firmware devid in InstallDesc with unallowed condition, url={0}'.format(file_url))
+            fmtdata = (self.__class__.__name__, obj.get_filename(), obj.get_download_url())
+            msgdata = '{0} delected {1} with invalid devid in InstallDesc file, url={2}'.format(*fmtdata)
+            self.insert(obj)(log_level='error', log_message=msgdata)
+            logger.error(msgdata)
             return
         self.delete(src_name, dst_name)
 

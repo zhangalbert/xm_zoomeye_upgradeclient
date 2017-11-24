@@ -47,7 +47,6 @@ class Check(object):
             'author': svn_info.last_changed_author,
             'number': svn_info.rev.number if svn_info.rev else svn_info.rev,
         }
-
         return data
 
     def revision_summarize(self, url, sta_timetuple, end_timetuple):
