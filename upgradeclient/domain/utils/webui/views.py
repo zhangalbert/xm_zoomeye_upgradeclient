@@ -7,6 +7,7 @@ import traceback
 
 from upgradeclient.domain.utils.webui.config import template_dir
 
+
 exp_render = web.template.render('{0}/'.format(template_dir), cache=False)
 com_render = web.template.render('{0}/'.format(template_dir), base=os.path.join(template_dir, 'layout'), cache=False)
 
