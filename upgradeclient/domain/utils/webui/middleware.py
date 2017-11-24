@@ -13,6 +13,9 @@ LOGGERID = 'wsgilog.logger'
 THROWERR = 'x-wsgiorg.throw_errors'
 
 
+render = web.template.render('{0}/'.format(template_dir), cache=False)
+
+
 class LogMiddleware(WsgiLog):
     def __init__(self, application):
         WsgiLog.__init__(self, application, **env)
@@ -27,6 +30,5 @@ class LogMiddleware(WsgiLog):
             return self.application(environ, start_response)
         except:
             content = self.catch(environ, start_response)
-            render = web.template.render('{0}/'.format(template_dir), globals={'content': content}, cache=False)
-            return render.error()
+            return render.error(content=content)
 
