@@ -7,7 +7,7 @@ import web
 from upgradeclient.domain.utils.webui.views import *
 from upgradeclient.domain.utils.webui.config import template_dir
 from upgradeclient.domain.utils.webui.urls import url_patterns as urls
-from upgradeclient.domain.utils.webui.middleware import LogMiddleware, ExpMiddleware
+from upgradeclient.domain.utils.webui.middleware import ExpMiddleware
 
 
 app = web.application(urls, globals())
