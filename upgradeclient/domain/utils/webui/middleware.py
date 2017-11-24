@@ -2,6 +2,7 @@
 
 
 import web
+import traceback
 
 
 from wsgilog import WsgiLog
@@ -14,6 +15,20 @@ THROWERR = 'x-wsgiorg.throw_errors'
 
 
 render = web.template.render('{0}/'.format(template_dir), cache=False)
+
+
+class ExpMiddleware(object):
+    def __init__(self, application):
+        self.application = application
+
+    def __call__(self, environ, start_response):
+        try:
+            return self.application(environ, start_response)
+        except:
+            return render.error(content=self.catch(environ, start_response))
+
+    def catch(self, environ, start_response):
+        return traceback.format_exc()
 
 
 class LogMiddleware(WsgiLog):

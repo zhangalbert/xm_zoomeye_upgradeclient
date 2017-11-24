@@ -6,8 +6,8 @@ import web
 
 from upgradeclient.domain.utils.webui.views import *
 from upgradeclient.domain.utils.webui.config import template_dir
-from upgradeclient.domain.utils.webui.middleware import LogMiddleware
 from upgradeclient.domain.utils.webui.urls import url_patterns as urls
+from upgradeclient.domain.utils.webui.middleware import LogMiddleware, ExpMiddleware
 
 
 app = web.application(urls, globals())
@@ -20,4 +20,4 @@ app.internalerror = lambda e: web.internalerror(render.error(content=e))
 
 def run(*middleware, **envs):
     map(lambda k: os.environ.setdefault(k.upper(), str(envs[k])), envs)
-    app.run(LogMiddleware, *middleware)
+    app.run(LogMiddleware, ExpMiddleware, *middleware)
