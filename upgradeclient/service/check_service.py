@@ -50,6 +50,7 @@ class CheckService(BaseService):
                 self.sub_process.update({name: sub_p})
 
     def ctl_process_signal_callback(self, unused_signal, unused_frame):
+        self.event_event.set()
         fmtdata = (self.__class__.__name__, multiprocessing.current_process().name, os.getpid())
         msgdata = '{0} main/sub process got ctrl+c signal, name={1}, pid={2}'.format(*fmtdata)
         self.insert()(log_level='warning ',  log_message=msgdata)
