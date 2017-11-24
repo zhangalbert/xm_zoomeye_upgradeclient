@@ -39,5 +39,4 @@ class RedirectView(BaseView):
 
 class IndexView(BaseView):
     def get(self):
-        ls
         return com_render.index()
