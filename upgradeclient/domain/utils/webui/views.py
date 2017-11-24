@@ -15,4 +15,5 @@ class RedirectView(object):
 
 class IndexView(object):
     def GET(self):
+        ls
         return render.index()

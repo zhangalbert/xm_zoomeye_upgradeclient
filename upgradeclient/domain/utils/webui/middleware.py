@@ -24,7 +24,9 @@ class ExpMiddleware(object):
     def __call__(self, environ, start_response):
         try:
             res = self.application(environ, start_response)
-            print 'limanman', res
+            print 'limanman'
+            for x in res:
+                print x
             return res
         except:
             return render.error(content=self.catch(environ, start_response))
