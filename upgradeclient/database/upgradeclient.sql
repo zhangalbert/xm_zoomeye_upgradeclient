@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS "upgradeclient" (
   "log_level" text DEFAULT '',
   "log_name" text DEFAULT '',
   "log_class" text DEFAULT '',
+  "dao_name" text DEFAULT '',
   "file_type" text DEFAULT '',
   "file_name" text DEFAULT '',
   "file_url" text DEFAULT '',

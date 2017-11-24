@@ -20,6 +20,7 @@ class BaseHandler(object):
         parted_dict = {
             'log_name': self.event_type,
             'log_class': self.__class__.__name__,
+            'dao_name': obj.get_daoname() or '',
             'file_type': obj.get_filetype() or '',
             'file_name': obj.get_filename() or '',
             'file_url': obj.get_download_url() or '',
