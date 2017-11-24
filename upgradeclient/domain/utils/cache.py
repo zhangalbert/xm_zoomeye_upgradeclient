@@ -21,13 +21,17 @@ class Cache(object):
         if relative_path is not None:
             target_path = os.path.join(target_path, relative_path)
         if not os.path.exists(target_path):
-            logger.warning('cache dir is not ready, path={0}'.format(target_path))
+            fmtdata = (self.__class__.__name__, relative_path, target_path)
+            msgdata = '{0} detected {1} cache dir is not ready, path={2}'.format(*fmtdata)
+            logger.warning(msgdata)
             return messages
 
         for f in os.listdir(target_path):
             f_path = os.path.join(target_path, f)
             if not os.access(f_path, os.F_OK|os.R_OK):
-                logger.error('cache read file with exception, mode=F_OK|R_OK path={0}'.format(f_path))
+                fmtdata = (self.__class__.__name__, relative_path, f_path)
+                msgdata = '{0} read {1} cache with exception, mode=F_OK|R_OK path={2}'.format(*fmtdata)
+                logger.error(msgdata)
                 continue
             if not os.path.isfile(f_path):
                 continue
@@ -41,6 +45,8 @@ class Cache(object):
         if relative_path is not None:
             target_path = os.path.join(target_path, relative_path)
         if os.path.exists(target_path):
-            logger.warning('cache file has not been consumed, ignore, path={0}'.format(target_path))
+            fmtdata = (self.__class__.__name__, relative_path, target_path)
+            msgdata = '{0} detected {1} cache with same file, wait consumed, path={2}'.format(fmtdata)
+            logger.warning(msgdata)
             return
         File.write_content(content, target_path)

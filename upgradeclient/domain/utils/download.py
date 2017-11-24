@@ -41,14 +41,20 @@ class Download(object):
         self.url, self.filename = url, filename
         download_fname = '{0}.downloading'.format(filename)
 
-        logger.info('start download {0} from {1}'.format(filename, url))
+        fmtdata = (self.__class__.__name__, threading.currentThread().name, filename, url)
+        msgdata = '{0} thread {1} start download {2} from {3}'.format(*fmtdata)
+        logger.info(msgdata)
         try:
             urllib.urlretrieve(url, filename=download_fname, reporthook=self.reporthook, *kwargs)
             shutil.move(download_fname, filename)
-            logger.info('download {0} from {1} successfuly'.format(filename, url))
+            fmtdata = (self.__class__.__name__, threading.currentThread().name, filename, url)
+            msgdata = '{0} thread {1} download {2} from {3} success'.format(*fmtdata)
+            logger.info(msgdata)
         except Exception as e:
             is_success = False
-            logger.error('download {0} from {1} with exception, exp={2}'.format(filename, url, e))
+            fmtdata = (self.__class__.__name__, threading.currentThread().name, filename, url, e)
+            msgdata = '{0} thread {1} download {2} from {3} with exception, exp={4}'.format(*fmtdata)
+            logger.error(msgdata)
         finally:
             os.path.exists(download_fname) and os.remove(download_fname)
         return is_success

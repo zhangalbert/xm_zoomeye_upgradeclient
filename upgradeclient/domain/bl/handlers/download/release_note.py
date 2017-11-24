@@ -77,7 +77,9 @@ class ReleaseNoteHandler(BaseHandler):
             end_date = end_time.strftime('%Y-%m-%d')
             if date < sta_date or date > end_date:
                 fmtdata = (self.__class__.__name__, date, sta_date, end_date, obj.get_download_url)
-                msgdata = '{0} delected invalid date-range in releasenot, cur={1} stat={2} end ={3}'.format(*fmtdata)
+                msgdata = '{0} delected invalid date-range in releasenot, cur={1} stat={2} end ={3} url={4}'.format(
+                    *fmtdata
+                )
                 logger.warning(msgdata)
                 continue
             q = Q(obj__download_url__contains=date) & Q(obj__filename__contains=flag)
