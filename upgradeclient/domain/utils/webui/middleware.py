@@ -27,6 +27,8 @@ class ExpMiddleware(object):
             print 'limanman'
             for x in res:
                 print x
+            print environ
+            print start_response
             return res
         except:
             return render.error(content=self.catch(environ, start_response))
