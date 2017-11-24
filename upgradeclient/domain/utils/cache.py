@@ -46,7 +46,7 @@ class Cache(object):
             target_path = os.path.join(target_path, relative_path)
         if os.path.exists(target_path):
             fmtdata = (self.__class__.__name__, relative_path, target_path)
-            msgdata = '{0} detected {1} cache with same file, wait consumed, path={2}'.format(fmtdata)
+            msgdata = '{0} detected {1} cache with same file, wait consumed, path={2}'.format(*fmtdata)
             logger.warning(msgdata)
             return
         File.write_content(content, target_path)

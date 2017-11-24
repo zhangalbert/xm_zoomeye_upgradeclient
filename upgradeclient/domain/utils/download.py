@@ -24,7 +24,7 @@ def reporthook(cls, a, b, c):
     fmtdata = (cls.__class__.__name__, threading.currentThread().name, cls.filename, percent)
     msgdata = '{0} thread {1} download {1} {2:.2f}%/100%'.format(*fmtdata)
     logger.debug(msgdata)
-    
+
 
 class Download(object):
     def __init__(self):
