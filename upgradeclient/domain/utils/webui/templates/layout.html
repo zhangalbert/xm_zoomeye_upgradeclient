@@ -4,7 +4,7 @@ $def with (content)
         <title>
             $if content.title:
                 $content.title
-            $else
+            $else:
                 固件自动升级检测平台 - 首页
         </title>
         <meta charset="utf-8">
@@ -15,7 +15,7 @@ $def with (content)
             $for ioc in content.icofoles.split():
                 <link rel="icon" type="image/x-icon" href="$ico">
                 <link rel="shortcut icon" type="image/x-icon" href="$ico">
-        $else
+        $else:
             <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
             <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
 
