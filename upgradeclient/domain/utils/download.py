@@ -59,4 +59,5 @@ class Download(object):
             logger.error(msgdata)
         finally:
             os.path.exists(download_fname) and os.remove(download_fname)
+
         return is_success
