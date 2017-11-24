@@ -29,6 +29,7 @@ class LogMiddleware(WsgiLog):
         try:
             return self.application(environ, start_response)
         except:
-            content = self.catch(environ, start_response)
-            return render.error(content=content)
+            return render.error(content=self.catch(environ, start_response))
+    
+
 
