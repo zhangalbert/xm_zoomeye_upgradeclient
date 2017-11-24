@@ -20,4 +20,4 @@ app.internalerror = lambda e: web.internalerror(render.error(content='internal e
 
 def run(*middleware, **envs):
     map(lambda k: os.environ.setdefault(k.upper(), str(envs[k])), envs)
-    app.run(LogMiddleware, ExpMiddleware, *middleware)
+    app.run(ExpMiddleware, *middleware)
