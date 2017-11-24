@@ -23,18 +23,14 @@ class ExpMiddleware(object):
 
     def __call__(self, environ, start_response):
         try:
-            res = self.application(environ, start_response)
-            print 'limanman'
-            for x in res:
-                print x
-            print environ
-            print start_response
-            return res
-        except:
-            return render.error(content=self.catch(environ, start_response))
+            response = self.application(environ, start_response)
 
-    def catch(self, environ, start_response):
-        return traceback.format_exc()
+            rsp_errs = environ['wsgi.errors'].read()
+            if rsp_errs.strip():
+                return response
+            return render.error(content=rsp_errs)
+        except:
+            return render.error(content=traceback.format_exc())
 
 
 class LogMiddleware(WsgiLog):
