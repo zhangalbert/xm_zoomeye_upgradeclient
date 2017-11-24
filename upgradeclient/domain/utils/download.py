@@ -54,6 +54,9 @@ class Download(object):
             logger.info(msgdata)
         except Exception as e:
             is_success = False
+            print '='*100
+            print e
+            print '='*100
             fmtdata = (self.__class__.__name__, threading.currentThread().name, filename, url, e)
             msgdata = '{0} thread {1} download {2} from {3} with exception, exp={4}'.format(*fmtdata)
             logger.error(msgdata)
