@@ -2,7 +2,6 @@
 
 import os
 import web
-import pdb.pm
 import traceback
 
 
