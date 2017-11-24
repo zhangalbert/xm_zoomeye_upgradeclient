@@ -21,8 +21,10 @@ def reporthook(cls, a, b, c):
     3. c 远程文件大小
     """
     percent = min(100.0 * a * b / c, 100)
-    logger.debug('{0} download {1} {2:.2f}%/100%'.format(threading.currentThread(), cls.filename, percent))
-
+    fmtdata = (cls.__class__.__name__, threading.currentThread().name, cls.filename, percent)
+    msgdata = '{0} thread {1} download {1} {2:.2f}%/100%'.format(*fmtdata)
+    logger.debug(msgdata)
+    
 
 class Download(object):
     def __init__(self):
