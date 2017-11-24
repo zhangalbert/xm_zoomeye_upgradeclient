@@ -32,11 +32,11 @@ class BaseView(object):
 
 
 class RedirectView(BaseView):
-    def GET(self, path):
+    def get(self, path):
         web.seeother('/{0}'.format(path))
 
 
 class IndexView(BaseView):
-    def GET(self):
+    def get(self):
         ls
         return com_render.index()
