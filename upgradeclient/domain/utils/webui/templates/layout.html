@@ -12,7 +12,7 @@ $def with (content)
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- 自定义加载icon -->
         $if content.icofiles:
-            $for ioc in content.icofoles.split():
+            $for ioc in content.icofiles.split():
                 <link rel="icon" type="image/x-icon" href="$ico">
                 <link rel="shortcut icon" type="image/x-icon" href="$ico">
         $else:
