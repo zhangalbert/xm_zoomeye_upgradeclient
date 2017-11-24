@@ -46,7 +46,6 @@ class Client(object):
         self.logger.debug('err_file={0}'.format(self.err_file))
 
     def run(self):
-        self.logging()
         try:
             context = ApplicationContext(YamlConfig(self.ctx_yaml))
             service = context.get_object('XmZoomeyeUpgradeClient')
