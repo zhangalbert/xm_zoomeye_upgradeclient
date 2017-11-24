@@ -61,7 +61,7 @@ class DownloadService(BaseService):
                     time.sleep(1)
                 fmtdata = (self.__class__.__name__, self.check_interval, len(messages))
                 msgdata = '{0} thread group is finished, wait {1} seconds, num={2}'.format(*fmtdata)
-                db.insert(log_level='info', log_class=self.__class__.__name__, log_message=msgdata)
+                self.insert()(log_level='info', log_message=msgdata)
                 logger.info(msgdata)
                 time.sleep(self.check_interval)
         t = Thread(target=target)
