@@ -28,7 +28,6 @@ class LogMiddleware(WsgiLog):
             return self.application(environ, start_response)
         except:
             content = self.catch(environ, start_response)
-            render = web.template.render('{0}/'.format(template_dir), base=os.path.join(template_dir, 'ebase'),
-                                         globals={'content': content}, cache=False)
+            render = web.template.render('{0}/'.format(template_dir), globals={'content': content}, cache=False)
             return render.error()
 
