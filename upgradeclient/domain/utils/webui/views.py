@@ -1,7 +1,11 @@
 #! -*- coding: utf-8 -*-
 
-
+import os
 import web
+
+
+from upgradeclient.domain.utils.webui.config import template_dir
+render = web.template.render('{0}/'.format(template_dir), base=os.path.join(template_dir, 'layout.html'), cache=False)
 
 
 class RedirectView(object):
@@ -11,4 +15,4 @@ class RedirectView(object):
 
 class IndexView(object):
     def GET(self):
-        return 'Upgradeclient-Webui, v1.0, author: manmanli'
+        return render.index()
