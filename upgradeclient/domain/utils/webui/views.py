@@ -37,6 +37,7 @@ class RedirectView(object):
 
 class IndexView(object):
     def GET(self):
+        ls
         return com_render.index()
 
 
