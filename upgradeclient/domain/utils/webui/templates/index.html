@@ -4,6 +4,43 @@ $var pre_cssfiles: /statics/css/index.css
 $var pre_scriptfiles: /statics/js/index.js
 
 
-<div id="header" class="auto">header</div>
-<div id="body" class="auto">body</div>
-<div id="footer" class="auto">footer</div>
+<div id="layout-header" data-options="region:'north'">
+    导航栏
+</div>
+<div id="layout-body" data-options="region:'center'">
+    <div class="easyui-layout">
+        <div id="layout-body-left" data-options="west">
+            <div class="easyui-layout">
+                <div id="layout-body-left-top" data-options="north">
+                    <div class="easyui-layout">
+                        <div id="layout-body-left-top-left" data-options="west">
+                            数据采集速率
+                        </div>
+                        <div id="layout-body-left-top-center" data-options="center">
+                            <div class="easyui-layout">
+                                <div id="layout-body-left-top-center-top" data-options="north">
+                                    今日异常总数
+                                </div>
+                                <div id="layout-body-left-top-center-bottom" data-options="south">
+                                    昨日异常总数
+                                </div>
+                            </div>
+                        </div>
+                        <div id="layout-body-left-top-right" data-options="east">
+                            故障型号统计
+                        </div>
+                    </div>
+                </div>
+                <div id="layout-body-left-bottom" data-options="south">
+                    异常数量趋势
+                </div>
+            </div>
+        </div>
+        <div id="layout-body-right">
+            异常检测列表
+        </div>
+    </div>
+</div>
+<div id="layout-footer" data-options="region:'south'">
+    下
+</div>

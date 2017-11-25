@@ -41,7 +41,7 @@ $def with (content)
             $for pre_script in content.pre_scriptfiles.split():
                 <script type="text/javascript" src="$pre_script"></script>
     </head>
-    <body>
+    <body class="easyui-layout">
     $:content
     </body>
 </html>
