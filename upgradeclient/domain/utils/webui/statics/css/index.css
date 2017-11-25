@@ -1,3 +1,99 @@
-div {
-    padding: 10px;
+article,section,time,aside{display:block;}
+.point-time {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  top: 2px;
+  left: 20%;
+  margin-left: -4px;
+}
+.text-info {
+  color: #1c87bf;
+}
+.text-error {
+  color: #f6393f;
+}
+.text-warning {
+  color: #ffb902;
+}
+.timeline {
+  width:  100%;
+}
+.timeline article {
+  position: relative;
+}
+.timeline article section {
+  height: 40px;
+  position: relative;
+}
+.timeline article section:before {
+  content: "";
+  width: 2px;
+  top: 11px;
+  bottom: -5px;
+  left: 20%;
+  background: #e5e5e5;
+  position: absolute;
+}
+.timeline article section:last-child:before {
+  display: none;
+}
+.timeline article section time {
+  width: 15%;
+  display: block;
+  position: absolute;
+}
+.timeline article section time > span {
+  color: #aaaaaa;
+  display: block;
+  text-align: right;
+}
+.timeline article section aside {
+  color: #3a3a38;
+  margin-left: 25%;
+  padding-bottom: 15px;
+}
+.timeline article section .brief {
+  color: #9f9f9f;
+}
+
+.layout-header, .layout-footer {
+    height: 50px;
+    line-height: 50px;
+    overflow: hidden;
+}
+#layout-body-right {
+    padding-top: 20px;
+    overflow-x: auto;
+    overflow-y: scroll;
+}
+.header {
+    margin-bottom: 20px;
+    position: relative;
+    padding-right: 15px;
+    border-left: solid 5px red;
+}
+.header:after {
+    content: "";
+    height: 0px;
+    line-height: 0;
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+.header>span {
+    color: #2B415A;
+    padding-left: 20px;
+}
+.header span, .header ul li {
+    float: left;
+    height: 24px;
+    line-height: 24px;
+}
+.header ul {
+    float: right;
+}
+.header ul li.sep {
+    width: 10px;
+    border: solid 1px transparent;
 }
