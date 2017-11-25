@@ -27,17 +27,17 @@ class BaseView(object):
 
 
 class StaticFileView(BaseView):
-    def get(self, relative_path, file):
+    def get(self, path):
         print '=' * 100
-        print relative_path, file
+        print path
         print '=' * 100
-        file_path = os.path.join(upgwebui_dir, 'statics', relative_path, file)
+        file_path = os.path.join(upgwebui_dir, 'statics', path)
         if not os.path.exists(file_path):
             web.notfound()
 
         web.header('Content-type', 'application/octet-stream')
         web.header('Transfer-Encoding', 'chunked')
-        web.header('Content-Disposition', 'attachment; filename="{0}"'.format(file))
+        web.header('Content-Disposition', 'attachment; filename="{0}"'.format(os.path.basename(path)))
         try:
             with open(file_path, 'r+b') as fd:
                 while True:
