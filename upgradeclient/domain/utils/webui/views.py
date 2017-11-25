@@ -13,28 +13,28 @@ com_render = web.template.render('{0}/'.format(template_dir), base='layout', cac
 
 
 class BaseView(object):
-    def get(self, *args, **kwargs):
+    def get(self, *args):
         raise NotImplementedError
 
-    def post(self, *args, **kwargs):
+    def post(self, *args):
         raise NotImplementedError
 
-    def GET(self, *args, **kwargs):
+    def GET(self, *args):
         try:
-            return self.get(*args, **kwargs)
+            return self.get(*args)
         except:
-            return exp_render.error(*args, content=traceback.format_exc(), **kwargs)
+            return exp_render.error(content=traceback.format_exc())
 
-    def POST(self, *args, **kwargs):
+    def POST(self, *args):
         try:
-            return self.post(*args, **kwargs)
+            return self.post(*args)
         except:
-            return exp_render.error(*args, content=traceback.format_exc(), **kwargs)
+            return exp_render.error(content=traceback.format_exc())
 
 
 class StaticFileView(BaseView):
     def get(self, relative_path, file):
-        file_path = os.path.join(upgwebui_dir, 'static', relative_path, file)
+        file_path = os.path.join(upgwebui_dir, 'statics', relative_path, file)
         if not os.path.exists(file_path):
             web.notfound()
 
