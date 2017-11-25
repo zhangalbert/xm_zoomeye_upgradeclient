@@ -16,40 +16,41 @@ $var pre_scriptfiles: /statics/js/index.js
 						<div id="layout-body-left-top-left" data-options="region:'west',width:'23.3%',border:false">
 							<div class="header">
 								<span>数据采集速率</span>
-								</div>
 								<ul>
 									<li></li>
 								</ul>
 							</div>
-	                		<div id="layout-body-left-top-center" data-options="region:'center',width:'33.3%',border:false">
-	                			<div class="easyui-layout" data-options="fit:true">
-	                				<div id="layout-body-left-top-center-top" data-options="region:'north',width:'100%',height:'43.3%',border:false">
-							    <div class="header">
-								<span>昨日异常数量</span>
-							    </div>
-							    <ul>
-								<li></li>
-							    </ul>
-			                		</div>
-			                		<div id="layout-body-left-top-center-bottom" data-options="region:'south',width:'100%',height:'43.3%',border:false">
-							    <div class="header">
-								<span>今日异常数量</span>
-							    </div>
-							    <ul>
-								<li></li>
-							    </ul>
-			                		</div>
-	                			</div>
-	                		</div>
-	                		<div id="layout-body-left-top-right" data-options="region:'east',width:'43.3%',border:false">
-					    <div class="header">
-						<span>型号异常百分比</span>
-					    </div>
-					    <ul>
-						<li></li>
-					    </ul>
-	                		</div>
-	                	</div>
+						</div>
+						<div id="layout-body-left-top-center" data-options="region:'center',width:'33.3%',border:false">
+							<div class="easyui-layout" data-options="fit:true">
+								<div id="layout-body-left-top-center-top" data-options="region:'north',width:'100%',height:'43.3%',border:false">
+									<div class="header">
+										<span>昨日异常数量</span>
+										<ul>
+											<li></li>
+										</ul>
+									</div>
+								</div>
+								<div id="layout-body-left-top-center-bottom" data-options="region:'south',width:'100%',height:'43.3%',border:false">
+									<div class="header">
+										<span>今日异常数量</span>
+										<ul>
+											<li></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="layout-body-left-top-right" data-options="region:'east',width:'43.3%',border:false">
+							<div class="header">
+								<span>型号异常百分比</span>
+								<ul>
+									<li></li>
+								</ul>
+							</div>
+							<div id="exception_percent"></div>
+						</div>
+					</div>
 	            </div>
 	            <div id="layout-body-left-bottom" data-options="region:'south',height:'50%',border:false">
 	                <div class="header">
@@ -61,7 +62,7 @@ $var pre_scriptfiles: /statics/js/index.js
 							</li>
 						</ul>
 					</div>
-					<div id="exception_trend" style="width:100%;height:100%;"></div>
+					<div id="exception_trend"></div>
 	            </div>
 	     	</div>
         </div>

@@ -97,3 +97,7 @@ article,section,time,aside{display:block;}
     width: 10px;
     border: solid 1px transparent;
 }
+#exception_trend {
+    width:100%;
+    height: 360px;
+}
