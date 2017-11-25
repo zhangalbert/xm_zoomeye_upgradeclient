@@ -7,7 +7,8 @@ import logging
 from upgradeclient.database.database import Database
 
 
-template_dir = os.path.join(Database.get_client_dir(), 'domain', 'utils', 'webui', 'templates')
+upgwebui_dir = os.path.join(Database.get_client_dir(), 'domain', 'utils', 'webui')
+template_dir = os.path.join(upgwebui_dir, 'templates')
 
 env = {
     # 至少一处理器

@@ -5,7 +5,7 @@ import web
 import traceback
 
 
-from upgradeclient.domain.utils.webui.config import template_dir
+from upgradeclient.domain.utils.webui.config import template_dir, upgwebui_dir
 
 
 exp_render = web.template.render('{0}/'.format(template_dir), cache=False)
@@ -34,7 +34,7 @@ class BaseView(object):
 
 class StaticFileView(BaseView):
     def get(self, relative_path, file):
-        file_path = os.path.join(template_dir, relative_path, file)
+        file_path = os.path.join(upgwebui_dir, 'static', relative_path, file)
         if not os.path.exists(file_path):
             web.notfound()
 
