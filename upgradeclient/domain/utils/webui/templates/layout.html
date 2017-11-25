@@ -16,26 +16,26 @@ $def with (content)
                 <link rel="icon" type="image/x-icon" href="$ico">
                 <link rel="shortcut icon" type="image/x-icon" href="$ico">
         $else:
-            <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
-            <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+            <link rel="icon" type="image/x-icon" href="/statics/img/favicon.ico">
+            <link rel="shortcut icon" type="image/x-icon" href="/statics/img/favicon.ico">
 
          <!-- 全局预加载CSS -->
-        <link rel="stylesheet" href="/static/js/insdep/reset.min.css" type="text/css" media="screen" charset="utf-8"/>
-        <link rel="stylesheet" href="/static/js/insdep/normalize.min.css" type="text/css" media="screen" charset="utf-8"/>
-        <link rel="stylesheet" href="/static/css/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" charset="utf-8"/>
-        <link rel="stylesheet" href="/static/js/insdep/easyui_full.css" type="text/css" media="screen" charset="utf-8"/>
+        <link rel="stylesheet" href="/statics/js/insdep/reset.min.css" type="text/css" media="screen" charset="utf-8"/>
+        <link rel="stylesheet" href="/statics/js/insdep/normalize.min.css" type="text/css" media="screen" charset="utf-8"/>
+        <link rel="stylesheet" href="/statics/css/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" charset="utf-8"/>
+        <link rel="stylesheet" href="/statics/js/insdep/easyui_full.css" type="text/css" media="screen" charset="utf-8"/>
         <!-- 自定义加载CSS -->
         $if content.pre_cssfiles:
             $for pre_css in content.pre_cssfiles.split():
                 <link rel="stylesheet" href="$pre_css" type="text/css" media="screen" charset="utf-8"/>
 
         <!-- 全局预加载JS -->
-        <script type="text/javascript" src="/static/js/html5shiv.min.js"></script>
-        <script type="text/javascript" src="/static/js/respond.min.js"></script>
-        <script type="text/javascript" src="/static/js/insdep/easyui/jquery.min.js"></script>
-        <script type="text/javascript" src="/static/js/insdep/easyui/jquery.easyui.min.js"></script>
-        <script type="text/javascript" src="/static/js/insdep/insdep-extend.min.js"></script>
-        <script type="text/javascript" src="/static/js/insdep/expand/jquery-easyui-datagridview/datagrid-detailview.js"></script>
+        <script type="text/javascript" src="/statics/js/html5shiv.min.js"></script>
+        <script type="text/javascript" src="/statics/js/respond.min.js"></script>
+        <script type="text/javascript" src="/statics/js/insdep/easyui/jquery.min.js"></script>
+        <script type="text/javascript" src="/statics/js/insdep/easyui/jquery.easyui.min.js"></script>
+        <script type="text/javascript" src="/statics/js/insdep/insdep-extend.min.js"></script>
+        <script type="text/javascript" src="/statics/js/insdep/expand/jquery-easyui-datagridview/datagrid-detailview.js"></script>
         <!-- 自定义加载JS -->
         $if content.pre_scriptfiles:
             $for pre_script in content.pre_scriptfiles.split():
