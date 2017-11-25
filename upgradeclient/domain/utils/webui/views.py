@@ -2,35 +2,16 @@
 
 import os
 import web
-import traceback
 
 
 from upgradeclient.domain.utils.webui.config import template_dir, upgwebui_dir
 
 
-exp_render = web.template.render('{0}/'.format(template_dir), cache=False)
 com_render = web.template.render('{0}/'.format(template_dir), base='layout', cache=False)
 
 
-class BaseView(object):
-    def GET(self, *args):
-        try:
-            return self.get(*args)
-        except:
-            return exp_render.error(content=traceback.format_exc())
-
-    def POST(self, *args):
-        try:
-            return self.post(*args)
-        except:
-            return exp_render.error(content=traceback.format_exc())
-
-
-class StaticFileView(BaseView):
-    def get(self, path):
-        print '=' * 100
-        print path
-        print '=' * 100
+class StaticFileView(object):
+    def GET(self, path):
         file_path = os.path.join(upgwebui_dir, 'statics', path)
         if not os.path.exists(file_path):
             web.notfound()
@@ -49,12 +30,13 @@ class StaticFileView(BaseView):
             yield e
 
 
-class RedirectView(BaseView):
-    def get(self, path):
+class RedirectView(object):
+    def GET(self, path):
         web.seeother('/{0}'.format(path))
 
 
-class IndexView(BaseView):
-    def get(self):
+class IndexView(object):
+    def GET(self):
         return com_render.index()
+
 
