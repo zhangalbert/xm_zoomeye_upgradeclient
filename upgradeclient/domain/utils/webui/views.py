@@ -9,7 +9,7 @@ from upgradeclient.domain.utils.webui.config import template_dir, upgwebui_dir
 
 
 exp_render = web.template.render('{0}/'.format(template_dir), cache=False)
-com_render = web.template.render('{0}/'.format(template_dir), base=os.path.join(template_dir, 'layout'), cache=False)
+com_render = web.template.render('{0}/'.format(template_dir), base='layout', cache=False)
 
 
 class BaseView(object):
@@ -23,13 +23,13 @@ class BaseView(object):
         try:
             return self.get(*args, **kwargs)
         except:
-            return exp_render.error(content=traceback.format_exc())
+            return exp_render.error(*args, content=traceback.format_exc(), **kwargs)
 
     def POST(self, *args, **kwargs):
         try:
             return self.post(*args, **kwargs)
         except:
-            return exp_render.error(content=traceback.format_exc())
+            return exp_render.error(*args, content=traceback.format_exc(), **kwargs)
 
 
 class StaticFileView(BaseView):
