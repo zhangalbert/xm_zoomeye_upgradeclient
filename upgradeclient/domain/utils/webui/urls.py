@@ -3,6 +3,6 @@
 
 url_patterns = [
     r'/(.*)/', 'RedirectView',
-    r'/', 'IndexView'
-    # r'/statics/(.*)', 'StaticFileView'
+    r'/', 'IndexView',
+    r'/statics/(js|css|img)/(.*)', 'StaticFileView',
 ]
