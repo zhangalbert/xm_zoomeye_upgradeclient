@@ -4,5 +4,5 @@
 url_patterns = [
     r'/(.*)/', 'RedirectView',
     r'/', 'IndexView'
-    r'/statics/(.*)', 'StaticFileView'
+    # r'/statics/(.*)', 'StaticFileView'
 ]
