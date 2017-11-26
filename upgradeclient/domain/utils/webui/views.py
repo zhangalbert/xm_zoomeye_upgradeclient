@@ -117,6 +117,9 @@ class ExceptionExceptView(BaseView):
         having_con = "{0} >= {1}".format(group_con, n_days_ago.strftime(time_fmt))
         fmt_date = (what_con, 'upgradeclient', group_con, having_con)
 
+        print '='*100
+        print "select {0} from {1} group by({2}) having {2}".format(*fmt_date)
+        print '='*100
         select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
 
         for ins in select_storage:
