@@ -107,7 +107,7 @@ class ExceptionRealtimeView(BaseView):
                 'created_date': ins.created_time.strftime('%Y-%m-%d'),
                 'created_time': ins.created_time.strftime('%H-%M-%S')
             })
-        response_data.sort(key=lambda s: '{0} {1}'.format(s.created_date, s.created_time, reverse=True))
+        response_data.sort(key=lambda s: '{0} {1}'.format(s['created_date'], s['created_time']), reverse=True)
 
         return self.json_response(response_data)
 
