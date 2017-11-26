@@ -85,7 +85,7 @@ class ExceptionRealtimeView(BaseView):
         for ins in select_storage:
             response_data.append({
                 'id': ins.id,
-                # 'log_level': ins.log_level,
+                'log_level': ins.log_level,
                 # 'log_name': ins.log_name,
                 # 'log_class': ins.log_class,
                 # 'dao_name': ins.dao_name,

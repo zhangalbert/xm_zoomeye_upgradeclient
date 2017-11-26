@@ -21,6 +21,12 @@
 .active {
 	background-color: #EBEDF4;
 }
+.rtrim {
+	width: 200px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
 .placeholder {
 	border: solid 1px transparent;
 }
