@@ -24,9 +24,9 @@ $(function(){
                 console.log(data);
                 var max_length = 20;
                 for (var i = 0; i < data.length; i++) {
-                    var cur_length = $('#exception_realtime section').length
-                        ,cur_ins = data[i];
-                    var html = '<section>' +
+                    var cur_ins = data[i],
+                        cur_length = $('#exception_realtime section').length;
+                    var html = '<section id="'+cur_ins['id']+'">' +
                                '<span class="point-time text-'+cur_ins['log_level']+'">' +
                                '<i class="fa fa-circle-o" aria-hidden="true"></i></span>' +
                                '<time><span>'+cur_ins['created_date']+'</span><span>'+cur_ins['created_time']+'</span>' +
