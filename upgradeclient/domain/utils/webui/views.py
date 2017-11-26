@@ -143,6 +143,8 @@ class ExceptionExceptView(BaseView):
             })
         response_data.sort(key=lambda s: s['date'])
 
+        return response_data
+
     def default_response(self, n):
         pass
 
