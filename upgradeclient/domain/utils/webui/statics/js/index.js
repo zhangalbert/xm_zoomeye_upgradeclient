@@ -245,7 +245,7 @@ $(function(){
 	    series: [{
 	        type: 'pie',
 	        innerSize: '95%',
-	        name: '固件型号异常占比',
+	        name: '线程异常分布',
 	        data: [
 	            ['CheckService',   0.0],
 	            ['DownloadService',       50.0],
