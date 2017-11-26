@@ -14,10 +14,9 @@ $(function(){
 		$('#user_profile').menu('show', {left: left, top: top, hideOnUnhover: true});
 	});
 	// 右侧实时异常列表
-    function realtime_ajax_exception_realtime() {
+    setInterval(function realtime_ajax_exception_realtime(){
         alert('测试');
-    }
-    setInterval(realtime_ajax_exception_realtime(), 2000);
+    }, 5000);
 
 	// 固件异常趋势图
 	$.getJSON('https://data.jianshukeji.com/jsonp?filename=json/usdeur.json&callback=?', function (data) {
