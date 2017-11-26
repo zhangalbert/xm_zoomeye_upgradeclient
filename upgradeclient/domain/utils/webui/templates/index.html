@@ -4,330 +4,347 @@ $var pre_cssfiles: /statics/css/index.css
 $var pre_scriptfiles: /statics/js/index.js
 
 
-<div class="layout-header" data-options="region:'north',border:false">
-	平台简介
+<div class="upg-layout-header" data-options="region:'north',border:false">
+	<div class="lf">
+		<span class="icon"><i>UpgradeClient-WebUI.</i></span>
+		<span> 社区版</span>
+	</div>
+	<div class="rt">
+		<ul>
+			<li><a href="">自助查询入口</a></li>
+			<li class="upg-dropdown">
+				<span>李满满 <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+				<div id="user_profile" class="easyui-menu">
+					<div><a href="">加入我们</a></div>
+					<div><a href="">退出系统</a></div>
+				</div>
+			</li>
+		</ul>
+	</div>
 </div>
-<div class="layout-body" data-options="region:'center',border:false">
-    <div class="easyui-layout" data-options="fit:true,border:false">
-        <div id="layout-body-left" data-options="region:'west',width:'60%',border:false">
-            <div class="easyui-layout" data-options="fit:true,border:false">
-	            <div id="layout-body-left-top" data-options="region:'north',height:'50%',border:false">
-	                <div class="easyui-layout" data-options="fit:true,border:false">
-						<div id="layout-body-left-top-left" data-options="region:'west',width:'23.3%',border:false">
-							<div class="header">
-								<span>数据采集速率</span>
-								<ul>
-									<li></li>
-								</ul>
-							</div>
-						</div>
-						<div id="layout-body-left-top-center" data-options="region:'center',width:'33.3%',border:false">
-							<div class="easyui-layout" data-options="fit:true">
-								<div id="layout-body-left-top-center-top" data-options="region:'north',width:'100%',height:'43.3%',border:false">
-									<div class="header">
-										<span>昨日异常数量</span>
-										<ul>
-											<li></li>
-										</ul>
+<div class="upg-layout-body" data-options="region:'center',border:false">
+	<div class="easyui-layout" data-options="fit:true,border:false">
+		<div id="layout-body-left" data-options="region:'west',width:'60%',border:false">
+			<div class="easyui-layout" data-options="fit:true,border:false">
+				<div id="layout-body-left-top" data-options="region:'north',height:'50%',border:false">
+					<div class="easyui-layout" data-options="fit:true,border:false">
+							<div id="layout-body-left-top-left" data-options="region:'west',width:'50%',border:false">
+								<div id="layout-body-left-top-left-right" data-options="region:'east',width:'50%',border:false">
+									<div class="upg-layout-header">
+									<div class="lf">
+										<span>线程异常分布</span>
+									</div>
+									<div class="rt">
+										<i class="placeholder"></i>
+										<i class="fa fa-refresh" aria-hidden="true"></i>
 									</div>
 								</div>
-								<div id="layout-body-left-top-center-bottom" data-options="region:'south',width:'100%',height:'43.3%',border:false">
-									<div class="header">
-										<span>今日异常数量</span>
-										<ul>
-											<li></li>
-										</ul>
-									</div>
+								<div id="exception_thread" style="height: 330px;"></div>
+							</div>
+							</div>
+						<div id="layout-body-left-top-right" data-options="region:'east',width:'50%',border:false">
+							<div class="upg-layout-header">
+								<div class="lf">
+									<span>型号异常分布</span>
+								</div>
+								<div class="rt">
+									<i class="placeholder"></i>
+									<i class="fa fa-refresh" aria-hidden="true"></i>
 								</div>
 							</div>
-						</div>
-						<div id="layout-body-left-top-right" data-options="region:'east',width:'43.3%',border:false">
-							<div class="header">
-								<span>型号异常百分比</span>
-								<ul>
-									<li></li>
-								</ul>
-							</div>
-							<div id="exception_percent" style="width:100%;height:220px;"></div>
+							<div id="exception_nametype" style="height: 330px;"></div>
 						</div>
 					</div>
-	            </div>
-	            <div id="layout-body-left-bottom" data-options="region:'south',height:'50%',border:false">
-	                <div class="header">
-						<span>固件异常趋势</span>
-						<ul>
-							<li>
-								<input id="exception_during" name="exception_during" class="easyui-combobox" data-options="panelHeight:250,valueField:'value',textField:'label',data:[{label:'一天内',value:'days_1',selected:true},{label:'两天内',value:'days_2'},{label:'一周内',value:'weeks_1'},{label:'两周内',value:'weeks_2'},{label:'一月内',value:'weeks_4'},{label:'两月内',value:'weeks_8'},{label:'半年内',value:'weeks_24'},{label:'一年内',value:'weeks_48'}]">
-								</input>
-							</li>
-						</ul>
+				</div>
+				<div id="layout-body-left-bottom" data-options="region:'south',height:'50%',border:false">
+					<div class="upg-layout-header">
+							<div class="lf">
+							<span>固件异常趋势</span>
+						</div>
+						<div class="rt">
+							<input id="exception_during" name="exception_during" class="easyui-combobox" data-options="panelHeight:250,valueField:'value',textField:'label',data:[{label:'一天内',value:'days_1',selected:true},{label:'两天内',value:'days_2'},{label:'一周内',value:'weeks_1'},{label:'两周内',value:'weeks_2'},{label:'一月内',value:'weeks_4'},{label:'两月内',value:'weeks_8'},{label:'半年内',value:'weeks_24'},{label:'一年内',value:'weeks_48'}]">
+							</input>
+							<i class="fa fa-refresh" aria-hidden="true"></i>
+						</div>
 					</div>
-					<div id="exception_trend" style="width:100%;height:220px;"></div>
-	            </div>
-	     	</div>
-        </div>
-        <div id="layout-body-right" data-options="region:'east',width:'40%',border:false">
-			<div class="header">
-				<span>当前异常列表</span>
-				<ul>
-					<li>
-						<input id="exception_number" name="exception_number" class="easyui-combobox" data-options="panelHeight:125,valueField:'value',textField:'label',data:[{label:'10',value:'10'},{label:'20',value: '20',selected:true},{label:'30',value:'30'},{label:'50',value:'50'},{label:'100',value:'100'}]">
-						</input>
-					</li>
-						<li class="sep"></li>
-					<li>
-						<input id="exception_level" name="exception_level" class="easyui-combobox" data-options="panelHeight:80,valueField:'value',textField:'label',data:[{label:'&gt;= 信息',value:'info'},{label:'&gt;= 警告',value:'warning'},{label:'&gt;= 严重',value:'error',selected:true}]">
-						</input>
-					</li>
-				</ul>
+					<div class="easyui-layout" data-options="fit:true,border:false">
+						<div id="layout-body-left-bottom-bottom" data-options="region:'south',height:'100%',border:false">
+							<div id="exception_trend" style="height: 330px;"></div>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="timeline">
-				<article>
-					<section>
-						<span class="point-time text-warning">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:36</span>
-						</time>
-						<aside>
-							<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-warning">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:36</span>
-						</time>
-						<aside>
-							<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-warning">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:36</span>
-						</time>
-						<aside>
-							<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-warning">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:36</span>
-						</time>
-						<aside>
-							<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-warning">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:36</span>
-						</time>
-						<aside>
-							<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-warning">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:36</span>
-						</time>
-						<aside>
-							<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-warning">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:36</span>
-						</time>
-						<aside>
-							<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-warning">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:36</span>
-						</time>
-						<aside>
-							<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-					<section>
-						<span class="point-time text-error">
-												<i class="fa fa-circle-o" aria-hidden="true"></i>
-											</span>
-						<time>
-							<span>2017-11-25</span>
-							<span>13:00</span>
-						</time>
-						<aside>
-							<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
-						</aside>
-					</section>
-				</article>
+		</div>
+		<div id="layout-body-right" data-options="region:'east',width:'40%',border:false">
+				<div class="upg-layout-header">
+				<div class="lf">
+					<span>实时异常列表</span>
+				</div>
+				<div class="rt">
+					<input id="exception_number" name="exception_number" class="easyui-combobox" data-options="panelHeight:125,valueField:'value',textField:'label',data:[{label:'10',value:'10'},{label:'20',value: '20',selected:true},{label:'30',value:'30'},{label:'50',value:'50'},{label:'100',value:'100'}]">
+					</input>
+					<input id="exception_level" name="exception_level" class="easyui-combobox" data-options="panelHeight:80,valueField:'value',textField:'label',data:[{label:'&gt;= 信息',value:'info'},{label:'&gt;= 警告',value:'warning'},{label:'&gt;= 严重',value:'error',selected:true}]">
+					</input>
+					<i class="fa fa-refresh" aria-hidden="true"></i>
+				</div>
 			</div>
-        </div>
-    </div>
+			<div class="easyui-layout" data-options="fit:true,border:false">
+				<div id="layout-body-right-bottom" data-options="region:'south',height:'100%',border:false">
+					<div class="timeline">
+						<article>
+							<section>
+								<span class="point-time text-warning">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:36</span>
+								</time>
+								<aside>
+									<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-warning">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:36</span>
+								</time>
+								<aside>
+									<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-warning">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:36</span>
+								</time>
+								<aside>
+									<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-warning">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:36</span>
+								</time>
+								<aside>
+									<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-warning">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:36</span>
+								</time>
+								<aside>
+									<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-warning">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:36</span>
+								</time>
+								<aside>
+									<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-warning">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:36</span>
+								</time>
+								<aside>
+									<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-warning">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:36</span>
+								</time>
+								<aside>
+									<p class="things text-warning">Zabbix server new: Disk I/O is overloaded on Zabbix server new</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+							<section>
+								<span class="point-time text-error">
+														<i class="fa fa-circle-o" aria-hidden="true"></i>
+													</span>
+								<time>
+									<span>2017-11-25</span>
+									<span>13:00</span>
+								</time>
+								<aside>
+									<p class="things text-error">Zabbix server app: Disk I/O is overloaded on Zabbix server app</p>
+								</aside>
+							</section>
+						</article>
+					</div>
+					</div>
+			</div>
+		</div>
+	</div>
 </div>
-<div class="layout-footer" data-options="region:'south',border:false">
-    附加信息
+<div class="upg-layout-footer" data-options="region:'south',border:false">
+	<div class="lf">
+		<span class="font-grayish">Copyright ©UpgradeClient-WebUI |杭州XXOO信息技术有限公司</span>
+	</div>
+	<div class="rt">
+		<span class="font-grayish">PoweredBy: LiManMan</span>
+	</div>
+
 </div>

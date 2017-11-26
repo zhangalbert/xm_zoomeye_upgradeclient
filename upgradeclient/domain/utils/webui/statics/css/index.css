@@ -1,3 +1,50 @@
+/* 公共CSS区 */
+@font-face {font-family: 'webfont';
+  src: url('../fonts/webfont.eot'); /* IE9*/
+  src: url('../fonts/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../fonts/webfont.woff') format('woff'), /* chrome、firefox */
+  url('../fonts/webfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('../fonts/webfont.svg#思源黑体-细') format('svg'); /* iOS 4.1- */
+}
+* {
+	font-family: webfont;
+}
+.lf {
+	float: left;
+}
+.rt {
+	float: right;
+}
+.clear {
+	clear: both;
+}
+.active {
+	background-color: #EBEDF4;
+}
+.placeholder {
+	border: solid 1px transparent;
+}
+.easyui-menu.menu-top.menu {
+	width: 200px !important;
+	border-radius: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	border: solid 1px #EBEDF4;
+	border-top: none;
+	border-right: none;
+}
+.easyui-menu.menu-top.menu .menu-line {
+	display: none;
+}
+.easyui-menu.menu-top.menu .menu-item {
+	height: 50px !important;
+	line-height: 50px !important;
+}
+.easyui-menu.menu-top.menu .menu-item .menu-text {
+	padding-left: 25px !important;
+	line-height: 50px !important;
+}
+/* 右侧时间轴CSS区 */
 article,section,time,aside{display:block;}
 .point-time {
   position: absolute;
@@ -57,43 +104,54 @@ article,section,time,aside{display:block;}
   color: #9f9f9f;
 }
 
-.layout-header, .layout-footer {
-    height: 50px;
-    line-height: 50px;
-    overflow: hidden;
+/* 顶部CSS区域 */
+.upg-layout-header {
+	position: relative;
+	padding: 0 15px 0 15px;
+	height: 50px;
+	line-height: 50px;
+	border-bottom: solid 1px #EBEDF4;
 }
-#layout-body-right {
-    padding-top: 20px;
-    overflow-x: auto;
-    overflow-y: scroll;
+.upg-layout-header .lf span{
+	font-size: 16px;
 }
-.header {
-    margin-bottom: 20px;
-    position: relative;
-    padding-right: 15px;
-    border-left: solid 5px red;
+.upg-layout-header span.icon {
+	line-height: 50px;
+	display: inline-block;
 }
-.header:after {
-    content: "";
-    height: 0px;
-    line-height: 0;
-    display: block;
-    visibility: hidden;
-    clear: both;
+.upg-layout-header ul li {
+	float: left;
+	width: 100px;
+	text-align: center;
 }
-.header>span {
-    color: #2B415A;
-    padding-left: 20px;
+.upg-layout-header ul li:hover {
+	background-color: #EBEDF4;
 }
-.header span, .header ul li {
-    float: left;
-    height: 24px;
-    line-height: 24px;
+/* 身体CSS区域 */
+.upg-layout-body {
+	height: 800px;
+	margin: 0 auto;
+	padding: 10px 15px 10px 15px;
+	background-color: #EBEDF4;
 }
-.header ul {
-    float: right;
+/* 身体右上CSS区域 */
+.upg-layout-header .rt i.fa.fa-refresh{
+	padding: 5px;
+	border: solid 1px #B0B0B0;
 }
-.header ul li.sep {
-    width: 10px;
-    border: solid 1px transparent;
+#layout-body-right-bottom{
+	overflow-x:hidden;
+	overflow-y: scroll;
+	padding: 15px 0 50px 0;
+}
+#layout-body-left-bottom-bottom  {
+	overflow: hidden;
+}
+/* 底部CSS区域 */
+.upg-layout-footer {
+	height: 50px;
+	line-height: 50px;
+	overflow: hidden;
+	text-align: center;
+	padding: 0 15px 0 15px;
 }
