@@ -96,7 +96,7 @@ class ExceptionExceptView(BaseView):
     def dispatch(self, key):
         handler = {
             'days': self.days_response,
-            'week': self.week_response,
+            'weeks': self.week_response,
         }.get(key, self.default_response)
 
         return handler
