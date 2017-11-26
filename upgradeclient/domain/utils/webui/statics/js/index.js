@@ -54,28 +54,22 @@ $(function(){
 	        },
 	        xAxis: {
 	            type: 'datetime',
-	            dateTimeLabelFormats: {
-	                millisecond: '%H:%M:%S.%L',
-	                second: '%H:%M:%S',
-	                minute: '%H:%M',
-	                hour: '%H:%M',
-	                day: '%m-%d',
-	                week: '%m-%d',
-	                month: '%Y-%m',
-	                year: '%Y'
-	            }
+	            labels: {
+	                formatter: function () {
+                        var t = new Date(parseInt(this.value));
+                        return t.getYear()+'-'+t.getMonth()+'-'+t.getDay()+' '+t.getHours()+':'+t.getMinutes();
+                    }
+                }
 	        },
 	        tooltip: {
-	            dateTimeLabelFormats: {
-	                millisecond: '%H:%M:%S.%L',
-	                second: '%H:%M:%S',
-	                minute: '%H:%M',
-	                hour: '%H:%M',
-	                day: '%Y-%m-%d',
-	                week: '%m-%d',
-	                month: '%Y-%m',
-	                year: '%Y'
-	            }
+	            formatter: function () {
+                    var t = new Date(parseInt(this.value));
+                    return 'item: '+this.series.name+'<br/>'+'time: '
+                           +' '
+                           +t.getYear()+'-'+t.getMonth()+'-'+t.getDay()+' '+t.getHours()+':'+t.getMinutes()
+                           +' '
+                           +'[ '+this.y+' ]';
+                }
 	        },
 	        yAxis: {
 	            title: {
@@ -113,7 +107,7 @@ $(function(){
 	        },
 	        series: [{
 	            type: 'area',
-	            name: '美元兑欧元',
+	            name: '固件异常趋势',
 	            data: data
 	        }]
 	    });
