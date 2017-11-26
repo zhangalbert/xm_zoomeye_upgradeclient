@@ -21,21 +21,23 @@ $(function(){
             data: {},
             dataType: 'json',
             success: function(data) {
-                console.log(data);
                 var max_length = 20;
                 for (var i = 0; i < data.length; i++) {
                     var cur_ins = data[i],
                         cur_length = $('#exception_realtime section').length;
-                    var html = '<section id="'+cur_ins['id']+'">' +
-                               '<span class="point-time text-'+cur_ins['log_level']+'">' +
-                               '<i class="fa fa-circle-o" aria-hidden="true"></i></span>' +
-                               '<time><span>'+cur_ins['created_date']+'</span><span>'+cur_ins['created_time'] +
-                               '</span></time><aside><p class="things text-'+cur_ins['log_level']+' rtrim">' +
-                               cur_ins['log_message']+'</p></aside></section>';
+                    var html = $('<section id="'+cur_ins['id']+'">' +
+                                 '<span class="point-time text-'+cur_ins['log_level']+'">' +
+                                 '<i class="fa fa-circle-o" aria-hidden="true"></i></span>' +
+                                 '<time><span>'+cur_ins['created_date']+'</span><span>'+cur_ins['created_time'] +
+                                 '</span></time><aside><p class="things text-'+cur_ins['log_level']+' rtrim">' +
+                               cur_ins['log_message']+'</p></aside></section>');
                     if (cur_length > max_length) {
                         $('#exception_realtime section').eq(-1).remove();
-                    };
-                    $(html).insertBefore($('#exception_realtime section').eq(0))
+                    } else if (cur_length == 0){
+                        $('#exception_realtime').append(html)
+                    }else {
+                        $('#exception_realtime section').eq(0).prepend(html);
+                    }
                 }
             }
         })
