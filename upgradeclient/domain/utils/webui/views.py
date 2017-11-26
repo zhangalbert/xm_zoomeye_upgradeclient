@@ -118,9 +118,9 @@ class ExceptionExceptView(BaseView):
         fmt_date = (what_con, 'upgradeclient', group_con, having_con)
 
         print '='*100
-        print "select {0} from {1} group by({2}) having {2}".format(*fmt_date)
+        print "select {0} from {1} group by({2}) having {3}".format(*fmt_date)
         print '='*100
-        select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
+        select_storage = db.query("select {0} from {1} group by({2}) having {3}".format(*fmt_date))
 
         for ins in select_storage:
             response_data.append([self.make_time(time_fmt, ins.date), ins.count])
@@ -138,7 +138,7 @@ class ExceptionExceptView(BaseView):
         having_con = "{0} >= {1}".format(group_con, n_week_ago.strftime(date_fmt))
         fmt_date = (what_con, 'upgradeclient', group_con, having_con)
 
-        select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
+        select_storage = db.query("select {0} from {1} group by({2}) having {3}".format(*fmt_date))
 
         for ins in select_storage:
             response_data.append([self.make_time(date_fmt, ins.date), ins.count])
