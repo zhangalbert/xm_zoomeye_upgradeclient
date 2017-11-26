@@ -2,6 +2,7 @@
 
 import os
 import web
+import json
 
 
 from upgradeclient.database.database import db
@@ -12,6 +13,11 @@ com_render = web.template.render('{0}/'.format(template_dir), base='layout', cac
 
 
 class BaseView(object):
+    def json_response(self, data):
+        web.header('Content-type', 'application/json')
+
+        return json.dumps(data, indent=4)
+
     def GET(self, *args, **kwargs):
         raise NotImplementedError
 
@@ -66,6 +72,8 @@ class ExceptionExceptView(BaseView):
 
 class ExceptionRealtimeView(BaseView):
     def GET(self):
+        response_data = []
+
         loglevels = ['info', 'warning', 'error']
         input_storage = web.input(limit=20, log_level='error')
         log_limit = input_storage.limit
@@ -74,8 +82,25 @@ class ExceptionRealtimeView(BaseView):
         where_con = ' or '.join(map(lambda s: 'log_level=\'{0}\''.format(s), log_level))
 
         select_storage = db.select(where=where_con, limit=log_limit, order='created_time desc')
-        print '=' * 100
-        print select_storage
-        print '=' * 100
-        return select_storage
+        for ins in select_storage:
+            response_data.append({
+                'id': ins.id,
+                'log_level': ins.log_level,
+                'log_name': ins.log_name,
+                'log_class': ins.log_class,
+                'dao_name': ins.dao_name,
+                'file_type': ins.file_type,
+                'file_name': ins.file_name,
+                'file_url': ins.file_url,
+                'last_author': ins.last_author,
+                'last_date': ins.last_date,
+                'last_revision': ins.last_revision,
+                'last_action': ins.last_action,
+                'log_message': ins.log_message,
+                'created_date': ins.created_date.strftime('%Y-%m-%d'),
+                'created_time': ins.created_date.strftime('%H-%M-%S')
+            })
+
+        return self.json_response(response_data)
+
 
