@@ -3,6 +3,7 @@
 import os
 import web
 import json
+import datetime
 
 
 from upgradeclient.database.database import db
@@ -84,6 +85,65 @@ class ExceptionFmodelView(BaseView):
 
 class ExceptionExceptView(BaseView):
     def GET(self):
+        response_data = []
+
+        exp_during = web.input(exp_during='weeks_1')
+        split_keys = exp_during.exp_during.split('_')
+        response_data = self.dispatch(split_keys[0])(split_keys[-1])
+
+        return self.json_response(response_data)
+
+    def dispatch(self, key):
+        handler = {
+            'days': self.days_response,
+            'week': self.week_response,
+        }.get(key, self.default_response)
+
+        return handler
+
+    def days_response(self, n):
+        response_data = []
+
+        group_con = "strftime('%Y-%m-%d %H:%M:%S', created_time)"
+        what_con = ','.join([
+            "strftime('%Y-%m-%d %H:%M:%S', created_time) as date",
+            "count({0}) as count".format(group_con)
+        ])
+        n_days_ago = datetime.datetime.now()-datetime.timedelta(days=n)
+        having_con = "{0} >= {1}".format(group_con, n_days_ago.strftime('%Y-%m-%d %H:%M:%S'))
+        fmt_date = (what_con, 'upgradeclient', group_con, having_con)
+        select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
+
+        for ins in select_storage:
+            response_data.append({
+                'date': ins.date,
+                'count': ins.count
+            })
+        response_data.sort(key=lambda s: s['date'])
+
+        return response_data
+
+    def week_response(self, n):
+        response_data = []
+
+        group_con = "strftime('%Y-%m-%d', created_time)"
+        what_con = ','.join([
+            "strftime('%Y-%m-%d', created_time) as date",
+            "count({0}) as count".format(group_con)
+        ])
+        n_week_ago = datetime.datetime.now() - datetime.timedelta(weeks=n)
+        having_con = "{0} >= {1}".format(group_con, n_week_ago.strftime('%Y-%m-%d'))
+        fmt_date = (what_con, 'upgradeclient', group_con, having_con)
+        select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
+
+        for ins in select_storage:
+            response_data.append({
+                'date': ins.date,
+                'count': ins.count
+            })
+        response_data.sort(key=lambda s: s['date'])
+
+    def default_response(self, n):
         pass
 
 
@@ -92,8 +152,8 @@ class ExceptionRealtimeView(BaseView):
         response_data = []
 
         loglevels = ['info', 'warning', 'error']
-        input_storage = web.input(limit=20, log_level='info')
-        log_limit = input_storage.limit
+        input_storage = web.input(log_limit=20, log_level='info')
+        log_limit = input_storage.log_limit
         log_level = loglevels[loglevels.index(input_storage.log_level):]
 
         where_con = ' or '.join(map(lambda s: 'log_level=\'{0}\''.format(s), log_level))
