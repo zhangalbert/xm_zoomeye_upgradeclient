@@ -31,11 +31,10 @@ $(function(){
                                  '<time><span>'+cur_ins['created_date']+'</span><span>'+cur_ins['created_time'] +
                                  '</span></time><aside><p class="things text-'+cur_ins['log_level']+' rtrim">' +
                                cur_ins['log_message']+'</p></aside></section>');
-                    if (cur_length > max_length) {
-                        $('#exception_realtime section').eq(-1).remove();
-                    } else if (cur_length == 0){
+                    if (cur_length == 0){
                         $('#exception_realtime').append(html)
                     }else {
+                        $('#'+cur_ins['id']).remove()
                         $('#exception_realtime section').eq(0).prepend(html);
                     }
                 }
