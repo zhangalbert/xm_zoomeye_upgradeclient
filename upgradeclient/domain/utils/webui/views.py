@@ -75,7 +75,7 @@ class ExceptionRealtimeView(BaseView):
         response_data = []
 
         loglevels = ['info', 'warning', 'error']
-        input_storage = web.input(limit=20, log_level='error')
+        input_storage = web.input(limit=20, log_level='info')
         log_limit = input_storage.limit
         log_level = loglevels[loglevels.index(input_storage.log_level):]
 
