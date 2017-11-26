@@ -110,7 +110,7 @@ class ExceptionExceptView(BaseView):
     def days_response(self, n):
         response_data = []
 
-        time_fmt = '%Y-%m-%d %H:%M'
+        time_fmt = '\'%Y-%m-%d %H:%M\''
         group_con = "strftime({0}, created_time)".format(time_fmt)
         what_con = ','.join(["{0} as date", "count({0}) as count"]).format(group_con)
         n_days_ago = datetime.datetime.now()-datetime.timedelta(days=int(n))
@@ -131,7 +131,7 @@ class ExceptionExceptView(BaseView):
     def week_response(self, n):
         response_data = []
 
-        date_fmt = '%Y-%m-%d'
+        date_fmt = '\'%Y-%m-%d\''
         group_con = "strftime('{0}', created_time)".format(date_fmt)
         what_con = ','.join(["{0} as date", "count({0}) as count"]).format(group_con)
         n_week_ago = datetime.datetime.now() - datetime.timedelta(weeks=int(n))
