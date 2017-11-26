@@ -71,9 +71,9 @@ class ExceptionRealtimeView(BaseView):
         log_limit = input_storage.limit
         log_level = loglevels[loglevels.index(input_storage.log_level):]
 
-        select_storage = db.select(where='log_level in ({0})'.format(', '.join(log_level)),
-                                   limit=log_limit,
-                                   order='created_time desc')
+        where_con = ' or '.join(map(lambda s: 'log_level=\'{0}\''.format(s), log_level))
+
+        select_storage = db.select(where=where_con, limit=log_limit, order='created_time desc')
         print '=' * 100
         print select_storage
         print '=' * 100
