@@ -4,6 +4,7 @@ import os
 import web
 
 
+from upgradeclient.database.database import db
 from upgradeclient.domain.utils.webui.config import template_dir, upgwebui_dir
 
 
@@ -46,4 +47,35 @@ class RedirectView(BaseView):
 class IndexView(BaseView):
     def GET(self):
         return com_render.index()
+
+
+class ExceptionThreadView(BaseView):
+    def GET(self):
+        pass
+
+
+class ExceptionFmodelView(BaseView):
+    def GET(self):
+        pass
+
+
+class ExceptionExceptView(BaseView):
+    def GET(self):
+        pass
+
+
+class ExceptionRealtimeView(BaseView):
+    def GET(self):
+        loglevels = ['info', 'warning', 'error']
+        input_storage = web.input(limit=20, log_level='error')
+        log_limit = input_storage.limit
+        log_level = loglevels[loglevels.index(input_storage.log_level):]
+
+        select_storage = db.select(where='log_level in ({0})'.format(', '.join(log_level)),
+                                   limit=log_limit,
+                                   order='created_time desc')
+        print '=' * 100
+        print select_storage
+        print '=' * 100
+        return select_storage
 
