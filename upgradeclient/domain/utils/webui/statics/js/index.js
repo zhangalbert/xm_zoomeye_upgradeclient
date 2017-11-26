@@ -37,7 +37,7 @@ $(function(){
     }, 5000);
 
 	// 固件异常趋势图
-	$.getJSON('https://data.jianshukeji.com/jsonp?filename=json/usdeur.json&callback=?', function (data) {
+	$.getJSON('/ajax/exception/excepts', function (data) {
 	    exception_trend_chart = Highcharts.chart('exception_trend', {
 	    		credits: { 
 	    			enabled: false

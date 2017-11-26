@@ -116,11 +116,8 @@ class ExceptionExceptView(BaseView):
         select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
 
         for ins in select_storage:
-            response_data.append({
-                'date': ins.date,
-                'count': ins.count
-            })
-        response_data.sort(key=lambda s: s['date'])
+            response_data.append([ins.date, ins.count])
+        response_data.sort(key=lambda s: s[0])
 
         return response_data
 
@@ -135,15 +132,12 @@ class ExceptionExceptView(BaseView):
         n_week_ago = datetime.datetime.now() - datetime.timedelta(weeks=int(n))
         having_con = "{0} >= {1}".format(group_con, n_week_ago.strftime('%Y-%m-%d'))
         fmt_date = (what_con, 'upgradeclient', group_con, having_con)
-        
+
         select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
 
         for ins in select_storage:
-            response_data.append({
-                'date': ins.date,
-                'count': ins.count
-            })
-        response_data.sort(key=lambda s: s['date'])
+            response_data.append([ins.date, ins.count])
+        response_data.sort(key=lambda s: s[0])
 
         return response_data
 
