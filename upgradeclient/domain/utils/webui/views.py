@@ -37,8 +37,8 @@ class BaseView(object):
 
         return json.dumps(data, indent=4)
 
-    def make_time(self, time_str):
-        struct_time = time.strptime(time_str, '%Y-%m-%d %H:%M:%S')
+    def make_time(self, time_fmt, time_str):
+        struct_time = time.strptime(time_str, time_fmt)
 
         return time.mktime(struct_time)
 
@@ -110,19 +110,17 @@ class ExceptionExceptView(BaseView):
     def days_response(self, n):
         response_data = []
 
-        group_con = "strftime('%Y-%m-%d %H:%M', created_time)"
-        what_con = ','.join([
-            "strftime('%Y-%m-%d %H:%M', created_time) as date",
-            "count({0}) as count".format(group_con)
-        ])
+        time_fmt = '%Y-%m-%d %H:%M'
+        group_con = "strftime({0}, created_time)".format(time_fmt)
+        what_con = ','.join(["{0} as date", "count({0}) as count".format(group_con)])
         n_days_ago = datetime.datetime.now()-datetime.timedelta(days=int(n))
-        having_con = "{0} >= {1}".format(group_con, n_days_ago.strftime('%Y-%m-%d %H:%M'))
+        having_con = "{0} >= {1}".format(group_con, n_days_ago.strftime(time_fmt))
         fmt_date = (what_con, 'upgradeclient', group_con, having_con)
 
         select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
 
         for ins in select_storage:
-            response_data.append([self.make_time(ins.date), ins.count])
+            response_data.append([self.make_time(time_fmt, ins.date), ins.count])
         response_data.sort(key=lambda s: s[0])
 
         return response_data
@@ -130,19 +128,17 @@ class ExceptionExceptView(BaseView):
     def week_response(self, n):
         response_data = []
 
-        group_con = "strftime('%Y-%m-%d', created_time)"
-        what_con = ','.join([
-            "strftime('%Y-%m-%d', created_time) as date",
-            "count({0}) as count".format(group_con)
-        ])
+        date_fmt = '%Y-%m-%d'
+        group_con = "strftime('{0}', created_time)".format(date_fmt)
+        what_con = ','.join(["{0} as date", "count({0}) as count"]).format(group_con)
         n_week_ago = datetime.datetime.now() - datetime.timedelta(weeks=int(n))
-        having_con = "{0} >= {1}".format(group_con, n_week_ago.strftime('%Y-%m-%d'))
+        having_con = "{0} >= {1}".format(group_con, n_week_ago.strftime(date_fmt))
         fmt_date = (what_con, 'upgradeclient', group_con, having_con)
 
         select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
 
         for ins in select_storage:
-            response_data.append([self.make_time(ins.date), ins.count])
+            response_data.append([self.make_time(date_fmt, ins.date), ins.count])
         response_data.sort(key=lambda s: s[0])
 
         return response_data
