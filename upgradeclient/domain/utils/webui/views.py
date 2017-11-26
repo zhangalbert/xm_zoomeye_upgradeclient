@@ -123,7 +123,7 @@ class ExceptionExceptView(BaseView):
         select_storage = db.query("select {0} from {1} group by({2}) having {3}".format(*fmt_date))
 
         for ins in select_storage:
-            response_data.append([self.make_time(time_fmt, ins.date), ins.count])
+            response_data.append([self.make_time('%Y-%m-%d %H:%M', ins.date), ins.count])
         response_data.sort(key=lambda s: s[0])
 
         return response_data
@@ -141,7 +141,7 @@ class ExceptionExceptView(BaseView):
         select_storage = db.query("select {0} from {1} group by({2}) having {3}".format(*fmt_date))
 
         for ins in select_storage:
-            response_data.append([self.make_time(date_fmt, ins.date), ins.count])
+            response_data.append([self.make_time('%Y-%m-%d', ins.date), ins.count])
         response_data.sort(key=lambda s: s[0])
 
         return response_data
