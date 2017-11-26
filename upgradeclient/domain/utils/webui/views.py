@@ -3,6 +3,7 @@
 import os
 import web
 import json
+import time
 import datetime
 
 
@@ -35,6 +36,11 @@ class BaseView(object):
         web.header('Content-type', 'application/json')
 
         return json.dumps(data, indent=4)
+
+    def make_time(self, time_str):
+        struct_time = time.strftime(time_str, '%Y-%m-%d %H:%M:%S')
+
+        return time.mktime(struct_time)
 
     def GET(self, *args, **kwargs):
         raise NotImplementedError
@@ -116,7 +122,7 @@ class ExceptionExceptView(BaseView):
         select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
 
         for ins in select_storage:
-            response_data.append([ins.date, ins.count])
+            response_data.append([self.make_time(ins.date), ins.count])
         response_data.sort(key=lambda s: s[0])
 
         return response_data
@@ -136,7 +142,7 @@ class ExceptionExceptView(BaseView):
         select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
 
         for ins in select_storage:
-            response_data.append([ins.date, ins.count])
+            response_data.append([self.make_time(ins.date), ins.count])
         response_data.sort(key=lambda s: s[0])
 
         return response_data
