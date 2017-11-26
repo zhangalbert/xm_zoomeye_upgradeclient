@@ -31,16 +31,20 @@ $var pre_scriptfiles: /statics/js/index.js
 							<div id="layout-body-left-top-left" data-options="region:'west',width:'50%',border:false">
 								<div id="layout-body-left-top-left-right" data-options="region:'east',width:'50%',border:false">
 									<div class="upg-layout-header">
-									<div class="lf">
-										<span>线程异常分布</span>
+										<div class="lf">
+											<span>线程异常分布</span>
+										</div>
+										<div class="rt">
+											<i class="placeholder"></i>
+											<i class="fa fa-refresh" aria-hidden="true"></i>
+										</div>
 									</div>
-									<div class="rt">
-										<i class="placeholder"></i>
-										<i class="fa fa-refresh" aria-hidden="true"></i>
+									<div class="easyui-layout" data-options="fit:true,border:false">
+										<div id="layout-body-top-left-bottom" data-options="region:'south',height:'100%',border:false">
+											<div id="exception_thread" style="height: 300px;"></div>
+										</div>
 									</div>
 								</div>
-								<div id="exception_thread" style="height: 330px;"></div>
-							</div>
 							</div>
 						<div id="layout-body-left-top-right" data-options="region:'east',width:'50%',border:false">
 							<div class="upg-layout-header">
@@ -52,7 +56,12 @@ $var pre_scriptfiles: /statics/js/index.js
 									<i class="fa fa-refresh" aria-hidden="true"></i>
 								</div>
 							</div>
-							<div id="exception_nametype" style="height: 330px;"></div>
+							<div class="easyui-layout" data-options="fit:true,border:false">
+								<div id="layout-body-top-right-bottom" data-options="region:'south',height:'100%',border:false">
+									<div id="exception_nametype" style="height: 300px;"></div>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</div>
@@ -69,7 +78,7 @@ $var pre_scriptfiles: /statics/js/index.js
 					</div>
 					<div class="easyui-layout" data-options="fit:true,border:false">
 						<div id="layout-body-left-bottom-bottom" data-options="region:'south',height:'100%',border:false">
-							<div id="exception_trend" style="height: 330px;"></div>
+							<div id="exception_trend" style="height: 300px;"></div>
 						</div>
 					</div>
 				</div>
