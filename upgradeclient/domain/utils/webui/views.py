@@ -97,8 +97,8 @@ class ExceptionRealtimeView(BaseView):
                 'last_revision': ins.last_revision,
                 'last_action': ins.last_action,
                 'log_message': ins.log_message,
-                'created_date': ins.created_date.strftime('%Y-%m-%d'),
-                'created_time': ins.created_date.strftime('%H-%M-%S')
+                'created_date': ins.created_time.strftime('%Y-%m-%d'),
+                'created_time': ins.created_time.strftime('%H-%M-%S')
             })
 
         return self.json_response(response_data)
