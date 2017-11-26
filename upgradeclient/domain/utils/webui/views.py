@@ -104,7 +104,7 @@ class ExceptionExceptView(BaseView):
     def days_response(self, n):
         response_data = []
 
-        group_con = "strftime('%Y-%m-%d %H:%M:%S', created_time)"
+        group_con = "strftime('%Y-%m-%d %H:%M', created_time)"
         what_con = ','.join([
             "strftime('%Y-%m-%d %H:%M', created_time) as date",
             "count({0}) as count".format(group_con)
