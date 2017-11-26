@@ -38,7 +38,7 @@ class BaseView(object):
         return json.dumps(data, indent=4)
 
     def make_time(self, time_str):
-        struct_time = time.strftime(time_str, '%Y-%m-%d %H:%M:%S')
+        struct_time = time.strptime(time_str, '%Y-%m-%d %H:%M:%S')
 
         return time.mktime(struct_time)
 
