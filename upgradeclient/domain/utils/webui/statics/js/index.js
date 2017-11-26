@@ -36,6 +36,7 @@ $(function(){
                     } else if (cur_length == 0){
                         $('#exception_realtime').append(html);
                     }else {
+                        $('#exception_realtime section[pk="'+cur_ins['id']+'"]:last').remove();
                         $('#exception_realtime section').eq(0).prepend(html);
                     }
                 }
