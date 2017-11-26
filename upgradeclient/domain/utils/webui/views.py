@@ -81,7 +81,7 @@ class ExceptionRealtimeView(BaseView):
 
         where_con = ' or '.join(map(lambda s: 'log_level=\'{0}\''.format(s), log_level))
 
-        select_storage = db.select(where=where_con, limit=log_limit, order='created_time desc')
+        select_storage = db.select(where=where_con, limit=log_limit, order='created_time')
         for ins in select_storage:
             response_data.append({
                 'id': ins.id,
