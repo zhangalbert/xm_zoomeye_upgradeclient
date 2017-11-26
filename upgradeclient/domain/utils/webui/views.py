@@ -109,13 +109,10 @@ class ExceptionExceptView(BaseView):
             "strftime('%Y-%m-%d %H:%M:%S', created_time) as date",
             "count({0}) as count".format(group_con)
         ])
-        n_days_ago = datetime.datetime.now()-datetime.timedelta(days=n)
+        n_days_ago = datetime.datetime.now()-datetime.timedelta(days=int(n))
         having_con = "{0} >= {1}".format(group_con, n_days_ago.strftime('%Y-%m-%d %H:%M:%S'))
         fmt_date = (what_con, 'upgradeclient', group_con, having_con)
-        web.debug(db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date)))
-        print '='*100
-        print "select {0} from {1} group by({2}) having {2}".format(*fmt_date)
-        print '='*100
+
         select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
 
         for ins in select_storage:
@@ -135,13 +132,10 @@ class ExceptionExceptView(BaseView):
             "strftime('%Y-%m-%d', created_time) as date",
             "count({0}) as count".format(group_con)
         ])
-        n_week_ago = datetime.datetime.now() - datetime.timedelta(weeks=n)
+        n_week_ago = datetime.datetime.now() - datetime.timedelta(weeks=int(n))
         having_con = "{0} >= {1}".format(group_con, n_week_ago.strftime('%Y-%m-%d'))
         fmt_date = (what_con, 'upgradeclient', group_con, having_con)
-        print '=' * 100
-        print "select {0} from {1} group by({2}) having {2}".format(*fmt_date)
-        print '=' * 100
-        web.debug(db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date)))
+        
         select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
 
         for ins in select_storage:
