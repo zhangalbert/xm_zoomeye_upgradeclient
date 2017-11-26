@@ -183,11 +183,11 @@ $(function(){
 	        name: '固件型号异常占比',
 	        data: [
 	            ['IPC_General',   45.0],
-	            ['IPC_OEM',       12.0],
-	            ['DVR_General',       26.8],
-	            ['DVR_OEM',    8.5],
+	            ['IPC_OEM',       5.0],
+	            ['DVR_General',       10.0],
+	            ['DVR_OEM',    35.0],
 	            ['NVR_General', 30.2],
-	            ['NVR_OEM', 0.7]
+	            ['NVR_OEM', 5.0]
 	        ]
 	    }]
 	}, function(c) {
@@ -247,12 +247,12 @@ $(function(){
 	        innerSize: '95%',
 	        name: '固件型号异常占比',
 	        data: [
-	            ['CheckService',   45.0],
-	            ['DownloadService',       12.0],
-	            ['UploadService',       26.8],
-	            ['AlertService',    8.5],
-	            ['FirmwareHandler', 30.2],
-	            ['ReleaseNoteHandler', 0.7]
+	            ['CheckService',   0.0],
+	            ['DownloadService',       50.0],
+	            ['UploadService',       0.0],
+	            ['AlertService',    0.0],
+	            ['FirmwareHandler', 25.0],
+	            ['ReleaseNoteHandler', 25.0]
 	        ]
 	    }]
 	}, function(c) {
