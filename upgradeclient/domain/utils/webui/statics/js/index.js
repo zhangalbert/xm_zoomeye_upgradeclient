@@ -54,19 +54,41 @@ $(function(){
 	        },
 	        xAxis: {
 	            type: 'datetime',
+                dateTimeLabelFormats: {
+                    millisecond: '%H:%M:%S.%L',
+                    second: '%H:%M:%S',
+                    minute: '%H:%M',
+                    hour: '%H:%M',
+                    day: '%m-%d',
+                    week: '%m-%d',
+                    month: '%Y-%m',
+                    year: '%Y'
+                },
 	            labels: {
 	                formatter: function () {
-                        var t = new Date(parseInt(this.value));
-                        return t.getYear()+'-'+t.getMonth()+'-'+t.getDay()+' '+t.getHours()+':'+t.getMinutes();
+                        var t = new Date(parseInt(this.value)*1000);
+                        return t.getHours()+':'+t.getMinutes();
                     }
                 }
 	        },
 	        tooltip: {
+                dateTimeLabelFormats: {
+                    millisecond: '%H:%M:%S.%L',
+                    second: '%H:%M:%S',
+                    minute: '%H:%M',
+                    hour: '%H:%M',
+                    day: '%m-%d',
+                    week: '%m-%d',
+                    month: '%Y-%m',
+                    year: '%Y'
+                },
 	            formatter: function () {
-                    var t = new Date(parseInt(this.value));
+                    var t = new Date(parseInt(this.x)*1000);
                     return 'item: '+this.series.name+'<br/>'+'time: '
                            +' '
-                           +t.getYear()+'-'+t.getMonth()+'-'+t.getDay()+' '+t.getHours()+':'+t.getMinutes()
+                           +t.getFullYear()+'-'+t.getMonth()+'-'+t.getDate()
+                           +' '
+                           +t.getHours()+':'+t.getMinutes()+t.getSeconds()
                            +' '
                            +'[ '+this.y+' ]';
                 }
