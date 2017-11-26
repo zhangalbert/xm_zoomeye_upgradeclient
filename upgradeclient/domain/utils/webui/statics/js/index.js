@@ -2,11 +2,11 @@ $(function(){
 	var exception_trend_chart = null
 		,exception_nametype_chart = null
 		,exception_thread_chart = null;
-	$(window).resize(function(){
-		exception_trend_chart & exception_trend_chart.reflow();
-		exception_nametype_chart & exception_nametype_chart.reflow();
-		exception_thread_chart & exception_thread_chart.reflow();
-	})
+	// $(window).resize(function(){
+	// 	exception_trend_chart & exception_trend_chart.reflow();
+	// 	exception_nametype_chart & exception_nametype_chart.reflow();
+	// 	exception_thread_chart & exception_thread_chart.reflow();
+	// })
 	// 导航栏下拉菜单
 	$('.upg-layout-header li.upg-dropdown').on('mouseover', function(){
 		var left = $(this).offset().left- 100

@@ -144,7 +144,7 @@ article,section,time,aside{display:block;}
 	overflow-y: scroll;
 	padding: 15px 0 50px 0;
 }
-#layout-body-left-bottom-bottom  {
+#layout-body-left-bottom-bottom,#layout-body-top-left-bottom,#layout-body-top-right-bottom {
 	overflow: hidden;
 }
 /* 底部CSS区域 */
