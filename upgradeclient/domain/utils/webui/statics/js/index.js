@@ -47,10 +47,10 @@ $(function(){
 	            spacing : [15, 15 , 0, 15]
 	        },
 	        title: {
-	            text: null,
+	            text: null
 	        },
 	        subtitle: {
-	            text: null,
+	            text: null
 	        },
 	        xAxis: {
 	            type: 'datetime',
