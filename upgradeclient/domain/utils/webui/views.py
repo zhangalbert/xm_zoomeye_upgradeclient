@@ -92,7 +92,7 @@ class ExceptionRealtimeView(BaseView):
         response_data = []
 
         loglevels = ['info', 'warning', 'error']
-        input_storage = web.input(limit=30, log_level='info')
+        input_storage = web.input(limit=20, log_level='info')
         log_limit = input_storage.limit
         log_level = loglevels[loglevels.index(input_storage.log_level):]
 
@@ -105,7 +105,7 @@ class ExceptionRealtimeView(BaseView):
                 'log_level': ins.log_level,
                 'log_message': ins.log_message,
                 'created_date': ins.created_time.strftime('%Y-%m-%d'),
-                'created_time': ins.created_time.strftime('%H-%M-%S')
+                'created_time': ins.created_time.strftime('%H:%M:%S')
             })
         response_data.sort(key=lambda s: '{0} {1}'.format(s['created_date'], s['created_time']), reverse=True)
 
