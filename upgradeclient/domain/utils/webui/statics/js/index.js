@@ -55,26 +55,14 @@ $(function(){
 	        xAxis: {
 	            type: 'datetime',
 	            dateTimeLabelFormats: {
-	                millisecond: '%H:%M:%S.%L',
-	                second: '%H:%M:%S',
-	                minute: '%H:%M',
-	                hour: '%H:%M',
-	                day: '%m-%d',
-	                week: '%m-%d',
-	                month: '%Y-%m',
-	                year: '%Y'
+	                minute: '%Y-%m-%d %H:%M',
+	                day: '%Y-%m-%d'
 	            }
 	        },
 	        tooltip: {
 	            dateTimeLabelFormats: {
-	                millisecond: '%H:%M:%S.%L',
-	                second: '%H:%M:%S',
-	                minute: '%H:%M',
-	                hour: '%H:%M',
-	                day: '%Y-%m-%d',
-	                week: '%m-%d',
-	                month: '%Y-%m',
-	                year: '%Y'
+	                minute: '%Y-%m-%d %H:%M',
+	                day: '%Y-%m-%d'
 	            }
 	        },
 	        yAxis: {
@@ -113,7 +101,7 @@ $(function(){
 	        },
 	        series: [{
 	            type: 'area',
-	            name: '美元兑欧元',
+	            name: '固件异常趋势',
 	            data: data
 	        }]
 	    });

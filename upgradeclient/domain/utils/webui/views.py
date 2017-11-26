@@ -87,7 +87,7 @@ class ExceptionExceptView(BaseView):
     def GET(self):
         response_data = []
 
-        exp_during = web.input(exp_during='weeks_1')
+        exp_during = web.input(exp_during='days_1')
         split_keys = exp_during.exp_during.split('_')
         response_data = self.dispatch(split_keys[0])(split_keys[-1])
 
@@ -106,11 +106,11 @@ class ExceptionExceptView(BaseView):
 
         group_con = "strftime('%Y-%m-%d %H:%M:%S', created_time)"
         what_con = ','.join([
-            "strftime('%Y-%m-%d %H:%M:%S', created_time) as date",
+            "strftime('%Y-%m-%d %H:%M', created_time) as date",
             "count({0}) as count".format(group_con)
         ])
         n_days_ago = datetime.datetime.now()-datetime.timedelta(days=int(n))
-        having_con = "{0} >= {1}".format(group_con, n_days_ago.strftime('%Y-%m-%d %H:%M:%S'))
+        having_con = "{0} >= {1}".format(group_con, n_days_ago.strftime('%Y-%m-%d %H:%M'))
         fmt_date = (what_con, 'upgradeclient', group_con, having_con)
 
         select_storage = db.query("select {0} from {1} group by({2}) having {2}".format(*fmt_date))
