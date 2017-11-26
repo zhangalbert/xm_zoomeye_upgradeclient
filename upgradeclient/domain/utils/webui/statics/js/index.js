@@ -86,7 +86,7 @@ $(function(){
                     var t = new Date(parseInt(this.x)*1000);
                     return 'item: '+this.series.name+'<br/>'+'time: '
                            +' '
-                           +t.getFullYear()+'-'+t.getMonth()+'-'+t.getDate()
+                           +t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()
                            +' '
                            +t.getHours()+':'+t.getMinutes()+t.getSeconds()
                            +' '
