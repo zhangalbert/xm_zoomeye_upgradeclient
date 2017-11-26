@@ -21,7 +21,7 @@ $(function(){
             data: {},
             dataType: 'json',
             success: function(data) {
-                var max_length = 50;
+                var max_length = 30;
                 for (var i = 0; i < data.length; i++) {
                     var cur_ins = data[i],
                         cur_length = $('#exception_realtime section').length;
