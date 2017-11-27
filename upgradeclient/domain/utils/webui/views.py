@@ -116,15 +116,16 @@ class ExceptionExceptView(BaseView):
         what_con = ','.join(["{0} as date", "count({0}) as count"]).format(group_con)
         n_days_ago = datetime.datetime.now()-datetime.timedelta(days=int(n))
         having_con = "{0} > {1}".format(group_con, n_days_ago.strftime(time_fmt))
-        fmt_date = (what_con, 'upgradeclient', group_con, having_con)
 
         select_command = [
-            'select from upgradeclient',
+            'select {0} from upgradeclient'.format(what_con),
             'group by {0}'.format(group_con),
             'having {0}'.format(having_con)
         ]
-
-        for ins in db.select_one(' '.join(select_command)):
+        select_results = db.select_one(' '.join(select_command))
+        if select_results is None:
+            return self.json_response([])
+        for ins in select_results:
             response_data.append(ins)
         response_data.sort(key=lambda s: s[0])
 
@@ -138,10 +139,9 @@ class ExceptionExceptView(BaseView):
         what_con = ','.join(["{0} as date", "count({0}) as count"]).format(group_con)
         n_week_ago = datetime.datetime.now() - datetime.timedelta(weeks=int(n))
         having_con = "{0} > {1}".format(group_con, n_week_ago.strftime(date_fmt))
-        fmt_date = (what_con, 'upgradeclient', group_con, having_con)
 
         select_command = [
-            'select from upgradeclient',
+            'select {0} from upgradeclient'.format(what_con),
             'group by {0}'.format(group_con),
             'having {0}'.format(having_con)
         ]
