@@ -10,3 +10,6 @@ class Helper(object):
                 condition_list.append('{0} {1}=\'{2}\''.format(s, k, v))
                 continue
             condition_list.append('{0}=\'{1}\''.format(k, v))
+
+        return condition_list
+
