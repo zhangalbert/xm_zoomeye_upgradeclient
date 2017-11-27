@@ -127,7 +127,7 @@ class ExceptionExceptView(BaseView):
         if select_results is None:
             return self.json_response([])
         for ins in select_results:
-            response_data.append(ins)
+            response_data.append([self.make_time('%Y-%m-%d %H:%M', ins[0]), ins[-1]])
         response_data.sort(key=lambda s: s[0])
 
         return response_data
@@ -151,7 +151,7 @@ class ExceptionExceptView(BaseView):
         if select_results is None:
             return self.json_response([])
         for ins in select_results:
-            response_data.append(ins)
+            response_data.append([self.make_time('%Y-%m-%d', ins[0]), ins[-1]])
         response_data.sort(key=lambda s: s[0])
 
         return response_data

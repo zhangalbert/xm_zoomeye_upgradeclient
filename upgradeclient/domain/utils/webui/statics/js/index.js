@@ -66,12 +66,8 @@ $(function(){
                 },
 	            labels: {
 	                formatter: function () {
-	                    var cur_value = toString(this.value);
-                        var timestamp = new Date(cur_value.substring(0,19).replace(/-/g,'/')).getTime(),
-	                        t = new Date(timestamp);
-                        res =  t.getHours()+':'+t.getMinutes();
-                        alert(res);
-                        return res
+	                    var t = new Date(parseInt(this.x)*1000);
+                        return t.getHours()+':'+t.getMinutes();
 	                }
                 }
 	        },
@@ -87,9 +83,7 @@ $(function(){
                     year: '%Y'
                 },
 	            formatter: function () {
-                    var cur_value = toString(this.value);
-                    var timestamp = new Date(cur_value.substring(0,19).replace(/-/g,'/')).getTime(),
-                        t = new Date(timestamp);
+                    var t = new Date(parseInt(this.x)*1000);
                     return 'item: '+this.series.name+'<br/>'+'time: '
                            +' '
                            +t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()
