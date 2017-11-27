@@ -44,6 +44,9 @@ class SqliteMultithread(Thread):
         conn.close()
 
     def execute(self, req, arg=None, res=None):
+        print '='*100
+        print req
+        print '='*100
         self.reqs.put((req, arg or tuple(), res))
 
     def executemany(self, req, items):
