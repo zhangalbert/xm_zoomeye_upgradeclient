@@ -67,7 +67,6 @@ $(function(){
 	            labels: {
 	                formatter: function () {
 	                    var cur_value = toString(this.x);
-	                    alert(cur_value);
                         var timestamp = new Date(cur_value.substring(0,19).replace(/-/g,'/')).getTime(),
 	                        t = new Date(timestamp);
                         res =  t.getHours()+':'+t.getMinutes();
@@ -89,7 +88,6 @@ $(function(){
                 },
 	            formatter: function () {
                     var cur_value = toString(this.x);
-                    alert(cur_value);
                     var timestamp = new Date(cur_value.substring(0,19).replace(/-/g,'/')).getTime(),
                         t = new Date(timestamp);
                     return 'item: '+this.series.name+'<br/>'+'time: '
