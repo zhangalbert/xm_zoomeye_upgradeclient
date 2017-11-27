@@ -66,7 +66,8 @@ $(function(){
                 },
 	            labels: {
 	                formatter: function () {
-	                    var t = new Date(this.value.substring(0,19).replace(/-/g,'/')).getTime()*1000;
+	                    var timestamp = new Date(this.value.substring(0,19).replace(/-/g,'/')).getTime()*1000,
+	                        t = new Date(timestamp);
                         return t.getHours()+':'+t.getMinutes();
                     }
                 }
@@ -83,7 +84,8 @@ $(function(){
                     year: '%Y'
                 },
 	            formatter: function () {
-                    var t = new Date(this.value.substring(0,19).replace(/-/g,'/')).getTime()*1000;
+                    var timestamp = new Date(this.value.substring(0,19).replace(/-/g,'/')).getTime()*1000,
+                        t = new Date(timestamp);
                     return 'item: '+this.series.name+'<br/>'+'time: '
                            +' '
                            +t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()
