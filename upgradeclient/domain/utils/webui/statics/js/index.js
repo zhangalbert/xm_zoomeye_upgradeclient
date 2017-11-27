@@ -66,7 +66,7 @@ $(function(){
                 },
 	            labels: {
 	                formatter: function () {
-	                    var t = new Date(parseInt(this.x)*1000);
+	                    var t = new Date(parseInt(this.value)*1000);
                         return t.getHours()+':'+t.getMinutes();
 	                }
                 }
