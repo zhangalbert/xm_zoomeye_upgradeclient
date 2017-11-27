@@ -31,7 +31,7 @@ class BaseHandler(object):
 
         today = datetime.datetime.now().strftime('%Y-%m-%d')
 
-        select_where_condition = ' '.join(Helper.combin_sql_conditions(s='and', **kwargs))
+        select_where_condition = ' '.join(Helper.combin_sql_conditions(s='and', *kwargs.items()))
         select_command = [
             'select id',
             'from upgradeclient',
@@ -46,11 +46,11 @@ class BaseHandler(object):
         if select_res is None:
             db.execute(' '.join(insert_command))
             return
-        update_where_condition = Helper.combin_sql_conditions(s='and', id=select_res[0])
+        update_where_condition = Helper.combin_sql_conditions(s='and', *[(id, select_res[0])])
         update_command = [
             'update upgradeclient',
             'set created_time=\'{0}\',{1}'.format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                                                  ','.join(Helper.combin_sql_conditions(s='', **kwargs))),
+                                                  ','.join(Helper.combin_sql_conditions(s='', *kwargs.items()))),
             'where {0}'.format(' '.join(update_where_condition))
         ]
         db.execute(' '.join(update_command))
