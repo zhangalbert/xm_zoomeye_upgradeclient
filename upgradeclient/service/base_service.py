@@ -19,4 +19,4 @@ class BaseService(object):
         if istorage.first() is None:
             return partial(db.insert, **parted_dict)
         else:
-            return partial(db.update, where='{0},id=\'{1}\''.format(when_con, istorage.first().id), **parted_dict)
+            return partial(db.update, where='{0} and id=\'{1}\''.format(when_con, istorage.first().id), **parted_dict)
