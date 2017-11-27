@@ -94,7 +94,7 @@ class ExceptionExceptView(BaseView):
     def GET(self):
         response_data = []
 
-        exp_during = web.input(exp_during='days_1')
+        exp_during = web.input(exp_during='weeks_1')
         split_keys = exp_during.exp_during.split('_')
         response_data = self.dispatch(split_keys[0])(split_keys[-1])
 
