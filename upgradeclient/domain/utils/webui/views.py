@@ -175,7 +175,7 @@ class ExceptionRealtimeView(BaseView):
 
         kwargs = zip(['log_level', ]*len(log_level), log_level)
 
-        select_where_condition = ' '.join(Helper.combin_sql_conditions(s='or', *kwargs))
+        select_where_condition = ' '.join(Helper.combin_sql_conditions('or', kwargs))
 
         select_command = [
             'select * from upgradeclient',
@@ -186,7 +186,7 @@ class ExceptionRealtimeView(BaseView):
         print '='*10
         print kwargs
         print ' '.join(select_command)
-        print Helper.combin_sql_conditions(s='or', *kwargs)
+        print Helper.combin_sql_conditions('or', kwargs)
         print '='*100
         select_results = db.select_one(' '.join(select_command))
         if select_results is None:
