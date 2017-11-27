@@ -67,7 +67,7 @@ $(function(){
 	            labels: {
 	                formatter: function () {
 	                    var t = new Date(parseInt(this.value)*1000);
-                        return t.getHours()+':'+t.getMinutes();
+                        return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
 	                }
                 }
 	        },
