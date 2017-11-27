@@ -162,7 +162,7 @@ class ExceptionRealtimeView(BaseView):
 
         select_command = [
             'select from upgradeclient',
-            'where {0}'.format(' or '.join(map(lambda s: 'log_level=\'{0}\''.format(s), log_level)))
+            'where {0}'.format(' or '.join(map(lambda s: 'log_level=\'{0}\''.format(s), log_level))),
             'order by created_time desc',
             'limit={0}'.format(log_limit)
         ]
