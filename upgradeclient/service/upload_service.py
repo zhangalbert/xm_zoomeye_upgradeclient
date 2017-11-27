@@ -45,7 +45,7 @@ class UploadService(BaseService):
                     if future.exception() is not None:
                         fmtdata = (self.__class__.__name__, ins.get_remoteurl(), future.exception())
                         msgdata = '{0} upload with {1} with exception, exp={2}'.format(*fmtdata)
-                        self.insert()(log_level='error', log_message=msgdata)
+                        self.insert_to_db(log_level='error', log_message=msgdata)
                         logger.error(msgdata)
                     else:
                         fmtdata = (self.__class__.__name__, ins.get_remoteurl(), future.exception())

@@ -2,10 +2,9 @@
 
 
 import os
-import web
 
 
-from functools import partial
+from upgradeclient.database.db_wrapper import SqliteMultithread
 
 
 class Database(object):
@@ -26,12 +25,8 @@ class Database(object):
         return os.path.dirname(client_dir)
 
 
-__polling = False
 __db_name = 'upgradeclient'
-__db_path = os.path.join(Database.get_base_dir(), '{0}.db'.format(__db_name))
+__db_conf = (os.path.join(Database.get_base_dir(), '{0}.db'.format(__db_name)), True, 'DELETE')
+db = SqliteMultithread(*__db_conf)
 
-db = web.database(dbn='sqlite', db=__db_path, pooling=__polling)
-db.select = partial(db.select, __db_name)
-db.update = partial(db.update, __db_name)
-db.delete = partial(db.delete, __db_name)
-db.insert = partial(db.insert, __db_name)
+

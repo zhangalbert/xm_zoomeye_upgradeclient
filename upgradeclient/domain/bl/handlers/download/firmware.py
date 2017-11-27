@@ -99,7 +99,7 @@ class FirmwareHandler(BaseHandler):
         if not download.wget(obj.get_download_url(), dst_name):
             fmtdata = (self.__class__.__name__, obj.get_filename(), obj.get_download_url())
             msgdata = '{0} download {1} failed, url={2}'.format(*fmtdata)
-            self.insert(obj)(log_level='error', log_message=msgdata)
+            self.insert_to_db(obj, log_level='error', log_message=msgdata)
             logger.error(msgdata)
             return
         eventdata = self.analysis_log(obj)
@@ -107,14 +107,14 @@ class FirmwareHandler(BaseHandler):
             self.delete(src_name, dst_name)
             fmtdata = (self.__class__.__name__, obj.get_data()['Date'], obj.get_download_url())
             msgdata = '{0} delected unallowed condition in releasenote {1} log, url={2}'.format(*fmtdata)
-            self.insert(obj)(log_level='error', log_message=msgdata)
+            self.insert_to_db(obj, log_level='error', log_message=msgdata)
             logger.error(msgdata)
             return
         if not self.create_files(eventdata):
             self.delete(src_name, dst_name)
             fmtdata = (self.__class__.__name__, obj.get_filename(), obj.get_download_url())
             msgdata = '{0} delected {1} with invalid devid in InstallDesc file, url={2}'.format(*fmtdata)
-            self.insert(obj)(log_level='error', log_message=msgdata)
+            self.insert_to_db(obj, log_level='error', log_message=msgdata)
             logger.error(msgdata)
             return
         self.delete(src_name, dst_name)

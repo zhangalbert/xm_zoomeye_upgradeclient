@@ -53,7 +53,7 @@ class ReleaseNoteHandler(BaseHandler):
         if not obj.get_data():
             fmtdata = (self.__class__.__name__, obj.get_download_url())
             msgdata = '{0} detected no event data for releasenote, url={1}'.format(*fmtdata)
-            self.insert(obj)(log_level='warning', log_message=msgdata)
+            self.insert_to_db(obj, log_level='warning', log_message=msgdata)
             logger.warning(msgdata)
             return event_list
         objs_list = map(lambda o: type('obj', (object,), json.loads(o)), obj.get_data())
@@ -62,7 +62,7 @@ class ReleaseNoteHandler(BaseHandler):
         if not dict_data:
             fmtdata = (self.__class__.__name__, obj.get_download_url())
             msgdata = '{0} parse releasenot use Firmware with exception, url={1}'.format(*fmtdata)
-            self.insert(obj)(log_level='error', log_message=msgdata)
+            self.insert_to_db(obj, log_level='error', log_message=msgdata)
             logger.error(msgdata)
             return event_list
 
@@ -105,7 +105,7 @@ class ReleaseNoteHandler(BaseHandler):
         if not download.wget(obj.get_download_url(), dst_name):
             fmtdata = (self.__class__.__name__, obj.get_filename(), obj.get_download_url())
             msgdata = '{0} download {1} failed, url={2}'.format(*fmtdata)
-            self.insert(obj)(log_level='error', log_message=msgdata)
+            self.insert_to_db(obj, log_level='error', log_message=msgdata)
             logger.error(msgdata)
             return
         event_list = self.analysis_log(obj)

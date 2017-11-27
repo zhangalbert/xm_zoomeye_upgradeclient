@@ -5,8 +5,8 @@ import os
 import datetime
 
 
-from functools import partial
 from upgradeclient.database.database import db
+from upgradeclient.domain.common.helper import Helper
 
 
 class BaseHandler(object):
@@ -15,8 +15,8 @@ class BaseHandler(object):
         self.dao_factory = dao_factory
         self.event_type = None
 
-    def insert(self, obj):
-        parted_dict = {
+    def insert_to_db(self, obj, **kwargs):
+        kwargs.update({
             'log_name': self.event_type,
             'log_class': self.__class__.__name__,
             'dao_name': obj.get_daoname() or '',
@@ -27,16 +27,33 @@ class BaseHandler(object):
             'last_date': obj.get_date() or '',
             'last_revision': obj.get_number() or '',
             'last_action': obj.get_action() or '',
-        }
+        })
 
-        # 删除今日重复插入的内容
         today = datetime.datetime.now().strftime('%Y-%m-%d')
-        when_con = 'strftime(\'%Y-%m-%d\', created_time)=\'{0}\''.format(today)
-        istorage = partial(db.select)(where=when_con, vars=parted_dict)
-        if istorage.first() is None:
-            return partial(db.insert, **parted_dict)
-        else:
-            return partial(db.update, where='{0} and id=\'{1}\''.format(when_con, istorage.first().id), **parted_dict)
+
+        select_where_condition = ' '.join(Helper.combin_sql_conditions(s='and', **kwargs))
+        select_command = [
+            'select id',
+            'from upgradeclient',
+            'where {0} and strftime(\'%Y-%m-%d\', created_time)=\'{1}\''.format(select_where_condition, today)
+        ]
+        insert_command = [
+            'INSERT INTO upgradeclient',
+            '({0})'.format(','.join(kwargs.keys())),
+            'values ({0})'.format(','.join(kwargs.values()))
+        ]
+        select_res = db.select_one(' '.join(select_command))
+        if select_res is None:
+            db.execute(' '.join(insert_command))
+            return
+        update_where_condition = Helper.combin_sql_conditions(s='and', id=select_res[0])
+        update_command = [
+            'update upgradeclient',
+            'set created_time={0},{1}'.format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                                              Helper.combin_sql_conditions(s=',', **kwargs)),
+            'where {0}'.format(' '.join(update_where_condition))
+        ]
+        db.execute(update_command)
 
     def delete(self, *files):
         for f in files:

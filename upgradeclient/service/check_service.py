@@ -53,7 +53,7 @@ class CheckService(BaseService):
         self.event_event.set()
         fmtdata = (self.__class__.__name__, multiprocessing.current_process().name, os.getpid())
         msgdata = '{0} main/sub process got ctrl+c signal, name={1}, pid={2}'.format(*fmtdata)
-        self.insert()(log_level='warning ',  log_message=msgdata)
+        self.insert_to_db(log_level='warning ',  log_message=msgdata)
         logger.warning(msgdata)
 
     def start(self):
@@ -88,7 +88,7 @@ class CheckService(BaseService):
             time.sleep(15)
         fmtdata = (self.__class__.__name__,)
         msgdata = '{0} graceful closing successfully!'.format(*fmtdata)
-        self.insert()(log_level='info', log_message=msgdata)
+        self.insert_to_db(log_level='info', log_message=msgdata)
         logger.info(msgdata)
 
     def send_cache_task(self, event):
@@ -117,7 +117,7 @@ class CheckService(BaseService):
             if self.event_event.is_set():
                 fmtdata = (self.__class__.__name__, name, os.getpid())
                 msgdata = '{0} sub process {1} stoped successfull, pid={1}'.format(*fmtdata)
-                self.insert()(log_level='info', log_message=msgdata)
+                self.insert_to_db(log_level='info', log_message=msgdata)
                 logger.info(msgdata)
                 break
             end_time = datetime.datetime.now()
@@ -128,7 +128,7 @@ class CheckService(BaseService):
             except Exception as e:
                 fmtdata = (self.__class__.__name__, name, ins.summarize_interval, os.getpid(), e)
                 msgdata = '{0} sub process {1} check with exception, wait {2} seconds, pid={3} exp={4}'.format(*fmtdata)
-                self.insert()(log_level='error', log_message=msgdata)
+                self.insert_to_db(log_level='error', log_message=msgdata)
                 logger.error(msgdata)
                 time.sleep(ins.summarize_interval)
                 continue
