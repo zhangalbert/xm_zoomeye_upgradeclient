@@ -145,8 +145,10 @@ class ExceptionExceptView(BaseView):
             'group by {0}'.format(group_con),
             'having {0}'.format(having_con)
         ]
-
-        for ins in db.select_one(' '.join(select_command)):
+        select_results = db.select_one(' '.join(select_command))
+        if select_results is None:
+            return self.json_response([])
+        for ins in select_results:
             response_data.append(ins)
         response_data.sort(key=lambda s: s[0])
 
@@ -174,7 +176,10 @@ class ExceptionRealtimeView(BaseView):
             'order by created_time desc',
             'limit {0}'.format(log_limit)
         ]
-        for ins in db.select_one(' '.join(select_command)):
+        select_results = db.select_one(' '.join(select_command))
+        if select_results is None:
+            return self.json_response([])
+        for ins in select_results:
             created_date, created_time = ins[-1].split()
             response_data.append({
                 'id': ins[0],
