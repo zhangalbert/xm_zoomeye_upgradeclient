@@ -28,5 +28,7 @@ class Database(object):
 __db_name = 'upgradeclient'
 __db_conf = (os.path.join(Database.get_base_dir(), '{0}.db'.format(__db_name)), True, 'DELETE')
 db = SqliteMultithread(*__db_conf)
+db.start()
+
 
 

@@ -8,6 +8,7 @@ import datetime
 
 
 from upgradeclient.database.database import db
+from upgradeclient.domain.common.helper import Helper
 from upgradeclient.domain.utils.webui.config import template_dir, upgwebui_dir
 
 
@@ -159,10 +160,13 @@ class ExceptionRealtimeView(BaseView):
         log_limit = input_storage.log_limit
         log_level = loglevels[loglevels.index(input_storage.log_level):]
 
-        where_con = ' or '.join(map(lambda s: 'log_level=\'{0}\''.format(s), log_level))
-
-        select_storage = db.select(where=where_con, order='created_time desc', limit=log_limit)
-        for ins in select_storage:
+        select_command = [
+            'select from upgradeclient',
+            'where {0}'.format(' or '.join(map(lambda s: 'log_level=\'{0}\''.format(s), log_level)))
+            'order by created_time desc',
+            'limit={0}'.format(log_limit)
+        ]
+        for ins in db.select_one(' '.join(select_command)):
             response_data.append({
                 'id': ins.id,
                 'log_level': ins.log_level,
