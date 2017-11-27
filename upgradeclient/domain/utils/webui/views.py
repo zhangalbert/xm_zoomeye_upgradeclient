@@ -122,9 +122,7 @@ class ExceptionExceptView(BaseView):
             'group by {0}'.format(group_con),
             'having {0}'.format(having_con)
         ]
-        print '=' * 100
-        print ' '.join(select_command)
-        print '=' * 100
+
         select_results = db.select_one(' '.join(select_command))
         if select_results is None:
             return self.json_response([])
@@ -148,9 +146,7 @@ class ExceptionExceptView(BaseView):
             'group by {0}'.format(group_con),
             'having {0}'.format(having_con)
         ]
-        print '=' * 100
-        print ' '.join(select_command)
-        print '=' * 100
+
         select_results = db.select_one(' '.join(select_command))
         if select_results is None:
             return self.json_response([])
@@ -183,11 +179,7 @@ class ExceptionRealtimeView(BaseView):
             'order by created_time desc',
             'limit {0}'.format(log_limit)
         ]
-        print '='*10
-        print kwargs
-        print ' '.join(select_command)
-        print Helper.combin_sql_conditions('or', kwargs)
-        print '='*100
+
         select_results = db.select_one(' '.join(select_command))
         if select_results is None:
             return self.json_response([])

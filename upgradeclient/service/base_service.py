@@ -27,7 +27,7 @@ class BaseService(object):
         if select_res is None:
             db.execute(' '.join(insert_command))
             return
-        update_where_condition = Helper.combin_sql_conditions('and', [(id, select_res[0])])
+        update_where_condition = Helper.combin_sql_conditions('and', [('id', select_res[0])])
         update_command = [
             'update upgradeclient',
             'set created_time=\'{0}\',{1}'.format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
