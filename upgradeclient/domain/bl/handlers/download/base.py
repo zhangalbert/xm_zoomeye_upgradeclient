@@ -53,7 +53,7 @@ class BaseHandler(object):
                                               Helper.combin_sql_conditions(s=',', **kwargs)),
             'where {0}'.format(' '.join(update_where_condition))
         ]
-        db.execute(update_command)
+        db.execute(''.join(update_command))
 
     def delete(self, *files):
         for f in files:
