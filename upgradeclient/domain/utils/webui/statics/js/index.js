@@ -66,7 +66,9 @@ $(function(){
                 },
 	            labels: {
 	                formatter: function () {
-	                    var timestamp = new Date(this.value.substring(0,19).replace(/-/g,'/')).getTime(),
+	                    var cur_value = toString(this.x);
+	                    alert(cur_value);
+                        var timestamp = new Date(cur_value.substring(0,19).replace(/-/g,'/')).getTime(),
 	                        t = new Date(timestamp);
                         res =  t.getHours()+':'+t.getMinutes();
                         alert(res);
@@ -86,18 +88,17 @@ $(function(){
                     year: '%Y'
                 },
 	            formatter: function () {
-                    var timestamp = new Date(this.value.substring(0,19).replace(/-/g,'/')).getTime(),
+                    var cur_value = toString(this.x);
+                    alert(cur_value);
+                    var timestamp = new Date(cur_value.substring(0,19).replace(/-/g,'/')).getTime(),
                         t = new Date(timestamp);
-                    res = 'item: '+this.series.name+'<br/>'+'time: '
+                    return 'item: '+this.series.name+'<br/>'+'time: '
                            +' '
                            +t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()
                            +' '
                            +t.getHours()+':'+t.getMinutes()+t.getSeconds()
                            +' '
                            +'[ '+this.y+' ]';
-
-                    alert(res);
-                    return res
                 }
 	        },
 	        yAxis: {
