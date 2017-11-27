@@ -127,11 +127,6 @@ class ExceptionExceptView(BaseView):
         if select_results is None:
             return self.json_response([])
         for ins in select_results:
-            print '*' * 100
-            print select_results
-            print ' '.join(select_command)
-            print ins
-            print '*' * 100
             response_data.append(ins)
         response_data.sort(key=lambda s: s[0])
 
@@ -156,11 +151,6 @@ class ExceptionExceptView(BaseView):
         if select_results is None:
             return self.json_response([])
         for ins in select_results:
-            print '*' * 100
-            print select_results
-            print ' '.join(select_command)
-            print ins
-            print '*' * 100
             response_data.append(ins)
         response_data.sort(key=lambda s: s[0])
 
@@ -194,11 +184,6 @@ class ExceptionRealtimeView(BaseView):
         if select_results is None:
             return self.json_response([])
         for ins in select_results:
-            print '*' * 100
-            print select_results
-            print ' '.join(select_command)
-            print ins
-            print '*' * 100
             created_date, created_time = ins[-1].split()
             response_data.append({
                 'id': ins[0],
