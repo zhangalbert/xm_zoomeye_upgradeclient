@@ -136,7 +136,7 @@ class ExceptionExceptView(BaseView):
         response_data = []
 
         date_fmt = '\'%Y-%m-%d\''
-        group_con = "strftime('{0}', created_time)".format(date_fmt)
+        group_con = "strftime({0}, created_time)".format(date_fmt)
         what_con = ','.join(["{0} as date", "count({0}) as count"]).format(group_con)
         n_week_ago = datetime.datetime.now() - datetime.timedelta(weeks=int(n))
         having_con = "{0} > {1}".format(group_con, n_week_ago.strftime(date_fmt))
