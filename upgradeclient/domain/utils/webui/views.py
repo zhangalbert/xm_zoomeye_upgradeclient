@@ -128,6 +128,7 @@ class ExceptionExceptView(BaseView):
             return self.json_response([])
         for ins in select_results:
             print '*' * 100
+            print select_results
             print ' '.join(select_command)
             print ins
             print '*' * 100
@@ -156,6 +157,7 @@ class ExceptionExceptView(BaseView):
             return self.json_response([])
         for ins in select_results:
             print '*' * 100
+            print select_results
             print ' '.join(select_command)
             print ins
             print '*' * 100
@@ -193,6 +195,7 @@ class ExceptionRealtimeView(BaseView):
             return self.json_response([])
         for ins in select_results:
             print '*' * 100
+            print select_results
             print ' '.join(select_command)
             print ins
             print '*' * 100
