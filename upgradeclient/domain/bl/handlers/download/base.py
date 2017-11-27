@@ -2,11 +2,10 @@
 
 
 import os
+import datetime
 
 
 from functools import partial
-
-
 from upgradeclient.database.database import db
 
 
@@ -30,6 +29,11 @@ class BaseHandler(object):
             'last_action': obj.get_action() or '',
         }
 
+        # 删除今日重复插入的内容
+        today = datetime.datetime.now().strftime('%Y-%m-%d')
+        when_con = 'strftime(\'%Y-%m-%d\', created_time)=\'{0}\''.format(today)
+        partial(db.delete, where=when_con, vars=parted_dict)
+
         return partial(db.insert, **parted_dict)
 
     def delete(self, *files):
@@ -40,4 +44,3 @@ class BaseHandler(object):
 
     def handle(self, obj):
         raise NotImplementedError
-

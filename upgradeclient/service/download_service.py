@@ -61,7 +61,7 @@ class DownloadService(BaseService):
                     time.sleep(1)
                 fmtdata = (self.__class__.__name__, self.check_interval, len(messages))
                 msgdata = '{0} thread group is finished, wait {1} seconds, num={2}'.format(*fmtdata)
-                self.insert()(log_level='info', log_message=msgdata)
+                # self.insert()(log_level='info', log_message=msgdata)
                 logger.info(msgdata)
                 time.sleep(self.check_interval)
         t = Thread(target=target)
@@ -74,7 +74,7 @@ class DownloadService(BaseService):
         if os.path.exists(filepath):
             fmtdata = (self.__class__.__name__, filepath)
             msgdata = '{0} download_cache file has not been consumed, ignore, path={0}'.format(*fmtdata)
-            self.insert()(log_level='warning', log_message=msgdata)
+            # self.insert()(log_level='warning', log_message=msgdata)
             logger.warning(msgdata)
             return
         handler = self.handler_factory.create_download_handler(obj)
