@@ -169,10 +169,10 @@ class ExceptionRealtimeView(BaseView):
         select_where_condition = ' '.join(Helper.combin_sql_conditions(s='or', **kwargs))
 
         select_command = [
-            'select from upgradeclient',
+            'select * from upgradeclient',
             'where {0}'.format(select_where_condition),
             'order by created_time desc',
-            'limit={0}'.format(log_limit)
+            'limit {0}'.format(log_limit)
         ]
         for ins in db.select_one(' '.join(select_command)):
             created_date, created_time = ins[-1].split()
