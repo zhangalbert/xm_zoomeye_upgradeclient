@@ -34,6 +34,9 @@ class SqliteMultithread(Thread):
             elif req == '--commit--':
                 conn.commit()
             else:
+                print '=' * 100
+                print req
+                print '=' * 100
                 cursor.execute(req, arg)
                 if res:
                     for rec in cursor:
