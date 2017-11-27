@@ -29,6 +29,9 @@ class SqliteMultithread(Thread):
         cursor.execute('PRAGMA synchronous=OFF')
         while True:
             req, arg, res = self.reqs.get()
+            print '=' * 100
+            print req
+            print '=' * 100
             if req == '--close--':
                 break
             elif req == '--commit--':
@@ -44,9 +47,6 @@ class SqliteMultithread(Thread):
         conn.close()
 
     def execute(self, req, arg=None, res=None):
-        print '='*100
-        print req
-        print '='*100
         self.reqs.put((req, arg or tuple(), res))
 
     def executemany(self, req, items):
