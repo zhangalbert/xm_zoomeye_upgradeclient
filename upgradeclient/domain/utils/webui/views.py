@@ -175,6 +175,9 @@ class ExceptionRealtimeView(BaseView):
 
         kwargs = dict(zip(['log_level', ]*len(log_level), log_level))
         print '='*100
+        print loglevels
+        print input_storage.log_level
+        print loglevels.index(input_storage.log_level)
         print kwargs
         print '='*100
         select_where_condition = ' '.join(Helper.combin_sql_conditions(s='or', **kwargs))
