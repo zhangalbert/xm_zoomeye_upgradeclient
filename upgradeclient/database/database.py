@@ -30,5 +30,3 @@ __db_conf = (os.path.join(Database.get_base_dir(), '{0}.db'.format(__db_name)), 
 db = SqliteMultithread(*__db_conf)
 
 
-
-

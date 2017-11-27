@@ -40,7 +40,7 @@ class BaseHandler(object):
         insert_command = [
             'INSERT INTO upgradeclient',
             '({0})'.format(','.join(kwargs.keys())),
-            'values ({0})'.format(','.join(kwargs.values()))
+            'values ({0})'.format(','.join(Helper.combin_sql_values(kwargs.values())))
         ]
         select_res = db.select_one(' '.join(select_command))
         if select_res is None:
@@ -50,7 +50,7 @@ class BaseHandler(object):
         update_command = [
             'update upgradeclient',
             'set created_time=\'{0}\',{1}'.format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                                                  ' '.join(Helper.combin_sql_conditions(s=',', **kwargs))),
+                                                  ','.join(Helper.combin_sql_conditions(s='', **kwargs))),
             'where {0}'.format(' '.join(update_where_condition))
         ]
         db.execute(' '.join(update_command))

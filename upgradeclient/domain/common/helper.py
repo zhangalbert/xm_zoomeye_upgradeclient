@@ -13,3 +13,10 @@ class Helper(object):
 
         return condition_list
 
+    @staticmethod
+    def combin_sql_values(*args):
+        condition_list = []
+        for k in args:
+            condition_list.append('\'{0}\''.format(k))
+
+        return condition_list
