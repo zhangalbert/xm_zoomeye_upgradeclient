@@ -21,7 +21,7 @@ class BaseService(object):
         insert_command = [
             'INSERT INTO upgradeclient',
             '({0})'.format(','.join(kwargs.keys())),
-            'values ({0})'.format(','.join(Helper.combin_sql_values(kwargs.values())))
+            'values ({0})'.format(','.join(Helper.combin_sql_values(*kwargs.values())))
         ]
         select_res = db.select_one(' '.join(select_command))
         if select_res is None:
