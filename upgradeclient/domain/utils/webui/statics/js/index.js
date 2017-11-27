@@ -66,7 +66,7 @@ $(function(){
                 },
 	            labels: {
 	                formatter: function () {
-	                    var cur_value = toString(this.x);
+	                    var cur_value = toString(this.value);
                         var timestamp = new Date(cur_value.substring(0,19).replace(/-/g,'/')).getTime(),
 	                        t = new Date(timestamp);
                         res =  t.getHours()+':'+t.getMinutes();
@@ -87,7 +87,7 @@ $(function(){
                     year: '%Y'
                 },
 	            formatter: function () {
-                    var cur_value = toString(this.x);
+                    var cur_value = toString(this.value);
                     var timestamp = new Date(cur_value.substring(0,19).replace(/-/g,'/')).getTime(),
                         t = new Date(timestamp);
                     return 'item: '+this.series.name+'<br/>'+'time: '
