@@ -74,7 +74,7 @@ class DownloadService(BaseService):
         if os.path.exists(filepath):
             fmtdata = (self.__class__.__name__, filepath)
             msgdata = '{0} download_cache file has not been consumed, ignore, path={0}'.format(*fmtdata)
-            # self.insert()(log_level='warning', log_message=msgdata)
+            self.insert()(log_level='warning', log_message=msgdata)
             logger.warning(msgdata)
             return
         handler = self.handler_factory.create_download_handler(obj)
