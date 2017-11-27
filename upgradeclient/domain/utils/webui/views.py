@@ -123,7 +123,7 @@ class ExceptionExceptView(BaseView):
             'having {0}'.format(having_con)
         ]
 
-        select_results = db.select_one(' '.join(select_command))
+        select_results = db.select(' '.join(select_command))
         if select_results is None:
             return self.json_response([])
         for ins in select_results:
@@ -152,7 +152,7 @@ class ExceptionExceptView(BaseView):
             'having {0}'.format(having_con)
         ]
 
-        select_results = db.select_one(' '.join(select_command))
+        select_results = db.select(' '.join(select_command))
         if select_results is None:
             return self.json_response([])
         for ins in select_results:
@@ -190,7 +190,7 @@ class ExceptionRealtimeView(BaseView):
             'limit {0}'.format(log_limit)
         ]
 
-        select_results = db.select_one(' '.join(select_command))
+        select_results = db.select(' '.join(select_command))
         if select_results is None:
             return self.json_response([])
         for ins in select_results:
