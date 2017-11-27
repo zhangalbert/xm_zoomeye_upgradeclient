@@ -118,13 +118,14 @@ class ExceptionExceptView(BaseView):
         having_con = "{0} > {1}".format(group_con, n_days_ago.strftime(time_fmt))
         fmt_date = (what_con, 'upgradeclient', group_con, having_con)
 
-        print '='*100
-        print "select {0} from {1} group by({2}) having {3}".format(*fmt_date)
-        print '='*100
-        select_storage = db.query("select {0} from {1} group by({2}) having {3}".format(*fmt_date))
+        select_command = [
+            'select from upgradeclient',
+            'group by {0}'.format(group_con),
+            'having {0}'.format(having_con)
+        ]
 
-        for ins in select_storage:
-            response_data.append([self.make_time('%Y-%m-%d %H:%M', ins.date), ins.count])
+        for ins in db.select_one(' '.join(select_command)):
+            response_data.append(ins)
         response_data.sort(key=lambda s: s[0])
 
         return response_data
@@ -139,10 +140,14 @@ class ExceptionExceptView(BaseView):
         having_con = "{0} > {1}".format(group_con, n_week_ago.strftime(date_fmt))
         fmt_date = (what_con, 'upgradeclient', group_con, having_con)
 
-        select_storage = db.query("select {0} from {1} group by({2}) having {3}".format(*fmt_date))
+        select_command = [
+            'select from upgradeclient',
+            'group by {0}'.format(group_con),
+            'having {0}'.format(having_con)
+        ]
 
-        for ins in select_storage:
-            response_data.append([self.make_time('%Y-%m-%d', ins.date), ins.count])
+        for ins in db.select_one(' '.join(select_command)):
+            response_data.append(ins)
         response_data.sort(key=lambda s: s[0])
 
         return response_data
@@ -160,19 +165,23 @@ class ExceptionRealtimeView(BaseView):
         log_limit = input_storage.log_limit
         log_level = loglevels[loglevels.index(input_storage.log_level):]
 
+        kwargs = dict(zip(['log_level',]*len(log_level), log_level))
+        select_where_condition = ' '.join(Helper.combin_sql_conditions(s='or', **kwargs))
+
         select_command = [
             'select from upgradeclient',
-            'where {0}'.format(' or '.join(map(lambda s: 'log_level=\'{0}\''.format(s), log_level))),
+            'where {0}'.format(select_where_condition),
             'order by created_time desc',
             'limit={0}'.format(log_limit)
         ]
         for ins in db.select_one(' '.join(select_command)):
+            created_date, created_time = ins[-1].split()
             response_data.append({
-                'id': ins.id,
-                'log_level': ins.log_level,
-                'log_message': ins.log_message,
-                'created_date': ins.created_time.strftime('%Y-%m-%d'),
-                'created_time': ins.created_time.strftime('%H:%M:%S')
+                'id': ins[0],
+                'log_level': ins[1],
+                'log_message': ins[12],
+                'created_date': created_date.strip(),
+                'created_time': created_time.strip()
             })
         response_data.sort(key=lambda s: '{0} {1}'.format(s['created_date'], s['created_time']), reverse=True)
 
