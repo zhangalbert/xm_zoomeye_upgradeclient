@@ -66,7 +66,7 @@ $(function(){
                 },
 	            labels: {
 	                formatter: function () {
-                        var t = Date.parse(new Date(this.value))*1000;
+	                    var t = new Date(this.value.substring(0,19).replace(/-/g,'/')).getTime()*1000;
                         return t.getHours()+':'+t.getMinutes();
                     }
                 }
@@ -83,7 +83,7 @@ $(function(){
                     year: '%Y'
                 },
 	            formatter: function () {
-                    var t = Date.parse(new Date(this.value))*1000;
+                    var t = new Date(this.value.substring(0,19).replace(/-/g,'/')).getTime()*1000;
                     return 'item: '+this.series.name+'<br/>'+'time: '
                            +' '
                            +t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()
