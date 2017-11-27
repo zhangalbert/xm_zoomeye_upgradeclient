@@ -68,8 +68,10 @@ $(function(){
 	                formatter: function () {
 	                    var timestamp = new Date(this.value.substring(0,19).replace(/-/g,'/')).getTime(),
 	                        t = new Date(timestamp);
-                        return t.getHours()+':'+t.getMinutes();
-                    }
+                        res =  t.getHours()+':'+t.getMinutes();
+                        alert(res);
+                        return res
+	                }
                 }
 	        },
 	        tooltip: {
@@ -86,13 +88,16 @@ $(function(){
 	            formatter: function () {
                     var timestamp = new Date(this.value.substring(0,19).replace(/-/g,'/')).getTime(),
                         t = new Date(timestamp);
-                    return 'item: '+this.series.name+'<br/>'+'time: '
+                    res = 'item: '+this.series.name+'<br/>'+'time: '
                            +' '
                            +t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()
                            +' '
                            +t.getHours()+':'+t.getMinutes()+t.getSeconds()
                            +' '
                            +'[ '+this.y+' ]';
+
+                    alert(res);
+                    return res
                 }
 	        },
 	        yAxis: {
