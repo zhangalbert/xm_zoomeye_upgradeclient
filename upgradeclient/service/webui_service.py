@@ -15,3 +15,4 @@ class WebuiService(BaseService):
         t = Thread(target=server.run, args=self.middleware, kwargs=self.envs)
         t.setDaemon(True)
         t.start()
+

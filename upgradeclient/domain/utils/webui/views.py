@@ -82,12 +82,62 @@ class IndexView(BaseView):
 
 class ExceptionThreadView(BaseView):
     def GET(self):
-        pass
+        response_data = []
+
+        date_fmt = '\'%Y-%m-%d\''
+        what_con = "log_class, count(log_class) as count"
+        group_con = "strftime({0}, created_time)".format(date_fmt)
+        today = (datetime.datetime.now()-datetime.timedelta(days=1))
+        # 查询数据库中所有记录
+        # having_con = "{0} = {1}".format(group_con, today.strftime(date_fmt))
+        select_command = [
+            'select {0} from upgradeclient'.format(what_con),
+            'group by log_class',
+            # 'having {0}'.format(having_con)
+        ]
+        select_results = db.select(' '.join(select_command))
+        if select_results is None:
+            return self.json_response([])
+        response_dict = {}
+        for ins in select_results:
+            response_dict.update([ins])
+        sum_value = float(sum(response_dict.values()))
+        for k in response_dict:
+            percent = round(100*response_dict[k]/sum_value, 2)
+            response_data.append([k, percent])
+
+        return self.json_response(response_data)
 
 
 class ExceptionFmodelView(BaseView):
     def GET(self):
-        pass
+        response_data = []
+
+        date_fmt = '\'%Y-%m-%d\''
+        what_con = "dao_name, file_type, count(dao_name||file_type) as count"
+        group_con = "strftime({0}, created_time)".format(date_fmt)
+        today = (datetime.datetime.now() - datetime.timedelta(days=1))
+        having_con = "dao_name!='' and file_type!=''"
+        # 查询数据库中所有记录
+        # having_con = "{0} = {1} and dao_name!='' and file_type!=''".format(group_con, today.strftime(date_fmt))
+        select_command = [
+            'select {0} from upgradeclient'.format(what_con),
+            'group by log_class',
+            'having {0}'.format(having_con)
+        ]
+        select_results = db.select(' '.join(select_command))
+        if select_results is None:
+            return self.json_response([])
+        response_dict = {}
+        for ins in select_results:
+            key = '_'.join(ins[:-1])
+            response_dict.update({key: ins[-1]})
+        sum_value = float(sum(response_dict.values()))
+        for k in response_dict:
+            percent = round(response_dict[k] / sum_value, 2)
+            response_data.append([k, percent])
+
+        return self.json_response(response_data)
 
 
 class ExceptionExceptView(BaseView):
@@ -197,3 +247,6 @@ class ExceptionRealtimeView(BaseView):
         return self.json_response(response_data)
 
 
+class FirmwareDetailView(BaseView):
+    def GET(self, firmware_id):
+        return firmware_id

@@ -15,6 +15,10 @@
 .rt {
 	float: right;
 }
+.rt i:hover {
+	cursor: pointer;
+	background-color: #eeeeee;
+}
 .clear {
 	clear: both;
 }

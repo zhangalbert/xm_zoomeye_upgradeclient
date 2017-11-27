@@ -9,4 +9,5 @@ url_patterns = [
     r'/ajax/exception/fmodels', 'ExceptionFmodelView',
     r'/ajax/exception/excepts', 'ExceptionExceptView',
     r'/ajax/exception/realtime', 'ExceptionRealtimeView',
+    r'/firmware/([0-9])', 'FirmwareDetailView',
 ]

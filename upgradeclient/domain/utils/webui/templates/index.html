@@ -94,7 +94,7 @@ $var pre_scriptfiles: /statics/js/index.js
 					</input>
 					<input id="log_level" name="log_level" class="easyui-combobox" data-options="panelHeight:80,valueField:'value',textField:'label',data:[{label:'&gt;= 信息',value:'info',selected:true},{label:'&gt;= 警告',value:'warning'},{label:'&gt;= 严重',value:'error'}]">
 					</input>
-					<i class="fa fa-refresh" aria-hidden="true"></i>
+					<i onclick="realtime_ajax_exception_realtime()" class="fa fa-refresh" aria-hidden="true"></i>
 				</div>
 			</div>
 			<div class="easyui-layout" data-options="fit:true,border:false">
