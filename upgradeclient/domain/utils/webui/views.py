@@ -183,8 +183,10 @@ class ExceptionRealtimeView(BaseView):
             'order by created_time desc',
             'limit {0}'.format(log_limit)
         ]
-        print '='*100
+        print '='*10
+        print kwargs
         print ' '.join(select_command)
+        print Helper.combin_sql_conditions(s='or', *kwargs)
         print '='*100
         select_results = db.select_one(' '.join(select_command))
         if select_results is None:
