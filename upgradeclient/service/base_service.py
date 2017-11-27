@@ -30,11 +30,11 @@ class BaseService(object):
         update_where_condition = Helper.combin_sql_conditions(s='and', id=select_res[0])
         update_command = [
             'update upgradeclient',
-            'set created_time={0},{1}'.format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'set created_time=\'{0}\',{1}'.format(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                                               Helper.combin_sql_conditions(s=',', **kwargs)),
             'where {0}'.format(' '.join(update_where_condition))
         ]
-        db.execute(''.join(update_command))
+        db.execute(' '.join(update_command))
 
 
 
