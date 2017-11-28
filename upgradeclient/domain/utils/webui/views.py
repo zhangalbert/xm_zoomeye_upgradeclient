@@ -80,6 +80,37 @@ class IndexView(BaseView):
         return render.index()
 
 
+class FirmwareView(BaseView):
+    def GET(self):
+        return render.list()
+
+
+class FirmwareListView(BaseView):
+    def GET(self):
+        response_data = []
+        response_keys = [
+            'id', 'log_level', 'log_name', 'log_class', 'dao_name', 'file_type',
+            'file_name', 'file_url', 'last_author', 'last_date', 'last_revision',
+            'last_action', 'log_message', 'created_time',
+        ]
+
+        input_storage = web.input(log_level='info')
+    
+        where_con = "log_name!='' and dao_name!=''"
+        select_command = [
+            'select * from upgradeclient',
+            'where {0}'.format(where_con)
+        ]
+        select_results = db.select(' '.join(select_command))
+        if select_results is None:
+            return self.json_response([])
+        for ins in select_results:
+            response_data.append(dict(zip(response_keys, ins)))
+
+        response_data.sort(key=lambda s: s['created_time'], reverse=True)
+
+        return self.json_response(response_data)
+
 class ExceptionThreadView(BaseView):
     def GET(self):
         response_data = []
@@ -252,6 +283,3 @@ class FirmwareDetailView(BaseView):
         return firmware_id
 
 
-class FirmwareListView(BaseView):
-    def GET(self):
-        return render.list()

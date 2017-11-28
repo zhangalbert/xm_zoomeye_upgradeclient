@@ -91,12 +91,6 @@ $(function(){
 		exception_nametype_chart & exception_nametype_chart.reflow();
 		exception_thread_chart & exception_thread_chart.reflow();
 	});
-	// 导航栏下拉菜单
-	$('.upg-layout-header li.upg-dropdown').on('mouseover', function(){
-		var left = $(this).offset().left- 100
-			,top = 52;
-		$('#user_profile').menu('show', {left: left, top: top, hideOnUnhover: true});
-	});
 	realtime_ajax_exception_realtime();
     setInterval(realtime_ajax_exception_realtime, 60000);
 

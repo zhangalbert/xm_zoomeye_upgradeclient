@@ -3,15 +3,39 @@ $var icofiles: /statics/img/favicon.ico
 $var pre_cssfiles: /statics/css/main.css
 $var pre_scriptfiles: /statics/js/list.js
 
+
 <div class="list-layout-body" data-options="region:'center',border:false">
-    <div class="easyui-layout" data-options="fite:true,border:false">
-        <div id="layout-body-top" data-options="region:'north',border:false">
-            上面搜索区
+    <div class="easyui-layout" data-options="fit:true,border:false">
+        <div id="list-layout-body-top" data-options="region:'north',border:false">
+            <ul>
+                <li>
+                    <span>日志级别: </span>
+                    <input id="search_log_level" name="search_log_level" class="easyui-combobox" data-options="panelHeight:100,valueField:'value',textField:'label',data:[{label:'-------',value:'',selected:true},{label:'&gt;= 信息',value:'info'},{label:'&gt;= 警告',value:'warning'},{label:'&gt;= 严重',value:'error'}]">
+					</input>
+                </li>
+                <li>
+                    <span>日志类名: </span>
+                    <input id="search_log_class" name="search_log_level" class="easyui-combobox" data-options="panelHeight:170,valueField:'value',textField:'label',data:[{label:'-------',value:'',selected:true},{label:'日志处理器',value:'ReleaseNoteHandler'},{label:'固件处理器',value:'FirmwareHandler'},{label:'检测处理器',value:'CheckService'},{label:'下载处理器',value:'DownloadService'},{label:'上传处理器',value:'UploadService'},{label:'报警处理器',value:'AlertService'}]">
+					</input>
+                </li>
+                <li>
+                    <span>固件型号: </span>
+                    <input id="search_dao_name" name="search_dao_name" class="easyui-combobox" data-options="panelHeight:100,valueField:'value',textField:'label',data:[{label:'-------',value:'',selected:true},{label:'IPC',value:'ipc'},{label:'DVR',value:'dvr'},{label:'XMJP',value:'xmjp'}]">
+					</input>
+                </li>
+                <li>
+                    <span>型号类别: </span>
+                    <input id="search_ftyle" name="search_ftype" class="easyui-combobox" data-options="panelHeight:150,valueField:'value',textField:'label',data:[{label:'-------',value:'',selected:true},{label:'General',value:'General'},{label:'HZXM',value:'HZXM'},{label:'CloudBox',value:'CloudBox'},{label:'单片机',value:'单片机'},{label:'海思平台',value:'海思平台'}]">
+					</input>
+                </li>
+                <li>
+                    <span>异常信息: </span>
+                    <input id="search_log_message" class="easyui-textbox">
+                </li>
+            </ul>
         </div>
-        <div class="easyui-layout" data-options="fite:true,border:false">
-            <div id="layout-body-bottom" data-options="region:'north',border:false">
-                <table id="layout-body-bottom-tables" class="easyui-datagrid"></table>
-            </div>
+        <div id="list-layout-body-bottom" data-options="region:'center',border:false">
+            <table id="list-layout-body-bottom-table" class="easyui-datagrid"></table>
         </div>
     </div>
 </div>
