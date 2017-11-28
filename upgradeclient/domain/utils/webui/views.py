@@ -97,11 +97,11 @@ class FirmwareListView(BaseView):
         input_storage = web.input()
         limit_page = getattr(input_storage, 'page', 1)
         limit_rows = getattr(input_storage, 'rows', 20)
-        log_level = getattr(input_storage, 'search_log_level', None)
-        log_class = getattr(input_storage, 'search_log_class', None)
-        dao_name = getattr(input_storage, 'search_dao_name', None)
-        file_type = getattr(input_storage, 'search_file_type', None)
-        log_message = getattr(input_storage, 'search_input_storage', None)
+        log_level = getattr(input_storage, 'log_level', None)
+        log_class = getattr(input_storage, 'log_class', None)
+        dao_name = getattr(input_storage, 'dao_name', None)
+        file_type = getattr(input_storage, 'file_type', None)
+        log_message = getattr(input_storage, 'log_message', None)
 
         where_con = "log_name!='' and dao_name!=''"
         if log_level is not None:
