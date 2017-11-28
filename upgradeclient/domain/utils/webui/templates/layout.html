@@ -58,7 +58,8 @@ $def with (content)
             </div>
             <div class="rt">
                 <ul>
-                    <li><a href="/firmware">自助查询入口</a></li>
+                    $if content.show_show_searchentry:
+                        <li><a href="/firmware">自助查询入口</a></li>
                     <li class="upg-dropdown">
                         <span>李满满 <i class="fa fa-angle-down" aria-hidden="true"></i></span>
                         <div id="user_profile" class="easyui-menu">
