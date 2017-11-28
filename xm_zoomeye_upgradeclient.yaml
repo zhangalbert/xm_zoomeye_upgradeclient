@@ -65,7 +65,7 @@ objects:
       cache: {ref: Cache}
       handler_factory: {ref: DownloadHandlerFactory}
       relative_path: check_cache
-      check_interval: 15
+      check_interval: 5
     constructor-args: {cache: cache, handler_factory: handler_factory, relative_path: relative_path, check_interval: check_interval}
 
   - object: DownloadHandlerFactory
