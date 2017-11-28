@@ -104,10 +104,10 @@ class FirmwareListView(BaseView):
         where_con = "log_name!='' and dao_name!=''"
         if log_level is not None:
             where_con += " and log_level='{0}' ".format(log_level)
+        if log_class is not None:
+            where_con += " and log_class='{0}'".format(log_class)
         if dao_name is not None:
             where_con += " and dao_name='{0}' ".format(dao_name)
-        if log_class is not None:
-            where_con += " and log_class='{0}' ".format(log_class)
         if file_type is not None:
             where_con += " and file_type='{0}' ".format(file_type)
 

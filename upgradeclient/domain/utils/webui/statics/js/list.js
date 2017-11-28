@@ -64,4 +64,20 @@ $(function () {
             }
         ]]
     });
+    // 点击搜索事件
+    $('#search_log_message').on('click', function () {
+        var q_params = {},
+            log_level = $('#search_log_level').combobox('getValue'),
+            log_class = $('#search_log_class').combobox('getValue'),
+            dao_name = $('#search_dao_name').combobox('getValue'),
+            file_type = $('#search_file_type').combobox('getValue'),
+            log_message = $('#search_log_message').combobox('getValue');
+        if(log_level != ''){q_params['log_level'] = log_level;}
+        if(log_class != ''){q_params['log_class'] = log_class;}
+        if(dao_name != ''){q_params['dao_name'] = dao_name;}
+        if(file_type != ''){q_params['file_type'] = file_type;}
+        if(log_message != ''){q_params['log_message'] = log_message;}
+
+        $('#list-layout-body-bottom-table').datagrid('load', q_params);
+    });
 });
