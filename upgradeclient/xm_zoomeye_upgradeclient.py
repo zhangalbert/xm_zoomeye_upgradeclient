@@ -22,9 +22,11 @@ class XmZoomeyeUpgradeClient(object):
             self.download_service.start()
 
         '''
+        
         if self.upload_service is not None and self.upload_service != 'None':
             logger.info('start upload service successfully!')
             self.upload_service.start()
+        
         '''
 
         if self.alert_service is not None and self.alert_service != 'None':
