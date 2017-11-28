@@ -12,7 +12,7 @@ from upgradeclient.domain.common.helper import Helper
 from upgradeclient.domain.utils.webui.config import template_dir, upgwebui_dir
 
 
-com_render = web.template.render('{0}/'.format(template_dir), base='layout', cache=False)
+render = web.template.render('{0}/'.format(template_dir), base='layout', cache=False)
 
 
 class BaseView(object):
@@ -77,7 +77,7 @@ class RedirectView(BaseView):
 
 class IndexView(BaseView):
     def GET(self):
-        return com_render.index()
+        return render.index()
 
 
 class ExceptionThreadView(BaseView):
@@ -134,7 +134,7 @@ class ExceptionFmodelView(BaseView):
             response_dict.update({key: ins[-1]})
         sum_value = float(sum(response_dict.values()))
         for k in response_dict:
-            percent = round(response_dict[k] / sum_value, 2)
+            percent = round(100*response_dict[k] / sum_value, 2)
             response_data.append([k, percent])
 
         return self.json_response(response_data)
@@ -250,3 +250,8 @@ class ExceptionRealtimeView(BaseView):
 class FirmwareDetailView(BaseView):
     def GET(self, firmware_id):
         return firmware_id
+
+
+class FirmwareListView(BaseView):
+    def GET(self):
+        return render.list()
