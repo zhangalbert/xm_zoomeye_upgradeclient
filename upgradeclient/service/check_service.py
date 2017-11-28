@@ -120,7 +120,6 @@ class CheckService(BaseService):
                 self.insert_to_db(log_level='info', log_message=msgdata)
                 logger.info(msgdata)
                 break
-            
             end_time = datetime.datetime.now() + datetime.timedelta(days=1)
             sta_time = datetime.datetime.now() - datetime.timedelta(days=1, seconds=ins.revision_seconds)
             try:
