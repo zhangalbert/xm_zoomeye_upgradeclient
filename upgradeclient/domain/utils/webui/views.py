@@ -117,7 +117,8 @@ class FirmwareListView(BaseView):
 
         select_command = [
             'select * from upgradeclient',
-            'where {0}'.format(where_con)
+            'where {0}'.format(where_con),
+            'order by created_time desc'
         ]
         select_results = db.select(' '.join(select_command))
         if select_results is None:
