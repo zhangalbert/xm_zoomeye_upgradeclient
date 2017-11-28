@@ -115,7 +115,7 @@ class FirmwareListView(BaseView):
         if log_message is not None:
             where_con += " and log_message like '%{0}%' ".format(log_message)
 
-        where_con += " limit {0} offset {1}".format(limit_rows, (limit_page-1)*limit_rows)
+        where_con += " limit {0} offset {1}".format(limit_rows, (int(limit_page)-1)*int(limit_rows))
         select_command = [
             'select * from upgradeclient',
             'where {0}'.format(where_con)
