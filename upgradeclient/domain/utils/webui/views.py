@@ -95,7 +95,7 @@ class FirmwareListView(BaseView):
         ]
 
         input_storage = web.input(log_level='info')
-    
+
         where_con = "log_name!='' and dao_name!=''"
         select_command = [
             'select * from upgradeclient',
