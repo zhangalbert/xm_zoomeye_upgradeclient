@@ -114,6 +114,7 @@ article,section,time,aside{display:block;}
   color: #9f9f9f;
 }
 
+/* # index.html */
 /* 顶部CSS区域 */
 .upg-layout-header {
 	position: relative;
@@ -164,4 +165,10 @@ article,section,time,aside{display:block;}
 	overflow: hidden;
 	text-align: center;
 	padding: 0 15px 0 15px;
+}
+
+/* # list.html */
+.list-layout-body {
+	border:solid 10px red;
+	color: red;
 }
