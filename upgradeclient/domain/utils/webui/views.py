@@ -95,6 +95,8 @@ class FirmwareListView(BaseView):
         ]
 
         input_storage = web.input()
+        limit_page = getattr(input_storage, 'page', 1)
+        limit_rows = getattr(input_storage, 'rows', 20)
         log_level = getattr(input_storage, 'search_log_level', None)
         log_class = getattr(input_storage, 'search_log_class', None)
         dao_name = getattr(input_storage, 'search_dao_name', None)
@@ -110,7 +112,10 @@ class FirmwareListView(BaseView):
             where_con += " and dao_name='{0}' ".format(dao_name)
         if file_type is not None:
             where_con += " and file_type='{0}' ".format(file_type)
+        if log_message is not None:
+            where_con += " and log_message like '%{0}%' ".format(log_message)
 
+        where_con += " limit {0} offset {1}".format(limit_rows, (limit_page-1)*limit_rows)
         select_command = [
             'select * from upgradeclient',
             'where {0}'.format(where_con)
@@ -119,8 +124,6 @@ class FirmwareListView(BaseView):
         if select_results is None:
             return self.json_response([])
         for ins in select_results:
-            if log_message and log_message not in ins[-2]:
-                continue
             response_data.append(dict(zip(response_keys, ins)))
 
         response_data.sort(key=lambda s: s['created_time'], reverse=True)
