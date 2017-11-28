@@ -87,7 +87,7 @@ class FirmwareView(BaseView):
 
 class FirmwareListView(BaseView):
     def GET(self):
-        response_data = []
+        response_data = {'total': 0, 'rows': []}
         response_keys = [
             'id', 'log_level', 'log_name', 'log_class', 'dao_name', 'file_type',
             'file_name', 'file_url', 'last_author', 'last_date', 'last_revision',
@@ -123,9 +123,14 @@ class FirmwareListView(BaseView):
         select_results = db.select(' '.join(select_command))
         if select_results is None:
             return self.json_response([])
-        for ins in select_results:
-            response_data.append(dict(zip(response_keys, ins)))
 
+        sta_num = (int(limit_page)-1) * int(limit_rows)
+        end_num = int(limit_page) * int(limit_rows)
+        for ins in select_results:
+            response_data['total'] += 1
+            if sta_num <= response_data['total'] < end_num:
+                response_data['rows'].append(dict(zip(response_keys, ins)))
+                
         response_data.sort(key=lambda s: s['created_time'], reverse=True)
 
         return self.json_response(response_data)
