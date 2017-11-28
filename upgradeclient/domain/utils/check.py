@@ -51,6 +51,9 @@ class Check(object):
 
     def revision_summarize(self, url, sta_timetuple, end_timetuple):
         revision_min, revision_max = map(lambda t: self.to_revision_date(t), (sta_timetuple, end_timetuple))
+        print '=' * 100
+        print url, revision_min, url, revision_max
+        print '=' * 100
         summarizes = self.svnclient.diff_summarize(url, revision_min, url, revision_max)
 
         latest_changes = []
