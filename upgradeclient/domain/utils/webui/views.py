@@ -130,7 +130,7 @@ class FirmwareListView(BaseView):
             if sta_num <= response_data['total'] < end_num:
                 response_data['rows'].append(dict(zip(response_keys, ins)))
 
-        response_data['rows'].sort(key=lambda s: s['created_time'], reverse=True)
+        response_data['rows'].sort(key=lambda s: s['created_time'])
 
         return self.json_response(response_data)
 
