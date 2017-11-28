@@ -57,10 +57,10 @@ $(function () {
                 field:'file_type',width:'5%',title:'型号类别'
             },
             {
-                field:'log_message',width:'65%',title:'异常信息'
+                field:'log_message',width:'66%',title:'异常信息'
             },
             {
-                field:'created_time',width:'%5',title:'异常时间'
+                field:'created_time',width:'%5',title:'异常时间',align:'right'
             }
         ]]
     });
