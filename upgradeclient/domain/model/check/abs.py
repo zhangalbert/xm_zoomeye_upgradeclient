@@ -6,6 +6,10 @@ import json
 
 from upgradeclient.domain.model.alert.media import Media
 from upgradeclient.domain.model.alert.notify import Notify
+from upgradeclient.domain.common.logger import Logger
+
+
+logger = Logger.get_logger(__name__)
 
 
 class ABS(object):
@@ -90,9 +94,11 @@ class ABS(object):
 
     @staticmethod
     def create_notify(dict_data):
+        logger.error(dict_data)
         if dict_data is None:
             return None
         medias = dict_data.get('medias', None)
+        logger.error(medias)
         crontab = dict_data.get('crontab', None)
         if crontab is None or medias is None:
             return None
