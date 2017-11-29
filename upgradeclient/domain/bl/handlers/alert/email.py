@@ -74,14 +74,14 @@ class EmailHandler(BaseHandler):
         print html
 
         dict_conf = self.load_config()
-        print '*' * 100
-        print name
-        print dict_conf
-        print '*' * 100
         if name not in dict_conf:
             return
         mail_conf = dict_conf[name]
-        print '='*100
+        print '*' * 100
+        print name
+        print dict_conf
         print mail_conf
-        print '='*100
+        print obj.get_cc()
+        print obj.get_to()
+        print '*' * 100
         Email.send(mail_conf, '测试邮件', obj.get_to(), ecc=obj.get_cc(), ehtml=html)
