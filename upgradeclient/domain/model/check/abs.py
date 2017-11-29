@@ -99,6 +99,9 @@ class ABS(object):
         notify = Notify(crontab=crontab)
         medias_list = []
         for m in medias:
+            print '$' * 100
+            print m
+            print '$' * 100
             media = Media(handler=m['handler'], to=m['to'], cc=m['cc'])
             medias_list.append(media)
         notify.set_medias(medias_list)
