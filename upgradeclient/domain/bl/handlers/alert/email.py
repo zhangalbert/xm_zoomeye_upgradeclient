@@ -74,6 +74,10 @@ class EmailHandler(BaseHandler):
         print html
 
         dict_conf = self.load_config()
+        print '*' * 100
+        print name
+        print dict_conf
+        print '*' * 100
         if name not in dict_conf:
             return
         mail_conf = dict_conf[name]
