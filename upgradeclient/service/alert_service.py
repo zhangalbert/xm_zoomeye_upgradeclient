@@ -21,7 +21,6 @@ class AlertHandlerThread(Thread):
             msgdata = '{0} no notify config for {1}, ignore'.format(*fmtdata)
             logger.error(msgdata)
             return
-        logger.error(ins.to_dict())
         self.service.handle(ins)
 
 
