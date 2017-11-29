@@ -9,7 +9,7 @@ import datetime
 
 from upgradeclient.database.database import db
 from upgradeclient.domain.common.file import File
-from upgradeclient.domain.common.email import Email
+from upgradeclient.domain.common.mail import Email
 from upgradeclient.domain.common.logger import Logger
 from upgradeclient.domain.common.crontab import CronTab
 from upgradeclient.domain.bl.handlers.alert.base import BaseHandler
