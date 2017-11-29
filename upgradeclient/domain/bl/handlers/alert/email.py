@@ -23,8 +23,7 @@ class EmailHandler(BaseHandler):
             s.enter(t.next(), 1, self.report_hook, (obj,))
 
     def generate_timer(self, obj):
-        notify = obj.get_notify()
-        crontab = notify.get_crontab()
+        crontab = obj.get_crontab()
         entry = CronTab(crontab)
 
         return entry
