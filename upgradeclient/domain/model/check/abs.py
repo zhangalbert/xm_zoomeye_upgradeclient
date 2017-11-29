@@ -98,9 +98,8 @@ class ABS(object):
             return None
         notify = Notify(crontab=crontab)
         medias_list = []
-        for k in medias.iterkeys():
-            c = medias[k]
-            media = Media(k, c['to'], c['cc'])
+        for m in medias:
+            media = Media(handler=m['handler'], to=m['to'], cc=m['cc'])
             medias_list.append(media)
         notify.set_medias(medias_list)
 

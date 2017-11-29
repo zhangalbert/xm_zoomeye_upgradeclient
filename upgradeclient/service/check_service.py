@@ -69,7 +69,7 @@ class CheckService(BaseService):
         not os.path.exists(fdirname) and os.makedirs(fdirname)
 
         for name in self.dao_factory:
-            p = CheckHandlerProcess(name, self.dao_factory[name], self)
+            p = CheckHandlerProcess(self.dao_factory[name], self)
             p.daemon = True
             p.start()
             self.sub_process.update({name: p})

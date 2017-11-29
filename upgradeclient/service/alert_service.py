@@ -38,6 +38,10 @@ class AlertService(BaseService):
             t.start()
 
     def handle(self, ins):
-        handler = self.alert_factory.create_alert_handler(ins)
-        handler.handle(ins)
+        notify = ins.get_notify()
+        medias = notify.get_medias()
+        for media in medias:
+            handler = self.alert_factory.create_alert_handler(media)
+            handler.handle(media)
+
 

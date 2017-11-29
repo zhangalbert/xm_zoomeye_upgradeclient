@@ -5,16 +5,10 @@ import json
 
 
 class Media(object):
-    def __init__(self, tp=None, to=None, cc=None):
-        self.tp = None
+    def __init__(self, handler=None, to=None, cc=None):
         self.to = None
         self.cc = None
-
-    def get_tp(self):
-        return self.tp
-
-    def set_tp(self, tp):
-        self.tp = tp
+        self.handler = handler
 
     def get_to(self):
         return self.to
@@ -28,12 +22,17 @@ class Media(object):
     def set_cc(self, cc):
         self.cc = cc
 
+    def get_handler(self):
+        return self.handler
+
+    def set_handler(self, handler):
+        self.handler = handler
+
     def to_dict(self):
         dict_data = {
-            self.get_tp(): {
-                'to': self.get_to(),
-                'cc': self.get_cc(),
-            }
+            'to': self.get_to(),
+            'cc': self.get_cc(),
+            'handler': self.get_handler()
         }
 
         return dict_data
@@ -48,10 +47,10 @@ class Media(object):
     def from_json(json_data):
         dict_data = json.loads(json_data)
 
-        tp = dict_data.get('tp', None)
         to = dict_data.get('to', None)
         cc = dict_data.get('cc', None)
+        handler = dict_data.get('handler', None)
 
-        media = Media(tp=tp, to=to, cc=cc)
+        media = Media(handler=handler, to=to, cc=cc)
 
         return media
