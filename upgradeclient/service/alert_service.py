@@ -42,7 +42,7 @@ class AlertService(BaseService):
         crontab = notify.get_crontab()
         for media in medias:
             handler = self.alert_factory.create_alert_handler(media)
-            t = Thread(target=handler.handle, args=(crontab, media))
+            t = Thread(target=handler.handle, args=(ins.NAME, crontab, media))
             t.start()
 
 

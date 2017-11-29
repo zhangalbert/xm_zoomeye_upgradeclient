@@ -13,10 +13,10 @@
         {
           "handler": "email",
           "to": [
-              "limanman@xiongmaitech.com"
+              "xmdevops@vip.qq.com"
           ],
           "cc": [
-            "limanman@xiongmaitech.com"
+            "xmdevops@vip.qq.com"
           ]
         }
       ],
@@ -37,10 +37,10 @@
         {
           "handler": "email",
           "to": [
-              "limanman@xiongmaitech.com"
+              "xmdevops@vip.qq.com"
           ],
           "cc": [
-            "limanman@xiongmaitech.com"
+            "xmdevops@vip.qq.com"
           ]
         }
       ],
@@ -61,10 +61,10 @@
         {
           "handler": "email",
           "to": [
-              "limanman@xiongmaitech.com"
+              "xmdevops@vip.qq.com"
           ],
           "cc": [
-            "limanman@xiongmaitech.com"
+            "xmdevops@vip.qq.com"
           ]
         }
       ],
