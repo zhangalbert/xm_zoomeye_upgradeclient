@@ -6,6 +6,10 @@ import json
 
 from upgradeclient.domain.model.alert.media import Media
 from upgradeclient.domain.model.alert.notify import Notify
+from upgradeclient.domain.common.logger import Logger
+
+
+logger = Logger.get_logger(__name__)
 
 
 class ABS(object):
@@ -97,10 +101,9 @@ class ABS(object):
         if crontab is None or medias is None:
             return None
         notify = Notify(crontab=crontab)
-        print '$' * 100
-        print dict_data
-        print medias
-        print '$' * 100
+
+        logger.error(dict_data)
+        logger.error(medias)
         medias_list = []
         for m in medias:
             media = Media(handler=m['handler'], to=m['to'], cc=m['cc'])
