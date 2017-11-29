@@ -23,7 +23,7 @@ class Notify(object):
 
     def to_dict(self):
         dict_data = {
-            'medias': self.get_medias().to_dict(),
+            'medias': map(lambda s: s.to_dict(), self.get_medias()),
             'crontab': self.get_crontab()
         }
 
