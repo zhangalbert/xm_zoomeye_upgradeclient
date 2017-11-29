@@ -74,9 +74,9 @@ class EmailHandler(BaseHandler):
         html = self.get_html(data)
 
         dict_conf = self.load_config()
-        if name not in dict_conf:
-            return
-        mail_conf = dict_conf[name]
+        mail_conf = dict_conf.get('email', None)
+        if mail_conf is None:
+            return 
         print '*' * 100
         print name
         print dict_conf
