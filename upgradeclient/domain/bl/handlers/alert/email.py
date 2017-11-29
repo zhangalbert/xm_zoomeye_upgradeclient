@@ -49,9 +49,11 @@ class EmailHandler(BaseHandler):
         if self.validate():
             return
         t = self.__class__.timer_generator(crontab)
-        s = sched.scheduler(time.time, time.sleep)
         while True:
-            s.enter(t.next(), 1, self.report_hook, (name, obj,))
+            s = sched.scheduler(time.time, time.sleep)
+            ts = t.next()
+            print 'next run after seconds: {0}'.format(ts)
+            s.enter(ts, 1, self.report_hook, (name, obj,))
             s.run()
 
     @staticmethod
@@ -65,6 +67,9 @@ class EmailHandler(BaseHandler):
         dict_data = json.loads(jtxt_data)
 
         return dict_data
+
+    def get_html(self):
+        pass
 
     def report_hook(self, name, obj):
         data = self.get_data(name)
