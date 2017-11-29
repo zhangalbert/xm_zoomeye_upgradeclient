@@ -3,7 +3,7 @@
     "_comments": "",
     "smtp_host": "smtphz.qiye.163.com",
     "smtp_port": 25,
-    "smtp_user": "admin@xmeye.net",
+    "smtp_user": "admin",
     "smtp_pass": "7Qc8Ef9Jh61",
     "debug_num": 1
   }
