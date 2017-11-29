@@ -61,15 +61,17 @@ class EmailHandler(BaseHandler):
 
         return dict_data
 
-    def get_html(self):
-        pass
+    def get_html(self, data):
+        html = '<table><thead><tr><td>型号</td><td>异常</td></tr></thead><tbody>'
+        for d in data:
+            html += '<tr><td>' + d[4] + '</td><td>' + d[-2] + '</td></tr>'
+        html += '</tbody></table>'
+
+        return html
 
     def report_hook(self, name, obj):
         data = self.get_data(name)
-        html = '<table><thead><tr><td>型号</td><td>异常</td></tr></thead><tbody>'
-        for d in data:
-            html += '<tr><td>'+d[4]+'</td><td>'+d[-2]+'</td></tr>'
-        html += '</tbody></table>'
+        html = self.get_html(data)
 
         dict_conf = self.load_config()
         if name not in dict_conf:
