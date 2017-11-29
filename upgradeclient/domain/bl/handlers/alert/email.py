@@ -77,4 +77,7 @@ class EmailHandler(BaseHandler):
         if name not in dict_conf:
             return
         mail_conf = dict_conf[name]
+        print '='*100
+        print mail_conf
+        print '='*100
         Email.send(mail_conf, '测试邮件', obj.get_to(), ecc=obj.get_cc(), ehtml=html)
