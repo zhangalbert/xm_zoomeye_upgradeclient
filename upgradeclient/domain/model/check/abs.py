@@ -98,6 +98,7 @@ class ABS(object):
             return None
         notify = Notify(crontab=crontab)
         print '$' * 100
+        print dict_data
         print medias
         print '$' * 100
         medias_list = []
