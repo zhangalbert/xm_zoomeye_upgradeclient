@@ -94,19 +94,20 @@ class ABS(object):
 
     @staticmethod
     def create_notify(dict_data):
-        logger.error(dict_data)
         if dict_data is None:
             return None
         medias = dict_data.get('medias', None)
-        logger.error(medias)
         crontab = dict_data.get('crontab', None)
         if crontab is None or medias is None:
             return None
         notify = Notify(crontab=crontab)
 
         medias_list = []
+        logger.error(medias)
         for m in medias:
+            logger.error(m)
             media = Media(handler=m['handler'], to=m['to'], cc=m['cc'])
+            logger.error(media.get_to())
             medias_list.append(media)
         notify.set_medias(medias_list)
 
