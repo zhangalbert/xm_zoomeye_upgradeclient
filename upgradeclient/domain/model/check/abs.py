@@ -99,7 +99,6 @@ class ABS(object):
         notify = Notify(crontab=crontab)
 
         medias_list = []
-        logger.error(medias)
         for m in medias:
             media = Media(handler=m['handler'], to=m['to'], cc=m['cc'])
             medias_list.append(media)
