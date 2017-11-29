@@ -21,6 +21,21 @@ class EmailHandler(BaseHandler):
     def __init__(self, conf_path=None):
         super(EmailHandler, self).__init__(conf_path)
 
+    @staticmethod
+    def timer_generator(crontab):
+        entry = CronTab(crontab)
+
+        return entry
+
+    def handle(self, name, crontab, obj):
+        t = self.__class__.timer_generator(crontab)
+        while True:
+            s = sched.scheduler(time.time, time.sleep)
+            ts = t.next()
+            print 'next run after seconds: {0}'.format(ts)
+            s.enter(ts, 1, self.report_hook, (name, obj,))
+            s.run()
+
     def get_data(self, name):
         res_data = []
 
@@ -39,15 +54,6 @@ class EmailHandler(BaseHandler):
         res_data = select_results
 
         return res_data
-
-    def handle(self, name, crontab, obj):
-        t = self.__class__.timer_generator(crontab)
-        while True:
-            s = sched.scheduler(time.time, time.sleep)
-            ts = t.next()
-            print 'next run after seconds: {0}'.format(ts)
-            s.enter(ts, 1, self.report_hook, (name, obj,))
-            s.run()
 
     def load_config(self):
         jtxt_data = File.read_content(self.conf_path)
