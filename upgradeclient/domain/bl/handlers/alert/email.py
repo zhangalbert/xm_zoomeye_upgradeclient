@@ -49,12 +49,6 @@ class EmailHandler(BaseHandler):
             s.enter(ts, 1, self.report_hook, (name, obj,))
             s.run()
 
-    @staticmethod
-    def timer_generator(crontab):
-        entry = CronTab(crontab)
-
-        return entry
-
     def load_config(self):
         jtxt_data = File.read_content(self.conf_path)
         dict_data = json.loads(jtxt_data)

@@ -44,9 +44,8 @@ class Email(object):
             msgalternative.attach(msghtml)
 
         # 发送邮件区
-        smtp = smtplib.SMTP(host=srv_addr, port=srv_port)
+        smtp = smtplib.SMTP(srv_addr, srv_port)
         smtp.set_debuglevel(debug_no)
-        smtp.connect(srv_addr)
         smtp.login(srv_user, srv_pass)
         smtp.sendmail(efrom, eto, msgmeta.as_string())
         smtp.quit()
