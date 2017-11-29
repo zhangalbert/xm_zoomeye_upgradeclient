@@ -178,7 +178,7 @@ class ExceptionFmodelView(BaseView):
         # having_con = "{0} = {1} and dao_name!='' and file_type!=''".format(group_con, today.strftime(date_fmt))
         select_command = [
             'select {0} from upgradeclient'.format(what_con),
-            'group by log_class',
+            'group by dao_name||file_type',
             'having {0}'.format(having_con)
         ]
         select_results = db.select(' '.join(select_command))
