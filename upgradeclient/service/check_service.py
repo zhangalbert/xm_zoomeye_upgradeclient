@@ -17,15 +17,14 @@ logger = Logger.get_logger(__name__)
 
 
 class CheckHandlerProcess(multiprocessing.Process):
-    def __init__(self, name, obj, service):
+    def __init__(self, obj, service):
         super(CheckHandlerProcess, self).__init__()
         self.obj = obj
-        self.name = name
         self.service = service
 
     def run(self):
         ins = self.obj.get_data()
-        self.service.handle(self.name, ins)
+        self.service.handle(ins)
 
 
 class CheckService(BaseService):
@@ -43,7 +42,7 @@ class CheckService(BaseService):
         for name in self.sub_process:
             p = self.sub_process[name]
             if not p.is_alive():
-                sub_p = CheckHandlerProcess(name, self.dao_factory[name], self)
+                sub_p = CheckHandlerProcess(self.dao_factory[name], self)
                 sub_p.daemon = True
                 sub_p.start()
                 self.sub_process.pop(name)
@@ -107,30 +106,30 @@ class CheckService(BaseService):
 
         return base_url
 
-    def handle(self, name, ins):
-        url = ins.get_base_url()
-        filter_ins = self.filter_factory[name]
+    def handle(self, obj):
+        url = obj.get_base_url()
+        filter_ins = self.filter_factory[obj.NAME]
         self.check.set_commit_info_style(style_num=1)
         signal.signal(signal.SIGINT, self.ctl_process_signal_callback)
 
         while True:
             if self.event_event.is_set():
-                fmtdata = (self.__class__.__name__, name, os.getpid())
+                fmtdata = (self.__class__.__name__, obj.NAME, os.getpid())
                 msgdata = '{0} sub process {1} stoped successfull, pid={1}'.format(*fmtdata)
                 self.insert_to_db(log_level='info', log_message=msgdata)
                 logger.info(msgdata)
                 break
             end_time = datetime.datetime.now() + datetime.timedelta(days=1)
-            sta_time = datetime.datetime.now() - datetime.timedelta(days=1, seconds=ins.revision_seconds)
+            sta_time = datetime.datetime.now() - datetime.timedelta(days=1, seconds=obj.revision_seconds)
             try:
                 latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
                                                                end_time.timetuple())
             except Exception as e:
-                fmtdata = (self.__class__.__name__, name, ins.summarize_interval, os.getpid(), e)
+                fmtdata = (self.__class__.__name__, obj.NAME, obj.summarize_interval, os.getpid(), e)
                 msgdata = '{0} sub process {1} check with exception, wait {2} seconds, pid={3} exp={4}'.format(*fmtdata)
                 self.insert_to_db(log_level='error', log_message=msgdata)
                 logger.error(msgdata)
-                time.sleep(ins.summarize_interval)
+                time.sleep(obj.summarize_interval)
                 continue
             merged_changes = {}
             merged_urlmaps = {}
@@ -145,10 +144,10 @@ class CheckService(BaseService):
                 merged_urlmaps.setdefault(os.path.dirname(obj.download_url), obj)
 
             for item in merged_urlmaps:
-                event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
-                event_data = map(lambda e: self.create_event(daoname=name, **dict(e.__dict__)).to_json(),
+                event = self.create_event(daoname=obj.NAME, **dict(merged_urlmaps[item].__dict__))
+                event_data = map(lambda e: self.create_event(daoname=obj.NAME, **dict(e.__dict__)).to_json(),
                                  merged_changes[item])
                 event.set_data(event_data)
                 self.send_cache_task(event)
 
-            time.sleep(ins.summarize_interval)
+            time.sleep(obj.summarize_interval)

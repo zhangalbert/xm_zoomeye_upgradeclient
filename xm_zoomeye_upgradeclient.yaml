@@ -5,10 +5,44 @@ objects:
     properties:
       download_service: {ref: DownloadService}
       upload_service: {ref: UploadService}
-      alert_service: None
+      alert_service: {ref: AlertService}
       webui_service: {ref: WebuiService}
       check_service: {ref: CheckService}
       constructor-args: {download_service: download_service, upload_service: upload_service, alert_service: alert_service, check_service: check_service)}
+
+  - object: AlertService
+    class: upgradeclient.service.alert_service.AlertService
+    scope: singleton
+    properties:
+      dao_factory:
+        dvr: {ref: DvrDao}
+        ipc: {ref: IpcDao}
+        xmjp: {ref: XmjpDao}
+      alert_factory: {ref: AlertHandlerFactory }
+    constructor-args: {dao_factory: dao_factory, alert_factory: alert_factory}
+
+  - object: AlertHandlerFactory
+    class: upgradeclient.domain.bl.alert_handler_factory.AlertHandlerFactory
+    scope: singleton
+    properties:
+      alert_handlers:
+        default: {ref: AlertDefaultHandler}
+        email: {ref: AlertEmailHandler}
+    constructor-args: {alert_handlers: alert_handlers}
+
+  - object: AlertDefaultHandler
+    class: upgradeclient.domain.bl.handlers.alert.default.DefaultHandler
+    scope: singleton
+    properties:
+      conf_path: /etc/upgradeclient/notify.json
+    constructor-args: {conf_path: conf_path}
+
+  - object: AlertEmailHandler
+    class: upgradeclient.domain.bl.handlers.alert.email.EmailHandler
+    scope: singleton
+    properties:
+      conf_path: /etc/upgradeclient/notify.json
+    constructor-args: {conf_path: conf_path}
 
   - object: WebuiService
     class: upgradeclient.service.webui_service.WebuiService

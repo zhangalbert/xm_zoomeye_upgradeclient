@@ -4,9 +4,13 @@
 import json
 
 
+from upgradeclient.domain.model.alert.media import Media
+from upgradeclient.domain.model.alert.notify import Notify
+
+
 class ABS(object):
     def __init__(self, base_url=None, proxy_host=None, target_host=None, revision_seconds=None, summarize_interval=None,
-                 auth_user=None, auth_pass=None, notify_to=None, notify_cc=None):
+                 auth_user=None, auth_pass=None, notify=None):
         self.base_url = base_url
         self.proxy_host = proxy_host
         self.target_host = target_host
@@ -14,8 +18,7 @@ class ABS(object):
         self.summarize_interval = summarize_interval
         self.auth_user = auth_user
         self.auth_pass = auth_pass
-        self.notify_to = notify_to
-        self.notify_cc = notify_cc
+        self.notify = notify
 
     def get_base_url(self):
         return self.base_url
@@ -59,17 +62,11 @@ class ABS(object):
     def set_auth_pass(self, auth_pass):
         self.auth_user = auth_pass
 
-    def get_notify_to(self):
-        return self.notify_to
+    def get_notify(self):
+        return self.notify
 
-    def set_notify_to(self, notify_to):
-        self.notify_to = notify_to
-
-    def get_notify_cc(self):
-        return self.notify_cc
-
-    def set_notify_cc(self, notify_cc):
-        self.notify_cc = notify_cc
+    def set_notify(self, notify):
+        self.notify = notify
 
     def to_dict(self):
         dict_data = {
@@ -80,8 +77,7 @@ class ABS(object):
             'summarize_interval': self.get_summarize_interval(),
             'auth_user': self.get_auth_user(),
             'auth_pass': self.get_auth_pass(),
-            'notify_to': map(lambda s: s.to_json, self.get_notify_to()),
-            'notify_cc': map(lambda s: s.to_json, self.get_notify_cc()),
+            'notify': self.get_notify().to_dict()
         }
 
         return dict_data
@@ -91,5 +87,24 @@ class ABS(object):
         json_data = json.dumps(dict_data, indent=indent)
 
         return json_data
+
+    @staticmethod
+    def create_notify(dict_data):
+        if dict_data is None:
+            return None
+        medias = dict_data.get('medias', None)
+        crontab = dict_data.get('crontab', None)
+        if crontab is None or medias is None:
+            return None
+        notify = Notify(crontab=crontab)
+        medias_list = []
+        for k in medias.iterkeys():
+            c = medias[k]
+            media = Media(k, c['to'], c['cc'])
+            medias_list.append(media)
+        notify.set_medias(medias_list)
+
+        return notify
+
 
 
