@@ -304,8 +304,14 @@ class ExceptionRealtimeView(BaseView):
 
 
 class FirmwareDetailView(BaseView):
-    def GET(self, firmware_id):
-        return render.detail(name='limanman')
+    def GET(self, pk):
+        select_command = [
+            'select * from upgradeclient where id={0}'.format(pk)
+        ]
+        select_results = db.select_one(' '.join(select_command))
+        if select_results is None:
+            return render.detail(content='')
+        return render.detail(content=select_results)
 
 
 

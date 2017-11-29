@@ -189,3 +189,21 @@ article,section,time,aside{display:block;}
 #list-layout-body-top ul li:last-child {
 	float: right;
 }
+
+/* # detail.html */
+#detail-layout-body-top {
+	margin: 0 auto;
+	padding: 15px;
+}
+#detail-layout-body-top ul li {
+	line-height: 30px;
+	margin-bottom: 10px;
+	border-bottom: solid 1px #eeeeee;
+}
+#detail-layout-body-top ul li {
+	border-left: solid 3px orange;
+	padding-left: 10px;
+}
+#detail-layout-body-top ul li span:last-child {
+	color: #aaaaaa;
+}

@@ -58,10 +58,10 @@ $def with (content)
             </div>
             <div class="rt">
                 <ul>
+                    $if content.show_gobackhome == '1':
+                        <li><a href="/">返回主页</a></li>
                     $if content.show_searchentry == '1':
                         <li><a href="/firmware">自助查询</a></li>
-                    $else:
-                        <li><a href="/">返回主页</a></li>
                     <li class="upg-dropdown">
                         <span>新游客 <i class="fa fa-angle-down" aria-hidden="true"></i></span>
                         <div id="user_profile" class="easyui-menu">

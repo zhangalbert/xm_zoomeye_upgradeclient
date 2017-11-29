@@ -40,27 +40,31 @@ $(function () {
         singleSelect: true,
         checkOnSelect: true,
         selectOnCheck: true,
+        onDblClickRow: function (index, row) {
+            var pk = row['id'];
+            location.href = '/firmware/' +pk;
+        },
         columns:[[
             {
-                field:'log_level',width:'5%',title:'日志级别',
+                field:'log_level',width:'5%',title:'日志级别', sortable: false,
                 formatter: function(value,row,index){
                     return '<span class="text-'+value+'"><i class="fa fa-circle" aria-hidden="true"></i></span>';
                 },align:'center'
             },
             {
-                field:'log_class',width:'10%',title:'日志类名'
+                field:'log_class',width:'10%',title:'日志类名', sortable: true
             },
             {
-                field:'dao_name',width:'5%',title:'固件型号'
+                field:'dao_name',width:'5%',title:'固件型号', sortable: true
             },
             {
-                field:'file_type',width:'5%',title:'型号类别'
+                field:'file_type',width:'5%',title:'型号类别', sortable: true
             },
             {
-                field:'log_message',width:'66%',title:'异常信息'
+                field:'log_message',width:'66%',title:'异常信息', sortable: true
             },
             {
-                field:'created_time',width:'%5',title:'异常时间',align:'right'
+                field:'created_time',width:'%5',title:'异常时间',align:'right', sortable: true
             }
         ]]
     });

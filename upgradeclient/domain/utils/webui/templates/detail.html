@@ -1,12 +1,60 @@
-$def with(name)
+$def with(content)
 $var title: 固件自动升级检测平台 - 详情页
 $var icofiles: /statics/img/favicon.ico
 $var pre_cssfiles: /statics/css/main.css
+$var pre_scriptfiles: /statics/js/list.js
+$var show_searchentry: 1
+$var show_gobackhome: 1
 
 <div class="detail-layout-body" data-options="region:'center',border:false">
     <div class="easyui-layout" data-options="fit:true,border:false">
         <div id="detail-layout-body-top" data-options="region:'north',border:false">
-            $name
+            <ul>
+                <li>
+                    <span>异常编号: </span>
+                    <span>$content[0]</span>
+                </li>
+                <li>
+                    <span>异常级别: </span>
+                    <span>$content[1]</span>
+                </li>
+                <li>
+                    <span>异常事件: </span>
+                    <span>$content[2]</span>
+                </li>
+                <li>
+                    <span>异常类名: </span>
+                    <span>$content[3]</span>
+                </li>
+                <li>
+                    <span>固件类型: </span>
+                    <span>$content[4]_$content[5]</span>
+                </li>
+                <li>
+                    <span>固件地址: </span>
+                    <span>$content[7]</span>
+                </li>
+                <li>
+                    <span>提交用户: </span>
+                    <span>$content[8]</span>
+                </li>
+                <li>
+                    <span>提交时间: </span>
+                    <span>$content[9]</span>
+                </li>
+                <li>
+                    <span>提交版本: </span>
+                    <span>$content[10]</span>
+                </li>
+                <li>
+                    <span>操作类型: </span>
+                    <span>$content[11]</span>
+                </li>
+                <li>
+                    <span>异常信息: </span>
+                    <span>$content[12]</span>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

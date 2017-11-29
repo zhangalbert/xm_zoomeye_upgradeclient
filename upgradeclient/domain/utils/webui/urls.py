@@ -6,7 +6,7 @@ url_patterns = [
     r'/', 'IndexView',
     r'/firmware', 'FirmwareView',
     r'/ajax/firmware/list', 'FirmwareListView',
-    r'/firmware/([0-9])', 'FirmwareDetailView',
+    r'/firmware/([0-9]+)', 'FirmwareDetailView',
     r'/statics/(js|css|img|fonts)/(.*)', 'StaticFileView',
     r'/ajax/exception/threads', 'ExceptionThreadView',
     r'/ajax/exception/fmodels', 'ExceptionFmodelView',
