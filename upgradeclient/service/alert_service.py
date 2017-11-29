@@ -1,6 +1,5 @@
 #! -*- coding: utf-8 -*-
 
-
 from threading import Thread
 from upgradeclient.domain.common.logger import Logger
 from upgradeclient.service.base_service import BaseService
@@ -40,8 +39,11 @@ class AlertService(BaseService):
     def handle(self, ins):
         notify = ins.get_notify()
         medias = notify.get_medias()
+        crontab = ins.get_crontab()
         for media in medias:
             handler = self.alert_factory.create_alert_handler(media)
-            handler.handle(media)
+            t = Thread(target=handler.handle, args=(crontab, media))
+            t.start()
+
 
 

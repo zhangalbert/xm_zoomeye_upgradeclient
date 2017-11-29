@@ -16,19 +16,20 @@ class EmailHandler(BaseHandler):
     def __init__(self, conf_path=None):
         super(EmailHandler, self).__init__(conf_path)
 
-    def handle(self, obj):
-        t = self.generate_timer(obj)
+    def handle(self, crontab, obj):
+        t = self.__class__.timer_generator(crontab)
         while True:
             s = sched.scheduler(time.time, time.sleep)
-            s.enter(t.next(), 1, self.report_hook, (obj,))
+            s.enter(t.next(), 1, self.__class__.report_hook, (obj,))
 
-    def generate_timer(self, obj):
-        crontab = obj.get_crontab()
+    @staticmethod
+    def timer_generator(crontab):
         entry = CronTab(crontab)
 
         return entry
 
-    def report_hook(self, obj):
+    @staticmethod
+    def report_hook(obj):
         print 'X' * 100
         print 'I was running~'
         print 'X' * 100

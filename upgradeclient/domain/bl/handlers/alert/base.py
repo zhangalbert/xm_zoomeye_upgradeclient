@@ -48,5 +48,5 @@ class BaseHandler(object):
                 continue
             os.remove(f)
 
-    def handle(self, obj):
+    def handle(self, crontab, obj):
         raise NotImplementedError
