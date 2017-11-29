@@ -48,9 +48,6 @@ class BaseHandler(object):
                 continue
             os.remove(f)
 
-    def validate(self):
-        return os.path.exists(self.conf_path)
-
     def handle(self, name, crontab, obj):
         raise NotImplementedError
 

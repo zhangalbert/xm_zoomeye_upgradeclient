@@ -40,14 +40,7 @@ class EmailHandler(BaseHandler):
 
         return res_data
 
-    def validate(self):
-        validate_res = super(EmailHandler, self).validate()
-
-        return validate_res
-
     def handle(self, name, crontab, obj):
-        if self.validate():
-            return
         t = self.__class__.timer_generator(crontab)
         while True:
             s = sched.scheduler(time.time, time.sleep)
