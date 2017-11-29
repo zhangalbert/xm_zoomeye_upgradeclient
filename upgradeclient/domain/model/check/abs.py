@@ -6,10 +6,6 @@ import json
 
 from upgradeclient.domain.model.alert.media import Media
 from upgradeclient.domain.model.alert.notify import Notify
-from upgradeclient.domain.common.logger import Logger
-
-
-logger = Logger.get_logger(__name__)
 
 
 class ABS(object):
@@ -105,9 +101,7 @@ class ABS(object):
         medias_list = []
         logger.error(medias)
         for m in medias:
-            logger.error(m)
             media = Media(handler=m['handler'], to=m['to'], cc=m['cc'])
-            logger.error(media.get_to())
             medias_list.append(media)
         notify.set_medias(medias_list)
 

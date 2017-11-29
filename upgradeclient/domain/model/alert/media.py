@@ -6,8 +6,8 @@ import json
 
 class Media(object):
     def __init__(self, handler=None, to=None, cc=None):
-        self.to = None
-        self.cc = None
+        self.to = to
+        self.cc = to
         self.handler = handler
 
     def get_to(self):
