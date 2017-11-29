@@ -97,11 +97,11 @@ class ABS(object):
         if crontab is None or medias is None:
             return None
         notify = Notify(crontab=crontab)
+        print '$' * 100
+        print medias
+        print '$' * 100
         medias_list = []
         for m in medias:
-            print '$' * 100
-            print m
-            print '$' * 100
             media = Media(handler=m['handler'], to=m['to'], cc=m['cc'])
             medias_list.append(media)
         notify.set_medias(medias_list)
