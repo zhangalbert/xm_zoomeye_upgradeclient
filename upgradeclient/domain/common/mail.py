@@ -14,8 +14,8 @@ from email.MIMEMultipart import MIMEMultipart
 class Email(object):
     @staticmethod
     def send(eauth, esubject, eto, ecc=[], etext='', ehtml='', efrom='limanman@xiongmaitech.com'):
-        srv_addr = eauth.get('srv_addr', None)
-        srv_port = eauth.get('srv_port', None)
+        srv_addr = eauth.get('smtp_host', None)
+        srv_port = eauth.get('smtp_port', None)
         srv_user = eauth.get('smtp_user', None)
         srv_pass = eauth.get('smtp_pass', None)
         debug_no = eauth.get('debug_num', None)
