@@ -1,3 +1,12 @@
+$def with(name)
 $var title: 固件自动升级检测平台 - 详情页
 $var icofiles: /statics/img/favicon.ico
 $var pre_cssfiles: /statics/css/main.css
+
+<div class="detail-layout-body" data-options="region:'center',border:false">
+    <div class="easyui-layout" data-options="fit:true,border:false">
+        <div id="detail-layout-body-top" data-options="region:'north',border:false">
+            $name
+        </div>
+    </div>
+</div>

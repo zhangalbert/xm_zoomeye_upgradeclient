@@ -135,6 +135,7 @@ class FirmwareListView(BaseView):
 
         return self.json_response(response_data)
 
+
 class ExceptionThreadView(BaseView):
     def GET(self):
         response_data = []
@@ -304,6 +305,7 @@ class ExceptionRealtimeView(BaseView):
 
 class FirmwareDetailView(BaseView):
     def GET(self, firmware_id):
-        return firmware_id
+        return render.detail(name='limanman')
+
 
 
