@@ -21,6 +21,7 @@ class AlertHandlerThread(Thread):
             msgdata = '{0} no notify config for {1}, ignore'.format(*fmtdata)
             logger.error(msgdata)
             return
+        logger.error(ins.to_dict())
         self.service.handle(ins)
 
 
@@ -41,7 +42,6 @@ class AlertService(BaseService):
         medias = notify.get_medias()
         crontab = notify.get_crontab()
         for media in medias:
-            logger.error(media.to_dict())
             handler = self.alert_factory.create_alert_handler(media)
             t = Thread(target=handler.handle, args=(media.get_handler(), crontab, media))
             t.setDaemon(True)
