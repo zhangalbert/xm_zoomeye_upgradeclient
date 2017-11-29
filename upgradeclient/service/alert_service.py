@@ -17,6 +17,11 @@ class AlertHandlerThread(Thread):
 
     def run(self):
         ins = self.obj.get_data()
+        if ins.get_notify() is None:
+            fmtdata = (self.__class__.__name__, ins.NAME)
+            msgdata = '{0} no notify config for {1}, ignore'.format(*fmtdata)
+            logger.error(msgdata)
+            return
         self.service.handle(ins)
 
 
@@ -28,11 +33,6 @@ class AlertService(BaseService):
     def start(self):
         for name in self.dao_factory:
             dao = self.dao_factory[name]
-            if dao.get_notify() is None:
-                fmtdata = (self.__class__.__name__, name)
-                msgdata = '{0} no notify config for {1}, ignore'.format(*fmtdata)
-                logger.error(msgdata)
-                continue
             t = AlertHandlerThread(dao, self)
             t.daemon = True
             t.start()
