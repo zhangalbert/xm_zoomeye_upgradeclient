@@ -63,3 +63,6 @@
 ***
 
 * #### webui-detail
+![Flow Chart](https://raw.githubusercontent.com/xmdevops/xm_zoomeye_upgradeclient/master/docs/design/webui_detail.png)
+
+***
