@@ -44,8 +44,16 @@ class Email(object):
             msgalternative.attach(msghtml)
 
         # 发送邮件区
-        smtp = smtplib.SMTP(srv_addr, srv_port)
-        smtp.set_debuglevel(debug_no)
-        smtp.login(srv_user, srv_pass)
-        smtp.sendmail(efrom, eto, msgmeta.as_string())
-        smtp.quit()
+        return_res = {'is_success': False, 'error': ''}
+        try:
+            smtp = smtplib.SMTP(srv_addr, srv_port)
+            smtp.set_debuglevel(debug_no)
+            smtp.login(srv_user, srv_pass)
+            smtp.sendmail(efrom, eto, msgmeta.as_string())
+            smtp.quit()
+            return_res['is_success'] = True
+        except Exception as _:
+            return_res = {'is_success': False, 'error': e}
+            return return_res
+        return return_res
+

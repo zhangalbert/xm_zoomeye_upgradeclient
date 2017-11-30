@@ -5,13 +5,14 @@ import time
 import json
 import sched
 import datetime
+import traceback
 
 
 from upgradeclient.database.database import db
 from upgradeclient.domain.common.file import File
 from upgradeclient.domain.common.mail import Email
+from upgradeclient.domain.common.filter import Q, R
 from upgradeclient.domain.common.logger import Logger
-from upgradeclient.domain.common.crontab import CronTab
 from upgradeclient.domain.bl.handlers.alert.base import BaseHandler
 
 logger = Logger.get_logger(__name__)
@@ -21,14 +22,17 @@ class EmailHandler(BaseHandler):
     def __init__(self, conf_path=None):
         super(EmailHandler, self).__init__(conf_path)
 
-    @staticmethod
-    def timer_generator(crontab):
-        entry = CronTab(crontab)
+    def validate(self, obj):
+        q = Q(obj__smtp_host__not_exact='') & \
+            Q(obj__smtp_port__not_exact='') & \
+            Q(obj__smtp_user__not_exact='') & \
+            Q(obj__smtp_pass__not_exact='') & \
+            Q(obj__debug_num__not_exact='')
 
-        return entry
+        return R(obj, q_ins=q)
 
     def handle(self, name, crontab, obj):
-        t = self.__class__.timer_generator(crontab)
+        t = self.timer_generator(crontab)
         s = sched.scheduler(time.time, time.sleep)
         while True:
             s.enter(t.next(), 1, self.report_hook, (name, obj,))
@@ -54,32 +58,49 @@ class EmailHandler(BaseHandler):
         return res_data
 
     def load_config(self):
-        jtxt_data = File.read_content(self.conf_path)
-        dict_data = json.loads(jtxt_data)
+        dict_data = {}
+        try:
+            jtxt_data = File.read_content(self.conf_path)
+            dict_data = json.loads(jtxt_data)
+        except Exception as e:
+            fmtdata = (self.__class__.__name__, e)
+            msgdata = '{0} load config with exception, exp={0}'.format(*fmtdata)
+            logger.error(msgdata)
+            logger.error(traceback.format_exc())
 
         return dict_data
 
     def get_html(self, data):
-        html = '<table><thead><tr><td>型号</td><td>异常</td></tr></thead><tbody>'
+
+        html = '<ul>'
         for d in data:
-            html += '<tr><td>' + d[4] + '</td><td>' + d[-2] + '</td></tr>'
-        html += '</tbody></table>'
+            html += '<li>' + d[-2] + '</li>'
+        html += '</ul>'
 
         return html
 
     def report_hook(self, name, obj):
         data = self.get_data(name)
+        if not data:
+            logger.warning('{0} get no abnormal data, ignore, wait next scheduler')
+            return
         html = self.get_html(data)
 
         dict_conf = self.load_config()
         mail_conf = dict_conf.get('email', None)
-        if mail_conf is None:
+        obj = type('obj', (object,), mail_conf or {})
+        if not self.validate(obj):
+            fmtdata = (self.__class__.__name__,)
+            msgdata = '{0} load invalid conf (smtp_host,smtp_port,smtp_user,smtp_pass,debug_num)'.format(*fmtdata)
+            logger.error(msgdata)
             return
-        print '*' * 100
-        print name
-        print dict_conf
-        print mail_conf
-        print obj.get_cc()
-        print obj.get_to()
-        print '*' * 100
-        Email.send(mail_conf, u'测试邮件', obj.get_to(), ecc=obj.get_cc(), ehtml=html)
+
+        email_res = Email.send(mail_conf,
+                               u'云产品线-固件上传异常检测: 近日{0}自动升级异常检测结果'.format(name.upper()),
+                               obj.get_to() or ['limanman@xiongmaitech.com'], ecc=obj.get_cc(), ehtml=html)
+        if email_res['is_success'] is False:
+            fmtdata = (self.__class__, email_res['error'])
+            msgdata = '{0} send mail with exception, exp={1}'.format(*fmtdata)
+            logger.error(msgdata)
+            self.insert_to_db(log_level='error ',  log_message=msgdata)
+

@@ -7,6 +7,7 @@ import datetime
 
 from upgradeclient.database.database import db
 from upgradeclient.domain.common.helper import Helper
+from upgradeclient.domain.common.crontab import CronTab
 
 
 class BaseHandler(object):
@@ -48,10 +49,16 @@ class BaseHandler(object):
                 continue
             os.remove(f)
 
-    def validate(self):
+    def validate(self, obj):
         raise NotImplementedError
 
     def handle(self, name, crontab, obj):
         raise NotImplementedError
+
+    def timer_generator(crontab):
+        entry = CronTab(crontab)
+
+        return entry
+
 
 
