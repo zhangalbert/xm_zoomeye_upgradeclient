@@ -1,10 +1,10 @@
 {
   "email": {
     "_comments": "",
-    "smtp_host": "smtphz.qiye.163.com",
+    "smtp_host": "",
     "smtp_port": 25,
-    "smtp_user": "admin",
-    "smtp_pass": "7Qc8Ef9Jh61",
+    "smtp_user": "",
+    "smtp_pass": "",
     "debug_num": 1
   }
 }

@@ -12,15 +12,11 @@
       "medias": [
         {
           "handler": "email",
-          "to": [
-              "xmdevops@vip.qq.com"
-          ],
-          "cc": [
-            "xmdevops@vip.qq.com"
-          ]
+          "to": [],
+          "cc": []
         }
       ],
-      "crontab": "36 18 * * *"
+      "crontab": "0 23 * * *"
     }
   },
   "dvr": {
@@ -36,15 +32,11 @@
       "medias": [
         {
           "handler": "email",
-          "to": [
-              "xmdevops@vip.qq.com"
-          ],
-          "cc": [
-            "xmdevops@vip.qq.com"
-          ]
+          "to": [],
+          "cc": []
         }
       ],
-      "crontab": "36 18 * * *"
+      "crontab": "0 23 * * *"
     }
   },
   "xmjp": {
@@ -60,15 +52,11 @@
       "medias": [
         {
           "handler": "email",
-          "to": [
-              "xmdevops@vip.qq.com"
-          ],
-          "cc": [
-            "xmdevops@vip.qq.com"
-          ]
+          "to": [],
+          "cc": []
         }
       ],
-      "crontab": "36 18 * * *"
+      "crontab": "0 23 * * *"
     }
   }
 }

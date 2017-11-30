@@ -22,6 +22,83 @@
 
 ***
 
+#### 主要配置:
+* xm_zoomeye_upgradeclient.yaml,作为整个程序入口配置
+* /etc/upgradeclient/global.json
+```json
+{
+  "ipc": {
+    "_comments": "",
+    "base_url": "",
+    "proxy_host": "",
+    "target_host": "",
+    "revision_seconds": "",
+    "summarize_interval": "",
+    "auth_user": "",
+    "auth_pass": "",
+    "notify": {
+      "medias": [
+        {
+          "handler": "email",
+          "to": [],
+          "cc": []
+        }
+      ],
+      "crontab": "0 23 * * *"
+    }
+  },
+  "dvr": {
+    "_comments": "",
+    "base_url": "",
+    "proxy_host": "",
+    "target_host": "",
+    "revision_seconds": "",
+    "summarize_interval": "",
+    "auth_user": "",
+    "auth_pass": "",
+    "notify": {
+      "medias": [
+        {
+          "handler": "email",
+          "to": [],
+          "cc": []
+        }
+      ],
+      "crontab": "0 23 * * *"
+    }
+  }
+}
+```
+* /etc/upgradeclient/upload.json
+```json
+{
+  "rsync": [
+    {
+      "_comments": "",
+      "binpath": "",
+      "username": "",
+      "password": "",
+      "serverip": "",
+      "serverport": "",
+      "localpath": "",
+      "remotepath": ""
+    }
+  ]
+}
+```
+* /etc/upgradeclient/upload.json
+```json
+{
+  "email": {
+    "_comments": "",
+    "smtp_host": "",
+    "smtp_port": 25,
+    "smtp_user": "",
+    "smtp_pass": "",
+    "debug_num": 1
+  }
+}
+```
 
 #### 管理界面:
 `http://<ip>:<port>/, 默认监听端口8081,可通过修改xm_zoomeye_upgradeclient.yaml自定义`
