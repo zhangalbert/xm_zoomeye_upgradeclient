@@ -88,8 +88,8 @@ class EmailHandler(BaseHandler):
 
         dict_conf = self.load_config()
         mail_conf = dict_conf.get('email', None)
-        obj = type('obj', (object,), mail_conf or {})
-        if not self.validate(obj):
+        tobj = type('obj', (object,), mail_conf or {})
+        if not self.validate(tobj):
             fmtdata = (self.__class__.__name__,)
             msgdata = '{0} load invalid conf (smtp_host,smtp_port,smtp_user,smtp_pass,debug_num)'.format(*fmtdata)
             logger.error(msgdata)
