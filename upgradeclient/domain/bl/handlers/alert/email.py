@@ -78,7 +78,7 @@ class EmailHandler(BaseHandler):
             html += '<li>'
             html += 'version: {0} # '.format(d[-4])
             html += 'error: {0} '.format(d[-2])
-            html += '<a href="http://10.2.5.51:8081/firmware/{0}">click</a>'.format(d[0])
+            html += '<a href="http://10.2.5.51:8081/firmware/{0}">detail</a>'.format(d[0])
             html += '</li>'
         html += '</ul>'
 
