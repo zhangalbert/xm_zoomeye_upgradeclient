@@ -55,7 +55,7 @@ class EmailHandler(BaseHandler):
             return res_data
         for ins in select_results:
             res_data.append(ins)
-            
+
         return res_data
 
     def load_config(self):
