@@ -46,7 +46,7 @@
 ***
 
 #### 软件流程:
-![Flow Chart](https://github.com/xmdevops/xm_zoomeye_upgradeclient/docs/design/flow_chart.png)
+![Flow Chart](https://raw.githubusercontent.com/xmdevops/xm_zoomeye_upgradeclient/master/docs/design/flow_chart.png)
 #### 
 
 ***
