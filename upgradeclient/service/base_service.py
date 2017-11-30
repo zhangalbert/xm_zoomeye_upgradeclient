@@ -35,7 +35,3 @@ class BaseService(object):
             'where {0}'.format(' '.join(update_where_condition))
         ]
         db.execute(' '.join(update_command))
-
-
-
-

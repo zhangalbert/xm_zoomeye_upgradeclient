@@ -4,9 +4,8 @@
 import re
 import json
 import string
-import zipfile
 
-
+from upgradeclient.domain.common import zipfile
 from upgradeclient.domain.common.file import File
 
 

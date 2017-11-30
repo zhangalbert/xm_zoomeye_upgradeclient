@@ -29,11 +29,9 @@ class EmailHandler(BaseHandler):
 
     def handle(self, name, crontab, obj):
         t = self.__class__.timer_generator(crontab)
+        s = sched.scheduler(time.time, time.sleep)
         while True:
-            s = sched.scheduler(time.time, time.sleep)
-            ts = t.next()
-            print 'next run after seconds: {0}'.format(ts)
-            s.enter(ts, 1, self.report_hook, (name, obj,))
+            s.enter(t.next(), 1, self.report_hook, (name, obj,))
             s.run()
 
     def get_data(self, name):
@@ -76,7 +74,7 @@ class EmailHandler(BaseHandler):
         dict_conf = self.load_config()
         mail_conf = dict_conf.get('email', None)
         if mail_conf is None:
-            return 
+            return
         print '*' * 100
         print name
         print dict_conf
