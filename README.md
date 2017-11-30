@@ -58,11 +58,11 @@
 ***
 
 * ##### webui-list
-![Flow Chart](https://raw.githubusercontent.com/xmdevops/xm_zoomeye_upgradeclient/master/docs/design/webui_list.png)
+![Flow Chart](https://raw.githubusercontent.com/xmdevops/xm_zoomeye_upgradeclient/master/docs/design/web_list.png)
 
 ***
 
 * #### webui-detail
-![Flow Chart](https://raw.githubusercontent.com/xmdevops/xm_zoomeye_upgradeclient/master/docs/design/webui_detail.png)
+![Flow Chart](https://raw.githubusercontent.com/xmdevops/xm_zoomeye_upgradeclient/master/docs/design/web-detail.png)
 
 ***
