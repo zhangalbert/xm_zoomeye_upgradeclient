@@ -55,7 +55,7 @@ class BaseHandler(object):
     def handle(self, name, crontab, obj):
         raise NotImplementedError
 
-    def timer_generator(crontab):
+    def timer_generator(self, crontab):
         entry = CronTab(crontab)
 
         return entry
