@@ -53,8 +53,9 @@ class EmailHandler(BaseHandler):
         select_results = db.select(' '.join(select_command))
         if select_results is None:
             return res_data
-        res_data = select_results
-
+        for ins in select_results:
+            res_data.append(ins)
+            
         return res_data
 
     def load_config(self):
