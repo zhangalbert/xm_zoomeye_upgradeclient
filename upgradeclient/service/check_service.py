@@ -152,3 +152,4 @@ class CheckService(BaseService):
                 self.send_cache_task(event)
 
             time.sleep(obj.get_summarize_interval())
+
