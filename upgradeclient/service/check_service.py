@@ -108,10 +108,6 @@ class CheckService(BaseService):
         return base_url
 
     def handle(self, name, obj):
-        print '*' * 100
-        print obj
-        print obj.NAME
-        print '*' * 100
         url = obj.get_base_url()
         filter_ins = self.filter_factory[name]
         self.check.set_commit_info_style(style_num=1)
@@ -139,14 +135,14 @@ class CheckService(BaseService):
             merged_changes = {}
             merged_urlmaps = {}
             for item in latest_changes:
-                obj = type('obj', (object,), item)
-                base_url = self.get_baseurl(obj.download_url)
-                if not filter_ins.release_note_validate(obj):
-                    if base_url in merged_changes and filter_ins.firmware_name_validate(obj):
+                cobj = type('obj', (object,), item)
+                base_url = self.get_baseurl(cobj.download_url)
+                if not filter_ins.release_note_validate(cobj):
+                    if base_url in merged_changes and filter_ins.firmware_name_validate(cobj):
                         merged_changes[base_url].append(obj)
                     continue
-                merged_changes.setdefault(os.path.dirname(obj.get_download_url()), [])
-                merged_urlmaps.setdefault(os.path.dirname(obj.get_download_url()), obj)
+                merged_changes.setdefault(os.path.dirname(cobj.download_url), [])
+                merged_urlmaps.setdefault(os.path.dirname(cobj.download_url), cobj)
 
             for item in merged_urlmaps:
                 event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
