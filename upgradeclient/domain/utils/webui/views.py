@@ -30,7 +30,6 @@ class BaseView(object):
     'last_revision': ins.last_revision,
     'last_action': ins.last_action,
     'log_message': ins.log_message,
-    'created_date': ins.created_time.strftime('%Y-%m-%d'),
     'created_time': ins.created_time.strftime('%H-%M-%S')
     """
     def json_response(self, data):
