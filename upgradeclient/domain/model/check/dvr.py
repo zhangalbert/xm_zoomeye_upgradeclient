@@ -10,6 +10,12 @@ from upgradeclient.domain.model.check.abs import ABS
 class DVR(ABS):
     NAME = 'dvr'
 
+    def __init__(self, base_url=None, proxy_host=None, target_host=None, revision_seconds=None, summarize_interval=None,
+                 auth_user=None, auth_pass=None, notify=None):
+        super(DVR, self).__init__(base_url=base_url, proxy_host=proxy_host, target_host=target_host,
+                                  revision_seconds=revision_seconds, summarize_interval=summarize_interval,
+                                  auth_user=auth_user, auth_pass=auth_pass, notify=notify)
+
     @staticmethod
     def from_json(json_data):
         all_dict = json.loads(json_data)
