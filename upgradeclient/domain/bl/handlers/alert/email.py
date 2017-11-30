@@ -102,7 +102,7 @@ class EmailHandler(BaseHandler):
 
         email_res = Email.send(mail_conf,
                                u'云产品线-固件上传异常检测: 近日{0}自动升级异常检测结果'.format(name.upper()),
-                               obj.get_to() or ['limanman@xiongmaitech.com'], ecc=obj.get_cc(), ehtml=html)
+                               obj.get_to(), ecc=obj.get_cc(), ehtml=html)
         if email_res['is_success'] is False:
             fmtdata = (self.__class__, email_res['error'])
             msgdata = '{0} send mail with exception, exp={1}'.format(*fmtdata)
