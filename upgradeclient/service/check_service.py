@@ -125,16 +125,16 @@ class CheckService(BaseService):
                 logger.info(msgdata)
                 break
             end_time = datetime.datetime.now() + datetime.timedelta(days=1)
-            sta_time = datetime.datetime.now() - datetime.timedelta(days=1, seconds=obj.revision_seconds)
+            sta_time = datetime.datetime.now() - datetime.timedelta(days=1, seconds=obj.get_revision_seconds())
             try:
                 latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
                                                                end_time.timetuple())
             except Exception as e:
-                fmtdata = (self.__class__.__name__, name, obj.summarize_interval, os.getpid(), e)
+                fmtdata = (self.__class__.__name__, name, obj.get_summarize_interval(), os.getpid(), e)
                 msgdata = '{0} sub process {1} check with exception, wait {2} seconds, pid={3} exp={4}'.format(*fmtdata)
                 self.insert_to_db(log_level='error', log_message=msgdata)
                 logger.error(msgdata)
-                time.sleep(obj.summarize_interval)
+                time.sleep(obj.get_summarize_interval())
                 continue
             merged_changes = {}
             merged_urlmaps = {}
@@ -145,8 +145,8 @@ class CheckService(BaseService):
                     if base_url in merged_changes and filter_ins.firmware_name_validate(obj):
                         merged_changes[base_url].append(obj)
                     continue
-                merged_changes.setdefault(os.path.dirname(obj.download_url), [])
-                merged_urlmaps.setdefault(os.path.dirname(obj.download_url), obj)
+                merged_changes.setdefault(os.path.dirname(obj.get_download_url()), [])
+                merged_urlmaps.setdefault(os.path.dirname(obj.get_download_url()), obj)
 
             for item in merged_urlmaps:
                 event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
@@ -155,4 +155,4 @@ class CheckService(BaseService):
                 event.set_data(event_data)
                 self.send_cache_task(event)
 
-            time.sleep(obj.summarize_interval)
+            time.sleep(obj.get_summarize_interval())
