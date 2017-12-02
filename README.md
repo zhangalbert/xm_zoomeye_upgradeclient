@@ -60,23 +60,6 @@
 * /etc/xm_zoomeye_upgradeclient/upload/upload.json
 ```json
 {
-  "rsync": [
-    {
-      "_comments": "",
-      "binpath": "",
-      "username": "",
-      "password": "",
-      "serverip": "",
-      "serverport": "",
-      "localpath": "",
-      "remotepath": ""
-    }
-  ]
-}
-```
-* /etc/upgradeclient/upload.json
-```json
-{
   "default": {
     "rsync": {
       "_comments": "",
@@ -87,6 +70,21 @@
       "serverport": "",
       "localpath": "",
       "remotepath": ""
+    }
+  }
+}
+```
+* /etc/xm_zoomeye_upgradeclient/alert/alert.json
+```json
+{
+  "default": {
+    "email": {
+      "_comments": "",
+      "smtp_host": "",
+      "smtp_port": 25,
+      "smtp_user": "",
+      "smtp_pass": "",
+      "debug_num": 1
     }
   }
 }
