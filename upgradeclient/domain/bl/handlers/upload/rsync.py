@@ -2,12 +2,13 @@
 
 
 import os
+import json
 import tempfile
 import subprocess
 
-
 from upgradeclient.database.database import Database
 from upgradeclient.domain.common.logger import Logger
+from upgradeclient.domain.model.upload.rsync import Rsync
 from upgradeclient.domain.bl.handlers.upload.base import BaseHandler
 
 
@@ -15,8 +16,8 @@ logger = Logger.get_logger(__name__)
 
 
 class RsyncHandler(BaseHandler):
-    def __init__(self, cache=None):
-        super(RsyncHandler, self).__init__(cache=cache)
+    def __init__(self, cache=None, conf_path=None):
+        super(RsyncHandler, self).__init__(cache=cache, conf_path=conf_path)
 
     def setmode(self, path, mode):
         if not os.path.exists(path) or not str(mode).isdigit():
@@ -31,7 +32,7 @@ class RsyncHandler(BaseHandler):
         obj.set_password(password_file)
 
     def set_localpath(self, obj):
-        obj.set_localpath(os.path.join(self.cache.base_path, obj.get_localpath()))
+        obj.set_localpath(os.path.join(self.cache.base_path, 'upgrade_files', obj.get_localpath()))
 
     def command(self, obj):
         execute_command = []
@@ -62,12 +63,22 @@ class RsyncHandler(BaseHandler):
                 current_position = fd.tell()
                 if p.poll() is not None:
                     break
-        return p.returncode == 0
+        return_res = {'is_success': p.returncode == 0, 'error': p.stderr.read()}
+
+        return return_res
 
     def handle(self, obj):
-        command = self.command(obj)
+        conf_dict = self.get_conf_dict(obj)
+        if not conf_dict:
+            return
+        robj = Rsync.from_json(json.dumps(conf_dict))
+        command = self.command(robj)
+
         logger.debug('upload service start {0}'.format(command))
-        if self.execute(command) is True:
-            logger.info('{0} execute successfully'.format(command))
+        execute_res = self.execute(command)
+        if execute_res['is_success'] is False:
+            logger.error('{0} execute with exception, exp={1}'.format(command, execute_res['error']))
         else:
-            logger.error('{0} execute failed'.format(command))
+            logger.info('{0} execute successfully'.format(command))
+
+

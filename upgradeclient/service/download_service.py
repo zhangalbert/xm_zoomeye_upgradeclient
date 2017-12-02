@@ -34,13 +34,15 @@ class DownloadService(BaseService):
         self.handler_factory = handler_factory
         self.check_interval = check_interval or 15
 
-    def start(self):
-        """ 启动download_service
-
-        """
-        # 防止线程之间竞争makedirs导致OSError
+    def pre_start(self):
         fdirname = os.path.join(self.cache.base_path, 'download_cache')
         not os.path.exists(fdirname) and os.makedirs(fdirname)
+
+    def post_start(self):
+        pass
+
+    def start(self):
+        self.pre_start()
 
         def target():
             while True:
@@ -58,12 +60,15 @@ class DownloadService(BaseService):
                     threads_status = map(lambda _: not _.isAlive(), self.sub_threads)
                     if all(threads_status):
                         break
-                    time.sleep(1)
+                    time.sleep(5)
+
                 fmtdata = (self.__class__.__name__, self.check_interval, len(messages))
                 msgdata = '{0} thread group is finished, wait {1} seconds, num={2}'.format(*fmtdata)
                 self.insert_to_db(log_level='info', log_message=msgdata)
                 logger.info(msgdata)
+
                 time.sleep(self.check_interval)
+
         t = Thread(target=target)
         t.setDaemon(True)
         t.start()
@@ -74,8 +79,8 @@ class DownloadService(BaseService):
         if os.path.exists(filepath):
             fmtdata = (self.__class__.__name__, filepath)
             msgdata = '{0} download_cache file has not been consumed, ignore, path={0}'.format(*fmtdata)
-            self.insert_to_db(log_level='warning', log_message=msgdata)
             logger.warning(msgdata)
             return
-        handler = self.handler_factory.create_download_handler(obj)
+        handler_name = obj.get_name()
+        handler = self.handler_factory.create_download_handler(handler_name)
         handler.handle(obj)

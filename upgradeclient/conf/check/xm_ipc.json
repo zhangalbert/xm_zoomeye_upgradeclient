@@ -1,0 +1,30 @@
+{
+  "name": "xm_ipc",
+  "auth_user": "",
+  "auth_pass": "",
+  "_comments": "",
+  "base_url": "",
+  "proxy_host": "",
+  "target_host": "",
+  "revision_seconds": "",
+  "summarize_interval": "",
+  "check_filter": "default",
+  "alert": {
+    "medias": [
+      {
+        "relation_name": "default",
+        "relation_type": "email",
+        "to": [],
+        "cc": []
+      }
+    ],
+    "crontab": "0 23 * * *"
+  },
+  "upload": [
+    {
+      "relation_name": "default",
+      "relation_type": "rsync"
+    }
+  ],
+  "target_cache": "xm_upgradefiles"
+}

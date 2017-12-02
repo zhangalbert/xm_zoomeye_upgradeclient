@@ -4,7 +4,7 @@
 import json
 
 
-class Notify(object):
+class Alert(object):
     def __init__(self, medias=None, crontab=None):
         self.medias = medias
         self.crontab = crontab
@@ -41,6 +41,7 @@ class Notify(object):
         medias = dict_data.get('medias', None)
         crontab = dict_data.get('crontab', None)
 
-        notify = Notify(medias=medias, crontab=crontab)
+        alert = Alert(medias=medias, crontab=crontab)
 
-        return notify
+        return alert
+

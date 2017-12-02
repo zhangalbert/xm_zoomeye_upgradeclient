@@ -3,6 +3,7 @@
 
 import datetime
 
+
 from upgradeclient.database.database import db
 from upgradeclient.domain.common.helper import Helper
 
@@ -35,3 +36,12 @@ class BaseService(object):
             'where {0}'.format(' '.join(update_where_condition))
         ]
         db.execute(' '.join(update_command))
+
+    def start(self):
+        raise NotImplementedError
+
+    def pre_start(self):
+        raise NotImplementedError
+
+    def post_start(self):
+        raise NotImplementedError

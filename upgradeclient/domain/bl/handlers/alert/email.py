@@ -15,6 +15,7 @@ from upgradeclient.domain.common.filter import Q, R
 from upgradeclient.domain.common.logger import Logger
 from upgradeclient.domain.bl.handlers.alert.base import BaseHandler
 
+
 logger = Logger.get_logger(__name__)
 
 
@@ -58,19 +59,6 @@ class EmailHandler(BaseHandler):
 
         return res_data
 
-    def load_config(self):
-        dict_data = {}
-        try:
-            jtxt_data = File.read_content(self.conf_path)
-            dict_data = json.loads(jtxt_data)
-        except Exception as e:
-            fmtdata = (self.__class__.__name__, e)
-            msgdata = '{0} load config with exception, exp={0}'.format(*fmtdata)
-            logger.error(msgdata)
-            logger.error(traceback.format_exc())
-
-        return dict_data
-
     def get_html(self, data):
 
         html = '<ul>'
@@ -91,21 +79,22 @@ class EmailHandler(BaseHandler):
             return
         html = self.get_html(data)
 
-        dict_conf = self.load_config()
-        mail_conf = dict_conf.get('email', None)
-        tobj = type('obj', (object,), mail_conf or {})
+        dict_conf = self.get_conf_dict(obj)
+        tobj = type('tobj', (object,), dict_conf or {})
         if not self.validate(tobj):
             fmtdata = (self.__class__.__name__,)
             msgdata = '{0} load invalid conf (smtp_host,smtp_port,smtp_user,smtp_pass,debug_num)'.format(*fmtdata)
             logger.error(msgdata)
             return
 
-        email_res = Email.send(mail_conf,
+        email_res = Email.send(dict_conf,
                                u'云产品线-固件上传异常检测: 近日{0}自动升级异常检测结果'.format(name.upper()),
                                obj.get_to(), ecc=obj.get_cc(), ehtml=html)
+
         if email_res['is_success'] is False:
             fmtdata = (self.__class__, email_res['error'])
             msgdata = '{0} send mail with exception, exp={1}'.format(*fmtdata)
             logger.error(msgdata)
             self.insert_to_db(log_level='error ',  log_message=msgdata)
+
 

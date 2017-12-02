@@ -20,22 +20,20 @@ logger = Logger.get_logger(__name__)
 class FirmwareHandler(BaseHandler):
     def __init__(self, *args, **kwargs):
         super(FirmwareHandler, self).__init__(*args, **kwargs)
-        self.event_type = EventType.DOWNLOADING_FIRMWARE
+        self.event_type = EventType.downloading_firmware
 
-    def create_files(self, obj):
-        is_created = True
+    def create_files(self, dict_data, relative_path):
+        return_res = {'is_success': True, 'error': ''}
 
         tdirname = os.path.join(self.cache.base_path, 'download_cache')
-        dst_name = os.path.join(tdirname, os.path.basename(obj['Firmware'].relative_path))
+        dst_name = os.path.join(tdirname, os.path.basename(dict_data['Firmware'].relative_path))
         upgdevid = Firmware.convert_devid(Firmware.get_devid(dst_name))
         if upgdevid is None:
-            is_created = False
-            return is_created
+            return_res = {'is_success': False, 'error': 'invalid devid in InstallDesc'}
+            return return_res
 
-        upgfiles = os.path.join(self.cache.base_path, 'upgrade_files', upgdevid)
-        # upg_date = os.path.join(upgfiles, obj['Date'])
-        # os.path.exists(upg_date) and shutil.rmtree(upg_date)
-        for k, v in obj.iteritems():
+        upgfiles = os.path.join(self.cache.base_path, relative_path, upgdevid)
+        for k, v in dict_data.iteritems():
             if getattr(v, 'relative_path', None) is not None and getattr(v, 'file_contents', None):
                 path = os.path.join(upgfiles, v.relative_path)
                 data = v.file_contents
@@ -43,7 +41,7 @@ class FirmwareHandler(BaseHandler):
                     continue
                 File.write_content(data, path)
 
-        return is_created
+        return return_res
 
     def is_allow_gen(self, obj):
         q = Q(obj__ChangeLog_SimpChinese__file_contents__not_exact='') & \
@@ -76,6 +74,7 @@ class FirmwareHandler(BaseHandler):
             'file_contents': ExtStr(open(dst_name, 'r+b').read()).strip(),
         })
         eventdata['XmCloudUpgrade'] = ExtStr(eventdata['XmCloudUpgrade'])
+
         event_obj = type('obj', (object,), eventdata)
         if not self.is_allow_gen(event_obj):
             return None
@@ -83,42 +82,43 @@ class FirmwareHandler(BaseHandler):
         return eventdata
 
     def handle(self, obj):
-        """ 处理DOWNLOADING_FIRMWARE事件
-        1. 下载.bin文件到download_cache
-        2. 下载成功调用analysis_log解析event_data数据并创建指定升级目录
-        3. 结束后删除download_cache内对应的任务
-        """
+        filename = obj.get_filename()
         file_url = obj.get_download_url()
+
         sdirname = os.path.join(self.cache.base_path, 'check_cache')
         tdirname = os.path.join(self.cache.base_path, 'download_cache')
-        fsrcname = obj.get_filename().rsplit('_', 1)[0]
-        src_name = os.path.join(sdirname, obj.get_filename())
+        fsrcname = filename.rsplit('_', 1)[0]
+        src_name = os.path.join(sdirname, filename)
         dst_name = os.path.join(tdirname, fsrcname)
 
         download = Download()
-        if not download.wget(obj.get_download_url(), dst_name):
-            fmtdata = (self.__class__.__name__, obj.get_filename(), obj.get_download_url())
-            msgdata = '{0} download {1} failed, url={2}'.format(*fmtdata)
+        download_res = download.wget(file_url, dst_name)
+        if download_res['is_success'] is False:
+            fmtdata = (self.__class__.__name__, filename, download_res['error'], file_url)
+            msgdata = '{0} download {1} with exception, exp={2} url={3}'.format(*fmtdata)
             self.insert_to_db(obj, log_level='error', log_message=msgdata)
             logger.error(msgdata)
             return
-        eventdata = self.analysis_log(obj)
-        if eventdata is None:
+
+        eventdata = obj.get_data()
+        dict_data = self.analysis_log(obj)
+        if dict_data is None:
             self.delete(src_name, dst_name)
-            fmtdata = (self.__class__.__name__, obj.get_data()['Date'], obj.get_download_url())
+            fmtdata = (self.__class__.__name__, eventdata['Date'], file_url)
             msgdata = '{0} delected unallowed condition in releasenote {1} log, url={2}'.format(*fmtdata)
             self.insert_to_db(obj, log_level='error', log_message=msgdata)
             logger.error(msgdata)
             return
-        if not self.create_files(eventdata):
+
+        dao_data = self.get_dao_data(obj)
+        relative_path = os.path.join('upgrade_files', dao_data.get_target_cache())
+        create_res = self.create_files(dict_data, relative_path)
+        if create_res['is_success'] is False:
             self.delete(src_name, dst_name)
-            fmtdata = (self.__class__.__name__, obj.get_filename(), obj.get_download_url())
-            msgdata = '{0} delected {1} with invalid devid in InstallDesc file, url={2}'.format(*fmtdata)
+            fmtdata = (self.__class__.__name__, filename, create_res['error'], file_url)
+            msgdata = '{0} delected {1} with error, err={2}, url={3}'.format(*fmtdata)
             self.insert_to_db(obj, log_level='error', log_message=msgdata)
             logger.error(msgdata)
             return
+
         self.delete(src_name, dst_name)
-
-
-
-

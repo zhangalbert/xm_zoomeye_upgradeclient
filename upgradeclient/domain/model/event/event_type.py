@@ -2,9 +2,9 @@
 
 
 class EventType(object):
-    CHECKING = 'CHECKING'
-    ALERTING = 'ALERTING'
-    UPLOADING = 'UPLOADING'
-    DOWNLOADING = 'DOWNLOADING'
-    DOWNLOADING_FIRMWARE = 'DOWNLOADING_FIRMWARE'
-    DOWNLOADING_RELEASENOTE = 'DOWNLOADING_RELEASENOTE'
+    checking = 'checking'
+    alerting = 'alerting'
+    uploading = 'uploading '
+    downloading = 'downloading'
+    downloading_firmware = 'downloading_firmware'
+    downloading_releasenote = 'downloading_releasenote'

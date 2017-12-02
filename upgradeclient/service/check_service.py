@@ -17,15 +17,14 @@ logger = Logger.get_logger(__name__)
 
 
 class CheckHandlerProcess(multiprocessing.Process):
-    def __init__(self, name, obj, service):
+    def __init__(self, obj, service):
         super(CheckHandlerProcess, self).__init__()
         self.obj = obj
-        self.name = name
         self.service = service
 
     def run(self):
         ins = self.obj.get_data()
-        self.service.handle(self.name, ins)
+        self.service.handle(ins)
 
 
 class CheckService(BaseService):
@@ -43,7 +42,8 @@ class CheckService(BaseService):
         for name in self.sub_process:
             p = self.sub_process[name]
             if not p.is_alive():
-                sub_p = CheckHandlerProcess(name, self.dao_factory[name], self)
+                dao = self.dao_factory.create_check_dao(name)
+                sub_p = CheckHandlerProcess(dao, self)
                 sub_p.daemon = True
                 sub_p.start()
                 self.sub_process.pop(name)
@@ -53,24 +53,21 @@ class CheckService(BaseService):
         self.event_event.set()
         fmtdata = (self.__class__.__name__, multiprocessing.current_process().name, os.getpid())
         msgdata = '{0} main/sub process got ctrl+c signal, name={1}, pid={2}'.format(*fmtdata)
-        self.insert_to_db(log_level='warning ',  log_message=msgdata)
         logger.warning(msgdata)
 
-    def start(self):
-        """ 启动check_service
-
-        1. 多进程同时检测多个base_url是否有固件更新
-        2. 子进程异常后自动启动同配置子进程
-        3. 多进程检测数据通过对应子类过滤器最终生成下载任务对象
-        4. 异步回调写入下载任务对象到本地cacher
-        5. 优雅关闭,等待所有子进程任务执行完后,主进程关闭
-        """
-        # 防止进程之间竞争makedirs导致OSError
+    def pre_start(self):
         fdirname = os.path.join(self.cache.base_path, 'check_cache')
         not os.path.exists(fdirname) and os.makedirs(fdirname)
 
-        for name in self.dao_factory:
-            p = CheckHandlerProcess(name, self.dao_factory[name], self)
+    def post_start(self):
+        pass
+
+    def start(self):
+        self.pre_start()
+
+        for name in self.dao_factory.check_daos:
+            dao = self.dao_factory.create_check_dao(name)
+            p = CheckHandlerProcess(dao, self)
             p.daemon = True
             p.start()
             self.sub_process.update({name: p})
@@ -85,7 +82,7 @@ class CheckService(BaseService):
                     break
             if is_finished is True:
                 break
-            time.sleep(15)
+            time.sleep(5)
         fmtdata = (self.__class__.__name__,)
         msgdata = '{0} graceful closing successfully!'.format(*fmtdata)
         self.insert_to_db(log_level='info', log_message=msgdata)
@@ -97,7 +94,7 @@ class CheckService(BaseService):
         self.cache.write(json_data, relative_path=relative_path)
 
     def create_event(self, **kwargs):
-        event = Event(name=EventType.DOWNLOADING_RELEASENOTE, **kwargs)
+        event = Event(name=EventType.downloading_releasenote, **kwargs)
 
         return event
 
@@ -107,10 +104,33 @@ class CheckService(BaseService):
 
         return base_url
 
-    def handle(self, name, obj):
-        url = obj.get_base_url()
-        filter_ins = self.filter_factory[name]
+    def get_filter_handler(self, obj):
+        filter_handler_name = obj.get_name()
+        filter_handler = self.filter_factory.create_filter_handler(filter_handler_name)
+
+        return filter_handler
+
+    def get_latest_changes(self, obj):
+        latest_changes = []
+
+        url, name, summarize_interval = obj.get_base_url(), obj.get_name(), obj.get_summarize_interval()
+        end_time = datetime.datetime.now() + datetime.timedelta(days=1)
+        sta_time = datetime.datetime.now() - datetime.timedelta(days=1, seconds=obj.get_revision_seconds())
+        try:
+            latest_changes = self.check.revision_summarize(url, sta_time.timetuple(), end_time.timetuple())
+        except Exception as e:
+            fmtdata = (self.__class__.__name__, name, summarize_interval, os.getpid(), e)
+            msgdata = '{0} sub process {1} check with exception, wait {2} seconds, pid={3} exp={4}'.format(*fmtdata)
+            self.insert_to_db(log_level='error', log_message=msgdata)
+            logger.error(msgdata)
+
+        return latest_changes
+
+    def handle(self, obj):
+        url, name, summarize_interval = obj.get_base_url(), obj.get_name(), obj.get_summarize_interval()
+
         self.check.set_commit_info_style(style_num=1)
+
         signal.signal(signal.SIGINT, self.ctl_process_signal_callback)
 
         while True:
@@ -120,36 +140,32 @@ class CheckService(BaseService):
                 self.insert_to_db(log_level='info', log_message=msgdata)
                 logger.info(msgdata)
                 break
-            end_time = datetime.datetime.now() + datetime.timedelta(days=1)
-            sta_time = datetime.datetime.now() - datetime.timedelta(days=1, seconds=obj.get_revision_seconds())
-            try:
-                latest_changes = self.check.revision_summarize(url, sta_time.timetuple(),
-                                                               end_time.timetuple())
-            except Exception as e:
-                fmtdata = (self.__class__.__name__, name, obj.get_summarize_interval(), os.getpid(), e)
-                msgdata = '{0} sub process {1} check with exception, wait {2} seconds, pid={3} exp={4}'.format(*fmtdata)
-                self.insert_to_db(log_level='error', log_message=msgdata)
-                logger.error(msgdata)
-                time.sleep(obj.get_summarize_interval())
+
+            latest_changes = self.get_latest_changes(obj)
+            if not latest_changes:
+                time.sleep(summarize_interval)
                 continue
+
             merged_changes = {}
             merged_urlmaps = {}
+            filter_handler = self.get_filter_handler(obj)
             for item in latest_changes:
-                cobj = type('obj', (object,), item)
+                cobj = type('cobj', (object,), item)
                 base_url = self.get_baseurl(cobj.download_url)
-                if not filter_ins.release_note_validate(cobj):
-                    if base_url in merged_changes and filter_ins.firmware_name_validate(cobj):
-                        merged_changes[base_url].append(obj)
+                if not filter_handler.release_note_validate(cobj):
+                    if base_url in merged_changes and filter_handler.firmware_name_validate(cobj):
+                        merged_changes[base_url].append(cobj)
                     continue
                 merged_changes.setdefault(os.path.dirname(cobj.download_url), [])
                 merged_urlmaps.setdefault(os.path.dirname(cobj.download_url), cobj)
 
             for item in merged_urlmaps:
-                event = self.create_event(daoname=name, **dict(merged_urlmaps[item].__dict__))
-                event_data = map(lambda e: self.create_event(daoname=name, **dict(e.__dict__)).to_json(),
+                event_data = map(lambda e: self.create_event(daoname=obj.get_name(), **dict(e.__dict__)).to_json(),
                                  merged_changes[item])
+                event = self.create_event(daoname=obj.get_name(), **dict(merged_urlmaps[item].__dict__))
                 event.set_data(event_data)
+
                 self.send_cache_task(event)
 
-            time.sleep(obj.get_summarize_interval())
+            time.sleep(summarize_interval)
 

@@ -1,6 +1,6 @@
 {
-  "rsync": [
-    {
+  "default": {
+    "rsync": {
       "_comments": "",
       "binpath": "",
       "username": "",
@@ -10,5 +10,5 @@
       "localpath": "",
       "remotepath": ""
     }
-  ]
+  }
 }

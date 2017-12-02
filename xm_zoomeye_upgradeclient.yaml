@@ -1,149 +1,66 @@
 objects:
-  - object: XmZoomeyeUpgradeClient
-    class: upgradeclient.xm_zoomeye_upgradeclient.XmZoomeyeUpgradeClient
+  - object: XmDvrDao
+    class: upgradeclient.domain.dao.check_dao.CheckDao
     scope: singleton
     properties:
-      download_service: {ref: DownloadService}
-      upload_service: {ref: UploadService}
-      alert_service: {ref: AlertService}
-      webui_service: {ref: WebuiService}
-      check_service: {ref: CheckService}
-      constructor-args: {download_service: download_service, upload_service: upload_service, alert_service: alert_service, check_service: check_service)}
-
-  - object: AlertService
-    class: upgradeclient.service.alert_service.AlertService
-    scope: singleton
-    properties:
-      dao_factory:
-        dvr: {ref: DvrDao}
-        ipc: {ref: IpcDao}
-        xmjp: {ref: XmjpDao}
-      alert_factory: {ref: AlertHandlerFactory }
-    constructor-args: {dao_factory: dao_factory, alert_factory: alert_factory}
-
-  - object: AlertHandlerFactory
-    class: upgradeclient.domain.bl.alert_handler_factory.AlertHandlerFactory
-    scope: singleton
-    properties:
-      alert_handlers:
-        default: {ref: AlertDefaultHandler}
-        email: {ref: AlertEmailHandler}
-    constructor-args: {alert_handlers: alert_handlers}
-
-  - object: AlertDefaultHandler
-    class: upgradeclient.domain.bl.handlers.alert.default.DefaultHandler
-    scope: singleton
-    properties:
-      conf_path: /etc/upgradeclient/notify.json
+      conf_path: /etc/xm_zoomeye_upgradeclient/check/xm_dvr.json
     constructor-args: {conf_path: conf_path}
 
-  - object: AlertEmailHandler
-    class: upgradeclient.domain.bl.handlers.alert.email.EmailHandler
+  - object: XmIpcDao
+    class: upgradeclient.domain.dao.check_dao.CheckDao
     scope: singleton
     properties:
-      conf_path: /etc/upgradeclient/notify.json
+      conf_path: /etc/xm_zoomeye_upgradeclient/check/xm_ipc.json
     constructor-args: {conf_path: conf_path}
 
-  - object: WebuiService
-    class: upgradeclient.service.webui_service.WebuiService
-    scope: singleton
-    constructor-args:
-      port: 8081
-
-  - object: UploadService
-    class: upgradeclient.service.upload_service.UploadService
+  - object: XmXmjpDao
+    class: upgradeclient.domain.dao.check_dao.CheckDao
     scope: singleton
     properties:
-      cache: {ref: Cache}
-      check_interval: 15
-      dao_factory:
-        rsync: {ref: RsyncDao}
-      upload_factory:
-        rsync: {ref: RsyncHandler}
-    constructor-args: {cache: cache, check_interval: check_interval, dao_factory: dao_factory, upload_factory: upload_factory}
-
-  - object: RsyncDao
-    class: upgradeclient.domain.dao.rsync_dao.RsyncDao
-    scope: singleton
-    properties:
-      conf_path: /etc/upgradeclient/upload.json
+      conf_path: /etc/xm_zoomeye_upgradeclient/check/xm_xmjp.json
     constructor-args: {conf_path: conf_path}
 
-  - object: RsyncHandler
-    class: upgradeclient.domain.bl.handlers.upload.rsync.RsyncHandler
+  - object: XmOemDvrJfchDao
+    class: upgradeclient.domain.dao.check_dao.CheckDao
     scope: singleton
     properties:
-      cache: {ref: Cache}
-    constructor-args: {cache: cache}
+      conf_path: /etc/xm_zoomeye_upgradeclient/check/xm_oem_dvr_jfch.json
+    constructor-args: {conf_path: conf_path}
 
-  - object: CheckService
-    class: upgradeclient.service.check_service.CheckService
+  - object: XmOemDvrJfosDao
+    class: upgradeclient.domain.dao.check_dao.CheckDao
     scope: singleton
     properties:
-      check: {ref: Check}
-      cache: {ref: Cache}
-      dao_factory:
-        dvr: {ref: DvrDao}
-        ipc: {ref: IpcDao}
-        xmjp: {ref: XmjpDao}
-      filter_factory:
-        dvr: {ref: DvrFilter}
-        ipc: {ref: IpcFilter}
-        xmjp: {ref: XmjpFilter}
-    constructor-args: {check: check, cache: cache, dao_factory: dao_factory, filter_factory: filter_factory}
+      conf_path: /etc/xm_zoomeye_upgradeclient/check/xm_oem_dvr_jfos.json
+    constructor-args: {conf_path: conf_path}
 
-  - object: DownloadService
-    class: upgradeclient.service.download_service.DownloadService
+  - object: XmOemDvrJvfengDao
+    class: upgradeclient.domain.dao.check_dao.CheckDao
     scope: singleton
     properties:
-      cache: {ref: Cache}
-      handler_factory: {ref: DownloadHandlerFactory}
-      relative_path: check_cache
-      check_interval: 5
-    constructor-args: {cache: cache, handler_factory: handler_factory, relative_path: relative_path, check_interval: check_interval}
+      conf_path: /etc/xm_zoomeye_upgradeclient/check/xm_oem_dvr_jvfeng.json
+    constructor-args: {conf_path: conf_path}
 
-  - object: DownloadHandlerFactory
-    class: upgradeclient.domain.bl.download_handler_factory.DownloadHandlerFactory
+  - object: XmOemIpcJfchDao
+    class: upgradeclient.domain.dao.check_dao.CheckDao
     scope: singleton
     properties:
-      download_handlers:
-        default: {ref: DefaultHandler}
-        downloading_firmware: {ref: FirmwareHandler}
-        downloading_releasenote: {ref: ReleaseNoteHandler}
-    constructor-args: {download_handlers: download_handlers}
+      conf_path: /etc/xm_zoomeye_upgradeclient/check/xm_oem_ipc_jfch.json
+    constructor-args: {conf_path: conf_path}
 
-  - object: DefaultHandler
-    class: upgradeclient.domain.bl.handlers.download.default.DefaultHandler
+  - object: XmOemIpcJfosDao
+    class: upgradeclient.domain.dao.check_dao.CheckDao
     scope: singleton
     properties:
-      cache: {ref: Cache}
-      dao_factory:
-        dvr: {ref: DvrDao}
-        ipc: {ref: IpcDao}
-        xmjp: {ref: XmjpDao}
-    constructor-args: {cache: cache, dao_factory: dao_factory}
+      conf_path: /etc/xm_zoomeye_upgradeclient/check/xm_oem_ipc_jfos.json
+    constructor-args: {conf_path: conf_path}
 
-  - object: FirmwareHandler
-    class: upgradeclient.domain.bl.handlers.download.firmware.FirmwareHandler
+  - object: XmOemIpcJvfengDao
+    class: upgradeclient.domain.dao.check_dao.CheckDao
     scope: singleton
     properties:
-      cache: {ref: Cache}
-      dao_factory:
-        dvr: {ref: DvrDao}
-        ipc: {ref: IpcDao}
-        xmjp: {ref: XmjpDao}
-    constructor-args: {cache: cache, dao_factory: dao_factory}
-
-  - object: ReleaseNoteHandler
-    class: upgradeclient.domain.bl.handlers.download.release_note.ReleaseNoteHandler
-    scope: singleton
-    properties:
-      cache: {ref: Cache}
-      dao_factory:
-        dvr: {ref: DvrDao}
-        ipc: {ref: IpcDao}
-        xmjp: {ref: XmjpDao}
-    constructor-args: {cache: cache, dao_factory: dao_factory}
+      conf_path: /etc/xm_zoomeye_upgradeclient/check/xm_oem_ipc_jvfeng.json
+    constructor-args: {conf_path: conf_path}
 
   - object: Check
     class: upgradeclient.domain.utils.check.Check
@@ -157,38 +74,161 @@ objects:
       base_path: /tmp/xm_zoomeye_upgradeclient/
     constructor-args: {base_path: base_path}
 
-  - object: DvrDao
-    class: upgradeclient.domain.dao.dvr_dao.DvrDao
+  - object: CheckDaoFactory
+    class: upgradeclient.domain.bl.check_dao_factory.CheckDaoFactory
     scope: singleton
     properties:
-      conf_path: /etc/upgradeclient/global.json
-    constructor-args: {conf_path: conf_path}
+      check_daos:
+        xm_dvr: {ref: XmDvrDao}
+        xm_ipc: {ref: XmIpcDao}
+        xm_xmjp: {ref: XmXmjpDao}
+        xm_oem_dvr_jfch: {ref: XmOemDvrJfchDao}
+        xm_oem_dvr_jfos: {ref: XmOemDvrJfosDao}
+        xm_oem_dvr_jvfeng: {ref: XmOemDvrJvfengDao}
+        xm_oem_ipc_jfch: {ref: XmOemIpcJfchDao}
+        xm_oem_ipc_jfos: {ref: XmOemIpcJfosDao}
+        xm_oem_ipc_jvfeng: {ref: XmOemIpcJvfengDao}
+    constructor-args: {check_daos: check_daos}
 
-  - object: IpcDao
-    class: upgradeclient.domain.dao.ipc_dao.IpcDao
-    scope: singleton
-    properties:
-      conf_path: /etc/upgradeclient/global.json
-    constructor-args: {conf_path: conf_path}
-
-  - object: XmjpDao
-    class: upgradeclient.domain.dao.xmjp_dao.XmjpDao
-    scope: singleton
-    properties:
-      conf_path: /etc/upgradeclient/global.json
-    constructor-args: {conf_path: conf_path}
-
-  - object: DvrFilter
-    class: upgradeclient.domain.bl.filter.check.dvr_filter.DvrFilter
+  - object: DefaultFilterHandler
+    class: upgradeclient.domain.bl.filter.check.default_filter.DefaultFilter
     scope: singleton
     constructor-args: {}
 
-  - object: IpcFilter
-    class: upgradeclient.domain.bl.filter.check.ipc_filter.IpcFilter
+  - object: FilterHandlerFactory
+    class: upgradeclient.domain.bl.filter_handler_factory.FilterHandlerFactory
     scope: singleton
-    constructor-args: {}
+    properties:
+      filter_handlers:
+        default: {ref: DefaultFilterHandler }
+    constructor-args: {filter_handlers: filter_handlers}
 
-  - object: XmjpFilter
-    class: upgradeclient.domain.bl.filter.check.xmjp_filter.XmjpFilter
+  - object: CheckService
+    class: upgradeclient.service.check_service.CheckService
     scope: singleton
-    constructor-args: {}
+    properties:
+      check: {ref: Check}
+      cache: {ref: Cache}
+      dao_factory: {ref: CheckDaoFactory}
+      filter_factory: {ref: FilterHandlerFactory}
+    constructor-args: {check: check, cache: cache, dao_factory: dao_factory, filter_factory: filter_factory}
+
+  - object: DownloadDefaultHandler
+    class: upgradeclient.domain.bl.handlers.download.default.DefaultHandler
+    scope: singleton
+    properties:
+      cache: {ref: Cache}
+      dao_factory: {ref: CheckDaoFactory}
+    constructor-args: {cache: cache, dao_factory: dao_factory}
+
+  - object: DownloadFirmwareHandler
+    class: upgradeclient.domain.bl.handlers.download.firmware.FirmwareHandler
+    scope: singleton
+    properties:
+      cache: {ref: Cache}
+      dao_factory: {ref: CheckDaoFactory}
+    constructor-args: {cache: cache, dao_factory: dao_factory}
+
+  - object: DownloadReleaseNoteHandler
+    class: upgradeclient.domain.bl.handlers.download.release_note.ReleaseNoteHandler
+    scope: singleton
+    properties:
+      cache: {ref: Cache}
+      dao_factory: {ref: CheckDaoFactory}
+    constructor-args: {cache: cache, dao_factory: dao_factory}
+
+  - object: DownloadHandlerFactory
+    class: upgradeclient.domain.bl.download_handler_factory.DownloadHandlerFactory
+    scope: singleton
+    properties:
+      download_handlers:
+        default: {ref: DownloadDefaultHandler}
+        downloading_firmware: {ref: DownloadFirmwareHandler}
+        downloading_releasenote: {ref: DownloadReleaseNoteHandler}
+    constructor-args: {download_handlers: download_handlers}
+
+  - object: DownloadService
+    class: upgradeclient.service.download_service.DownloadService
+    scope: singleton
+    properties:
+      cache: {ref: Cache}
+      handler_factory: {ref: DownloadHandlerFactory}
+      relative_path: check_cache
+      check_interval: 5
+    constructor-args: {cache: cache, handler_factory: handler_factory, relative_path: relative_path, check_interval: check_interval}
+
+  - object: UploadRsyncHandler
+    class: upgradeclient.domain.bl.handlers.upload.rsync.RsyncHandler
+    scope: singleton
+    properties:
+      cache: {ref: Cache}
+      conf_path: /etc/xm_zoomeye_upgradeclient/upload/upload.json
+    constructor-args: {cache: cache, conf_path: conf_path}
+
+  - object: UploadHandlerFactory
+    class: upgradeclient.domain.bl.upload_handler_factory.UploadHandlerFactory
+    scope: singleton
+    properties:
+      upload_handlers:
+        rsync: {ref: UploadRsyncHandler}
+        default: {ref: UploadRsyncHandler}
+    constructor-args: {upload_handlers: upload_handlers}
+
+  - object: UploadService
+    class: upgradeclient.service.upload_service.UploadService
+    scope: singleton
+    properties:
+      cache: {ref: Cache}
+      check_interval: 15
+      dao_factory: {ref: CheckDaoFactory}
+      handler_factory: {ref: UploadHandlerFactory}
+    constructor-args: {cache: cache, check_interval: check_interval, dao_factory: dao_factory, handler_factory: upload_factory}
+
+  - object: WebuiService
+    class: upgradeclient.service.webui_service.WebuiService
+    scope: singleton
+    constructor-args:
+      port: 8081
+
+  - object: AlertDefaultHandler
+    class: upgradeclient.domain.bl.handlers.alert.default.DefaultHandler
+    scope: singleton
+    properties:
+      conf_path: /etc/xm_zoomeye_upgradeclient/alert/alert.json
+    constructor-args: {conf_path: conf_path}
+
+  - object: AlertEmailHandler
+    class: upgradeclient.domain.bl.handlers.alert.email.EmailHandler
+    scope: singleton
+    properties:
+      conf_path: /etc/xm_zoomeye_upgradeclient/alert/alert.json
+    constructor-args: {conf_path: conf_path}
+
+  - object: AlertHandlerFactory
+    class: upgradeclient.domain.bl.alert_handler_factory.AlertHandlerFactory
+    scope: singleton
+    properties:
+      alert_handlers:
+        default: {ref: AlertDefaultHandler}
+        email: {ref: AlertEmailHandler}
+    constructor-args: {alert_handlers: alert_handlers}
+
+  - object: AlertService
+    class: upgradeclient.service.alert_service.AlertService
+    scope: singleton
+    properties:
+      dao_factory: {ref: CheckDaoFactory}
+      handler_factory: {ref: AlertHandlerFactory }
+    constructor-args: {dao_factory: dao_factory, handler_factory: handler_factory}
+
+
+  - object: XmZoomeyeUpgradeClient
+    class: upgradeclient.xm_zoomeye_upgradeclient.XmZoomeyeUpgradeClient
+    scope: singleton
+    properties:
+      download_service: {ref: DownloadService}
+      upload_service: {ref: UploadService}
+      alert_service: {ref: AlertService}
+      webui_service: {ref: WebuiService}
+      check_service: {ref: CheckService}
+      constructor-args: {download_service: download_service, upload_service: upload_service, alert_service: alert_service, check_service: check_service)}

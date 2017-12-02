@@ -22,7 +22,7 @@ logger = Logger.get_logger(__name__)
 class ReleaseNoteHandler(BaseHandler):
     def __init__(self, *args, **kwargs):
         super(ReleaseNoteHandler, self).__init__(*args, **kwargs)
-        self.event_type = EventType.DOWNLOADING_RELEASENOTE
+        self.event_type = EventType.downloading_releasenote
         
     def send_task_cache(self, event):
         json_data = event.to_json()
@@ -31,7 +31,7 @@ class ReleaseNoteHandler(BaseHandler):
 
     def create_event(self, **kwargs):
         kwargs.pop('name')
-        event = Event(name=EventType.DOWNLOADING_FIRMWARE, **kwargs)
+        event = Event(name=EventType.downloading_firmware, **kwargs)
 
         return event
 
@@ -48,67 +48,74 @@ class ReleaseNoteHandler(BaseHandler):
 
     def analysis_log(self, obj):
         event_list = []
+        event_data = obj.get_data()
+
+        filename = obj.get_filename()
+        file_url = obj.get_download_url()
+
         fdirname = os.path.join(self.cache.base_path, 'download_cache')
-        filename = os.path.join(fdirname, obj.get_filename())
-        if not obj.get_data():
-            fmtdata = (self.__class__.__name__, obj.get_download_url())
+        filename = os.path.join(fdirname, filename)
+
+        if not event_data:
+            fmtdata = (self.__class__.__name__, file_url)
             msgdata = '{0} detected no event data for releasenote, url={1}'.format(*fmtdata)
             self.insert_to_db(obj, log_level='warning', log_message=msgdata)
             logger.warning(msgdata)
             return event_list
+
         objs_list = map(lambda o: type('obj', (object,), json.loads(o)), obj.get_data())
 
         dict_data = Firmware.release_note2dict(filename)
         if not dict_data:
-            fmtdata = (self.__class__.__name__, obj.get_download_url())
+            fmtdata = (self.__class__.__name__, file_url)
             msgdata = '{0} parse releasenot use Firmware with exception, url={1}'.format(*fmtdata)
             self.insert_to_db(obj, log_level='error', log_message=msgdata)
             logger.error(msgdata)
             return event_list
-
-        conf_dao = self.dao_factory[obj.get_daoname()]
-        ins = conf_dao.get_data()
+        dao_data = self.get_dao_data(obj)
         end_time = datetime.datetime.now()
-        sta_time = end_time - datetime.timedelta(seconds=ins.revision_seconds)
-
+        sta_time = end_time - datetime.timedelta(seconds=dao_data.get_revision_seconds())
         for key, val in dict_data.iteritems():
             date, flag = key
             sta_date = sta_time.strftime('%Y-%m-%d')
             end_date = end_time.strftime('%Y-%m-%d')
             if date < sta_date or date > end_date:
                 fmtdata = (self.__class__.__name__, date, sta_date, end_date, obj.get_download_url())
-                msgdata = '{0} delected invalid date-range in releasenot, cur={1} stat={2} end ={3} url={4}'.format(
-                    *fmtdata
-                )
-                logger.warning(msgdata)
+                msgdata = '{0} delected invalid date-range in releasenote, cur={1} stat={2} end ={3} url={4}'
+                logger.warning(msgdata.format(*fmtdata))
                 continue
+
             q = Q(obj__download_url__contains=date) & Q(obj__filename__contains=flag)
             filter_res = self.filter_event(q, objs_list)
             filter_res and val.update({'Date': date})
             map(lambda e: e.set_data(val), filter_res)
+
             event_list.extend(filter_res)
 
         return event_list
 
     def handle(self, obj):
-        """ 处理DOWNLOADING_RELEASENOTE事件
-        1. 下载release_note文件到download_cache
-        2. 下载成功调用analysis_log解析release_note文件
-        3. 结束后删除check_cache内对应的任务
-        """
+        filename = obj.get_filename()
+        file_url = obj.get_download_url()
+
         tdirname = os.path.join(self.cache.base_path, 'download_cache')
         sdirname = os.path.join(self.cache.base_path, 'check_cache')
-        dst_name = os.path.join(tdirname, obj.get_filename())
-        src_name = os.path.join(sdirname, obj.get_filename())
+        dst_name = os.path.join(tdirname, filename)
+        src_name = os.path.join(sdirname, filename)
 
         download = Download()
-        if not download.wget(obj.get_download_url(), dst_name):
-            fmtdata = (self.__class__.__name__, obj.get_filename(), obj.get_download_url())
-            msgdata = '{0} download {1} failed, url={2}'.format(*fmtdata)
+        download_res = download.wget(file_url, dst_name)
+
+        if download_res['is_success'] is False:
+            fmtdata = (self.__class__.__name__, filename, download_res['error'], file_url)
+            msgdata = '{0} download {1} with exception, exp={2} url={3}'.format(*fmtdata)
             self.insert_to_db(obj, log_level='error', log_message=msgdata)
             logger.error(msgdata)
             return
+
         event_list = self.analysis_log(obj)
         for event in event_list:
             self.send_task_cache(event)
+
         self.delete(src_name, dst_name)
+

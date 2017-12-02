@@ -16,9 +16,9 @@ logger = Logger.get_logger(__name__)
 
 def reporthook(cls, a, b, c):
     """
-    1. a 已经下载的数据块
-    2. b 数据块的大小
-    3. c 远程文件大小
+    a 已经下载的数据块
+    b 数据块的大小
+    c 远程文件大小
     """
     percent = min(100.0 * a * b / c, 100)
     fmtdata = (cls.__class__.__name__, threading.currentThread().name, cls.filename, percent)
@@ -38,7 +38,7 @@ class Download(object):
             return
 
     def wget(self, url, filename, **kwargs):
-        is_success = True
+        return_res = {'is_success': True, 'error': ''}
 
         self.url, self.filename = url, filename
         download_fname = '{0}.downloading'.format(filename)
@@ -53,11 +53,12 @@ class Download(object):
             msgdata = '{0} thread {1} download {2} from {3} success'.format(*fmtdata)
             logger.info(msgdata)
         except Exception as e:
-            is_success = False
             fmtdata = (self.__class__.__name__, threading.currentThread().name, filename, url, e)
             msgdata = '{0} thread {1} download {2} from {3} with exception, exp={4}'.format(*fmtdata)
             logger.error(msgdata)
+            return_res = {'is_success': False, 'error': e}
         finally:
             os.path.exists(download_fname) and os.remove(download_fname)
 
-        return is_success
+        return return_res
+

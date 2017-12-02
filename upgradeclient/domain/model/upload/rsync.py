@@ -9,12 +9,12 @@ class Rsync(object):
 
     def __init__(self, binpath=None, localpath=None, username=None, serverip=None, serverport=None, remotepath=None, password=None):
         self.binpath = binpath
-        self.localpath = localpath
         self.username = username
         self.serverip = serverip
+        self.password = password
+        self.localpath = localpath
         self.serverport = serverport
         self.remotepath = remotepath
-        self.password = password
 
     def get_binpath(self):
         return self.binpath
@@ -84,25 +84,17 @@ class Rsync(object):
 
     @staticmethod
     def from_json(json_data):
-        all_dict = json.loads(json_data)
-        if Rsync.NAME in all_dict:
-            dict_data = all_dict[Rsync.NAME]
-        else:
-            dict_data = all_dict
+        dict_data = json.loads(json_data)
 
-        if not isinstance(dict_data, list):
-            dict_data = [dict_data]
+        binpath = dict_data.get('binpath', None)
+        localpath = dict_data.get('localpath', None)
+        username = dict_data.get('username', None)
+        serverip = dict_data.get('serverip', None)
+        serverport = dict_data.get('serverport', None)
+        remotepath = dict_data.get('remotepath', None)
+        password = dict_data.get('password', None)
 
-        rsync_ins_list = []
-        for rsync_dict in dict_data:
-            binpath = rsync_dict.get('binpath', None)
-            localpath = rsync_dict.get('localpath', None)
-            username = rsync_dict.get('username', None)
-            serverip = rsync_dict.get('serverip', None)
-            serverport = rsync_dict.get('serverport', None)
-            remotepath = rsync_dict.get('remotepath', None)
-            password = rsync_dict.get('password', None)
-            rsync_ins_list.append(Rsync(binpath=binpath, localpath=localpath, username=username, serverport=serverport,
-                                        serverip=serverip, remotepath=remotepath, password=password))
+        rsync = Rsync(binpath=binpath, localpath=localpath, username=username, serverport=serverport, serverip=serverip,
+                      remotepath=remotepath, password=password)
 
-        return rsync_ins_list
+        return rsync

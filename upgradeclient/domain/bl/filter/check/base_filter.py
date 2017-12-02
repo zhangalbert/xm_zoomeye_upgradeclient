@@ -8,9 +8,9 @@ class BaseFilter(object):
     def release_note_validate(self, obj):
         q = Q(obj__filename__regexp='^ReleaseNote') & \
             Q(obj__download_url__regexp=r'ReleaseNote$') & \
-            Q(obj__filetype__not_exact='OEM')
+            Q(obj__filetype__not_exact='Special')
 
-        return R(obj, q_ins=q)()
+        return q
 
     def firmware_name_validate(self, obj):
         q = Q(obj__filename__regexp=r'(?<=\.)(?P<date>[0-9]{8}).*(?=.bin)') & \
@@ -19,6 +19,8 @@ class BaseFilter(object):
             Q(obj__filename__not_istartswith='burnfile_') & \
             Q(obj__filename__not_istartswith='partition_')
 
-        return R(obj, q_ins=q)()
+        return q
+
+
 
 

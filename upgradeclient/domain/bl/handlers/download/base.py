@@ -61,5 +61,12 @@ class BaseHandler(object):
                 continue
             os.remove(f)
 
+    def get_dao_data(self, obj):
+        dao_name = obj.get_daoname()
+        dao = self.dao_factory.create_check_dao(dao_name)
+        dao_data = dao.get_data()
+
+        return dao_data
+
     def handle(self, obj):
         raise NotImplementedError

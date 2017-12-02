@@ -1,13 +1,11 @@
-#! -*- coding: utf-8 *-
+#! -*- coding: utf-8 -*-
 
 
 import json
 
 
-class Media(object):
-    def __init__(self, relation_name=None, relation_type=None, to=None, cc=None):
-        self.to = to
-        self.cc = cc
+class Upload(object):
+    def __init__(self, relation_name=None, relation_type=None):
         self.relation_name = relation_name
         self.relation_type = relation_type
 
@@ -23,31 +21,17 @@ class Media(object):
     def set_relation_type(self, relation_type):
         self.relation_type = relation_type
 
-    def get_to(self):
-        return self.to
-
-    def set_to(self, to):
-        self.to = to
-
-    def get_cc(self):
-        return self.cc
-
-    def set_cc(self, cc):
-        self.cc = cc
-
     def to_dict(self):
         dict_data = {
-            'to': self.get_to(),
-            'cc': self.get_cc(),
             'relation_name': self.get_relation_name(),
             'relation_type': self.get_relation_type()
         }
 
         return dict_data
 
-    def to_json(self):
+    def to_json(self, indent=4):
         dict_data = self.to_dict()
-        json_data = json.dumps(dict_data)
+        json_data = json.dumps(dict_data, indent=indent)
 
         return json_data
 
@@ -55,11 +39,10 @@ class Media(object):
     def from_json(json_data):
         dict_data = json.loads(json_data)
 
-        to = dict_data.get('to', None)
-        cc = dict_data.get('cc', None)
         relation_name = dict_data.get('relation_name', None)
         relation_type = dict_data.get('relation_type', None)
 
-        media = Media(relation_name=relation_name, relation_type=relation_type, to=to, cc=cc)
+        upload = Upload(relation_name=relation_name, relation_type=relation_type)
 
-        return media
+        return upload
+

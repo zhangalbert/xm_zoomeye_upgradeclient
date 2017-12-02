@@ -1,0 +1,12 @@
+{
+  "default": {
+    "email": {
+      "_comments": "",
+      "smtp_host": "",
+      "smtp_port": 25,
+      "smtp_user": "",
+      "smtp_pass": "",
+      "debug_num": 1
+    }
+  }
+}
