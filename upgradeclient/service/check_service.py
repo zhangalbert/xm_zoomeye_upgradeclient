@@ -160,13 +160,13 @@ class CheckService(BaseService):
                 merged_urlmaps.setdefault(os.path.dirname(cobj.download_url), cobj)
 
             for item in merged_urlmaps:
-                logger.info('=' * 100)
-                logger.info(item)
-                logger.info(merged_urlmaps[item].__dict__)
-                logger.info('=' * 100)
-
                 event_data = map(lambda e: self.create_event(daoname=obj.get_name(), **dict(e.__dict__)).to_json(),
                                  merged_changes[item])
+                logger.info('=' * 100)
+                logger.info(item)
+                logger.info(event_data)
+                logger.info(merged_urlmaps[item].__dict__)
+                logger.info('=' * 100)
                 event = self.create_event(daoname=obj.get_name(), **dict(merged_urlmaps[item].__dict__))
                 event.set_data(event_data)
 
