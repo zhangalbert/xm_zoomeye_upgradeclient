@@ -37,4 +37,4 @@ class XmZoomeyeUpgradeClient(object):
         self.__run(['download_service', 'upload_service', 'alert_service', 'webui_service', 'check_service'])
 
         while True:
-            time.sleep(5)
+            time.sleep(2)
