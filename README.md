@@ -114,7 +114,8 @@
 
 #### 未完待续
 * SQLite3未提供SQL转义,暂未转义对于有些包含特殊字符的异常信息可能会导致独立SQLite线程异常,后期需要转义log_message
-  * 方案一. 通过web.register_database注册除SQLite3外的其它引擎,来安全处理增删查改.
+  * 方案1. 通过web.register_database注册除SQLite3外的其它引擎,来安全处理增删查改.
+  * 方案N. 通过base_handler/base_service中入库入口insert_to_db中将log_message中的'统一转换为"
 
 ***
 
