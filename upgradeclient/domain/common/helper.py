@@ -3,6 +3,10 @@
 
 class Helper(object):
     @staticmethod
+    def string_escape(strs):
+        return strs.encode('string-escape')
+
+    @staticmethod
     def combin_sql_conditions(s='and', conditions=[]):
         condition_list = []
         for k, v in conditions:
@@ -20,3 +24,4 @@ class Helper(object):
             condition_list.append('\'{0}\''.format(k))
 
         return condition_list
+

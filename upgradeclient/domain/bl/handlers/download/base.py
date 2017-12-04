@@ -28,8 +28,9 @@ class BaseHandler(object):
             'last_revision': obj.get_number() or '',
             'last_action': obj.get_action() or '',
         })
-
         today = datetime.datetime.now().strftime('%Y-%m-%d')
+
+        kwargs['log_message'] = Helper.string_escape(kwargs['log_message'])
 
         select_where_condition = ' '.join(Helper.combin_sql_conditions('and', kwargs.items()))
         select_command = [

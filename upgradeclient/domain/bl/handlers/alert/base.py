@@ -22,8 +22,9 @@ class BaseHandler(object):
 
     def insert_to_db(self, **kwargs):
         kwargs.update({'log_class': self.__class__.__name__})
-
         today = datetime.datetime.now().strftime('%Y-%m-%d')
+
+        kwargs['log_message'] = Helper.string_escape(kwargs['log_message'])
 
         select_where_condition = ' '.join(Helper.combin_sql_conditions('and', kwargs.items()))
         select_command = [
