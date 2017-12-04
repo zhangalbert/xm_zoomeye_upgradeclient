@@ -2,6 +2,7 @@
 
 import os
 import time
+import signal
 import datetime
 import multiprocessing
 
@@ -30,9 +31,29 @@ class CheckService(BaseService):
     def __init__(self, check=None, cache=None, dao_factory=None, filter_factory=None):
         self.check = check
         self.cache = cache
+        self.sub_process = {}
         self.event_event = multiprocessing.Event()
         self.dao_factory = dao_factory
         self.filter_factory = filter_factory
+
+    def sub_process_signal_callback(self, signal_num, unused_frame):
+        if self.event_event.is_set():
+            return
+        for name in self.sub_process:
+            p = self.sub_process[name]
+            if not p.is_alive():
+                dao = self.dao_factory.create_check_dao(name)
+                sub_p = CheckHandlerProcess(dao, self)
+                sub_p.daemon = True
+                sub_p.start()
+                self.sub_process.pop(name)
+                self.sub_process.update({name: sub_p})
+
+    def ctl_process_signal_callback(self, unused_signal, unused_frame):
+        self.event_event.set()
+        fmtdata = (self.__class__.__name__, multiprocessing.current_process().name, os.getpid())
+        msgdata = '{0} main/sub process got ctrl+c signal, name={1}, pid={2}'.format(*fmtdata)
+        logger.warning(msgdata)
 
     def pre_start(self):
         fdirname = os.path.join(self.cache.base_path, 'check_cache')
@@ -49,6 +70,23 @@ class CheckService(BaseService):
             p = CheckHandlerProcess(dao, self)
             p.daemon = True
             p.start()
+            self.sub_process.update({name: p})
+        signal.signal(signal.SIGCHLD, self.sub_process_signal_callback)
+        signal.signal(signal.SIGINT,  self.ctl_process_signal_callback)
+        while True:
+            is_finished = True
+            for name in self.sub_process:
+                p = self.sub_process[name]
+                if p.is_alive():
+                    is_finished = False
+                    break
+            if is_finished is True:
+                break
+            time.sleep(5)
+        fmtdata = (self.__class__.__name__,)
+        msgdata = '{0} graceful closing successfully!'.format(*fmtdata)
+        self.insert_to_db(log_level='info', log_message=msgdata)
+        logger.info(msgdata)
 
     def send_cache_task(self, event):
         json_data = event.to_json()
@@ -92,6 +130,8 @@ class CheckService(BaseService):
         url, name, summarize_interval = obj.get_base_url(), obj.get_name(), obj.get_summarize_interval()
 
         self.check.set_commit_info_style(style_num=1)
+
+        signal.signal(signal.SIGINT, self.ctl_process_signal_callback)
 
         while True:
             if self.event_event.is_set():

@@ -1,6 +1,9 @@
 #! -*- coding: utf-8 -*-
 
 
+import time
+
+
 from upgradeclient.domain.common.logger import Logger
 
 
@@ -31,5 +34,7 @@ class XmZoomeyeUpgradeClient(object):
             service_obj.start()
 
     def start(self):
-        # prod:
         self.__run(['download_service', 'upload_service', 'alert_service', 'webui_service', 'check_service'])
+
+        while True:
+            time.sleep(5)
