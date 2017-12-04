@@ -156,10 +156,15 @@ class CheckService(BaseService):
                     if base_url in merged_changes and filter_handler.firmware_name_validate(cobj):
                         merged_changes[base_url].append(cobj)
                     continue
-                merged_changes.setdefault(os.path.dirname(base_url), [])
-                merged_urlmaps.setdefault(os.path.dirname(base_url), cobj)
+                merged_changes.setdefault(os.path.dirname(cobj.download_url), [])
+                merged_urlmaps.setdefault(os.path.dirname(cobj.download_url), cobj)
 
             for item in merged_urlmaps:
+                logger.info('=' * 100)
+                logger.info(item)
+                logger.info(merged_urlmaps[item].__dict__)
+                logger.info('=' * 100)
+
                 event_data = map(lambda e: self.create_event(daoname=obj.get_name(), **dict(e.__dict__)).to_json(),
                                  merged_changes[item])
                 event = self.create_event(daoname=obj.get_name(), **dict(merged_urlmaps[item].__dict__))
