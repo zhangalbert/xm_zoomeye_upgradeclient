@@ -4,7 +4,7 @@
 class Helper(object):
     @staticmethod
     def string_escape(strs):
-        return strs.encode('string-escape')
+        return strs.replace("'", '"')
 
     @staticmethod
     def combin_sql_conditions(s='and', conditions=[]):
