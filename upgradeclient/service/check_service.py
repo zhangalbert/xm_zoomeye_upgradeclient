@@ -142,9 +142,6 @@ class CheckService(BaseService):
                 break
 
             latest_changes = self.get_latest_changes(obj)
-            logger.info('='*100)
-            logger.info(latest_changes)
-            logger.info('='*100)
             if not latest_changes:
                 time.sleep(summarize_interval)
                 continue
@@ -159,12 +156,9 @@ class CheckService(BaseService):
                     if base_url in merged_changes and filter_handler.firmware_name_validate(cobj):
                         merged_changes[base_url].append(cobj)
                     continue
-                merged_changes.setdefault(os.path.dirname(cobj.download_url), [])
-                merged_urlmaps.setdefault(os.path.dirname(cobj.download_url), cobj)
+                merged_changes.setdefault(os.path.dirname(base_url), [])
+                merged_urlmaps.setdefault(os.path.dirname(base_url), cobj)
 
-            logger.info('*' * 100)
-            logger.info(merged_urlmaps)
-            logger.info('*' * 100)
             for item in merged_urlmaps:
                 event_data = map(lambda e: self.create_event(daoname=obj.get_name(), **dict(e.__dict__)).to_json(),
                                  merged_changes[item])
