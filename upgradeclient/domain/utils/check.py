@@ -5,12 +5,14 @@ import os
 import time
 import pysvn
 import urllib
-import pprint
 import urlparse
 
 
+from upgradeclient.domain.common.logger import Logger
 from upgradeclient.domain.common.file import File
 from upgradeclient.domain.utils.extstr import ExtStr
+
+logger = Logger.get_logger(__name__)
 
 
 class Check(object):
@@ -77,5 +79,7 @@ class Check(object):
                 'download_url': ExtStr(full_url)
             })
             latest_changes.append(svn_info)
+
+            logger.info('check: {0}'.format(full_url))
 
         return latest_changes
