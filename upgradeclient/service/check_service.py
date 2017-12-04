@@ -165,6 +165,7 @@ class CheckService(BaseService):
                 logger.info('=' * 100)
                 logger.info(item)
                 logger.info(event_data)
+                logger.info(merged_changes[item])
                 logger.info(merged_urlmaps[item].__dict__)
                 logger.info('=' * 100)
                 event = self.create_event(daoname=obj.get_name(), **dict(merged_urlmaps[item].__dict__))
