@@ -51,7 +51,7 @@ class RsyncHandler(BaseHandler):
 
     def execute(self, command):
         output = tempfile.NamedTemporaryFile(mode='a+b')
-        p = subprocess.Popen(command, stdout=output, stderr=output, shell=True, close_fds=True)
+        p = subprocess.Popen(command, stdout=output, stderr=subprocess.PIPE, shell=True, close_fds=True)
         current_position = 0
         with open(output.name) as fd:
             while True:

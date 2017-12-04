@@ -65,10 +65,6 @@ class UploadService(BaseService):
                     relation_name = ins.get_relation_name()
                     relation_type = ins.get_relation_type()
                     exception = future.exception()
-                    print 'err', '=' * 100
-                    print 'err', type(exception), exception
-                    print 'err', exception is None
-                    print 'err', '=' * 100
                     if exception is not None:
                         fmtdata = (self.__class__.__name__, relation_name, relation_type, exception)
                         msgdata = '{0} upload with {1}/{2} exception, exp={3}'.format(*fmtdata)
