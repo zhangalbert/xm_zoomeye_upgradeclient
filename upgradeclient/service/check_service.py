@@ -112,6 +112,7 @@ class CheckService(BaseService):
 
     def get_latest_changes(self, obj):
         latest_changes = []
+        split_latest_changes = {'releasenotes': [], 'firmwares': []}
 
         url, name, summarize_interval = obj.get_base_url(), obj.get_name(), obj.get_summarize_interval()
         end_time = datetime.datetime.now() + datetime.timedelta(days=1)
@@ -124,7 +125,15 @@ class CheckService(BaseService):
             self.insert_to_db(log_level='error', log_message=msgdata)
             logger.error(msgdata)
 
-        return latest_changes
+        filter_handler = self.get_filter_handler(obj)
+        for item in latest_changes:
+            cobj = type('cobj', (object,), item)
+            if not filter_handler.release_note_validate(cobj):
+                split_latest_changes['firmwares'].append(cobj)
+                continue
+            split_latest_changes['releasenotes'].append(cobj)
+
+        return split_latest_changes
 
     def handle(self, obj):
         url, name, summarize_interval = obj.get_base_url(), obj.get_name(), obj.get_summarize_interval()
@@ -149,25 +158,18 @@ class CheckService(BaseService):
             merged_changes = {}
             merged_urlmaps = {}
             filter_handler = self.get_filter_handler(obj)
-            for item in latest_changes:
-                cobj = type('cobj', (object,), item)
-                base_url = self.get_baseurl(cobj.download_url)
-                if not filter_handler.release_note_validate(cobj):
-                    if base_url in merged_changes and filter_handler.firmware_name_validate(cobj):
+            split_latest_changes = self.get_latest_changes(obj)
+            for robj in split_latest_changes['releasenotes']:
+                base_url = os.path.dirname(robj.download_url)
+                merged_urlmaps.setdefault(base_url, robj)
+                merged_changes.setdefault(base_url, [])
+                for cobj in split_latest_changes['firmwares']:
+                    if base_url in cobj.download_url and filter_handler.firmware_name_validate(cobj):
                         merged_changes[base_url].append(cobj)
-                    continue
-                merged_changes.setdefault(os.path.dirname(cobj.download_url), [])
-                merged_urlmaps.setdefault(os.path.dirname(cobj.download_url), cobj)
 
             for item in merged_urlmaps:
                 event_data = map(lambda e: self.create_event(daoname=obj.get_name(), **dict(e.__dict__)).to_json(),
                                  merged_changes[item])
-                logger.info('=' * 100)
-                logger.info(item)
-                logger.info(event_data)
-                logger.info(merged_changes[item])
-                logger.info(merged_urlmaps[item].__dict__)
-                logger.info('=' * 100)
                 event = self.create_event(daoname=obj.get_name(), **dict(merged_urlmaps[item].__dict__))
                 event.set_data(event_data)
 
