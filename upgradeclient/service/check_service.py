@@ -142,6 +142,9 @@ class CheckService(BaseService):
                 break
 
             latest_changes = self.get_latest_changes(obj)
+            logger.info('='*100)
+            logger.info(latest_changes)
+            logger.info('='*100)
             if not latest_changes:
                 time.sleep(summarize_interval)
                 continue
