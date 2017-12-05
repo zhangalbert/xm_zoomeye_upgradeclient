@@ -32,7 +32,7 @@ class RsyncHandler(BaseHandler):
         obj.set_password(password_file)
 
     def set_localpath(self, obj):
-        obj.set_localpath(os.path.join(self.cache.base_path, 'upgrade_files', obj.get_localpath()))
+        obj.set_localpath(os.path.join(self.cache.base_path, 'upgrade_files', obj.get_localpath(), ''))
 
     def command(self, obj):
         execute_command = []
