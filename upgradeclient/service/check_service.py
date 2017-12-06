@@ -30,6 +30,7 @@ class CheckService(BaseService):
     def __init__(self, check=None, cache=None, dao_factory=None, filter_factory=None):
         self.check = check
         self.cache = cache
+        self.sub_process = {}
         self.event_event = multiprocessing.Event()
         self.dao_factory = dao_factory
         self.filter_factory = filter_factory
@@ -43,17 +44,14 @@ class CheckService(BaseService):
 
     def start(self):
         self.pre_start()
-
         for name in self.dao_factory.check_daos:
             dao = self.dao_factory.create_check_dao(name)
             p = CheckHandlerProcess(dao, self)
             p.daemon = True
             p.start()
-            p.join(3600)
-        fmtdata = (self.__class__.__name__,)
-        msgdata = '{0} graceful closing successfully!'.format(*fmtdata)
-        self.insert_to_db(log_level='info', log_message=msgdata)
-        logger.info(msgdata)
+            self.sub_process[name] = p
+        for name in self.sub_process:
+            self.sub_process[name].join()
 
     def send_cache_task(self, event):
         json_data = event.to_json()
