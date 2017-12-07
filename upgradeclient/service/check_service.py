@@ -112,7 +112,6 @@ class CheckService(BaseService):
                 time.sleep(summarize_interval)
                 continue
 
-            print '=' * 100
             merged_changes = {}
             merged_urlmaps = {}
             filter_handler = self.get_filter_handler(obj)
