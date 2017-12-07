@@ -31,7 +31,6 @@ class CheckService(BaseService):
         self.check = check
         self.cache = cache
         self.sub_process = {}
-        self.event_event = multiprocessing.Event()
         self.dao_factory = dao_factory
         self.filter_factory = filter_factory
 
@@ -106,13 +105,6 @@ class CheckService(BaseService):
         self.check.set_commit_info_style(style_num=1)
 
         while True:
-            if self.event_event.is_set():
-                fmtdata = (self.__class__.__name__, name, os.getpid())
-                msgdata = '{0} sub process {1} stoped successfull, pid={1}'.format(*fmtdata)
-                self.insert_to_db(log_level='info', log_message=msgdata)
-                logger.info(msgdata)
-                break
-
             latest_changes = self.get_latest_changes(obj)
             if not latest_changes:
                 time.sleep(summarize_interval)
