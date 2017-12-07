@@ -106,6 +106,7 @@ class CheckService(BaseService):
 
         while True:
             latest_changes = self.get_latest_changes(obj)
+            
             if not latest_changes:
                 fmtdata = (self.__class__.__name__, summarize_interval)
                 logger.warning('{0} check with not latest changes, wait {1} seconds'.format(*fmtdata))
