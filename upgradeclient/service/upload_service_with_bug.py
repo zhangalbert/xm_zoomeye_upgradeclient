@@ -52,34 +52,30 @@ class UploadService(BaseService):
 
         def target():
             while True:
+                future_to_ins = {}
                 handler_dao_map = self.merge_task()
-                for item in handler_dao_map:
-                    u_handler = item[0]
-                    u_handler.handle(item[1])
+                max_workers = min(len(handler_dao_map), multiprocessing.cpu_count())
 
-                # future_to_ins = {}
-                # max_workers = min(len(handler_dao_map), multiprocessing.cpu_count())
-                #
-                # with futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-                #     future_to_ins = dict(map(lambda o: (executor.submit(o[0].handle, o[1]), o[1]), handler_dao_map))
-                #
-                # for future in futures.as_completed(future_to_ins):
-                #     ins = future_to_ins[future]
-                #
-                #     relation_name = ins.get_relation_name()
-                #     relation_type = ins.get_relation_type()
-                #     exception = future.exception()
-                #     if exception is not None:
-                #         fmtdata = (self.__class__.__name__, relation_name, relation_type, exception)
-                #         msgdata = '{0} upload with {1}/{2} exception, exp={3}'.format(*fmtdata)
-                #         self.insert_to_db(log_level='error', log_message=msgdata)
-                #         logger.error(msgdata)
-                #     else:
-                #         fmtdata = (self.__class__.__name__, relation_name, relation_type)
-                #         msgdata = '{0} upload with {1}/{2} success'.format(*fmtdata)
-                #         logger.info(msgdata)
-                #
-                # time.sleep(self.check_interval)
+                with futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+                    future_to_ins = dict(map(lambda o: (executor.submit(o[0].handle, o[1]), o[1]), handler_dao_map))
+
+                for future in futures.as_completed(future_to_ins):
+                    ins = future_to_ins[future]
+
+                    relation_name = ins.get_relation_name()
+                    relation_type = ins.get_relation_type()
+                    exception = future.exception()
+                    if exception is not None:
+                        fmtdata = (self.__class__.__name__, relation_name, relation_type, exception)
+                        msgdata = '{0} upload with {1}/{2} exception, exp={3}'.format(*fmtdata)
+                        self.insert_to_db(log_level='error', log_message=msgdata)
+                        logger.error(msgdata)
+                    else:
+                        fmtdata = (self.__class__.__name__, relation_name, relation_type)
+                        msgdata = '{0} upload with {1}/{2} success'.format(*fmtdata)
+                        logger.info(msgdata)
+
+                time.sleep(self.check_interval)
 
         t = Thread(target=target)
         t.setDaemon(True)
